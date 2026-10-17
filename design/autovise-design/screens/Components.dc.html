@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AutoVise — Component library</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./autovise.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="{{rootClass}}" style="min-height:100vh; background:var(--bg); color:var(--text); font-family:var(--font)">
+  <main class="wrap" style="padding-top:48px; padding-bottom:80px; display:flex; flex-direction:column; gap:40px">
+    <header style="display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap; align-items:flex-end">
+      <div style="display:flex; flex-direction:column; gap:10px">
+        <span class="eyebrow">AutoVise · {{themeName}} theme</span>
+        <h1 style="font-size:36px; font-weight:600">Component library</h1>
+        <p style="color:var(--muted); max-width:620px">shadcn/ui-style primitives on the AutoVise tokens. Everything here is live — tabs switch, switches toggle, sliders move.</p>
+      </div>
+      <div class="seg" role="group" aria-label="Colour theme">
+        <button class="{{segL}}" aria-label="Light theme" aria-pressed="{{pL}}" onClick="{{setL}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg></button>
+        <button class="{{segD}}" aria-label="Dark theme" aria-pressed="{{pD}}" onClick="{{setD}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg></button>
+        <button class="{{segS}}" aria-label="Use system theme" aria-pressed="{{pS}}" onClick="{{setS}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg></button>
+      </div>
+    </header>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(560px, 100%), 1fr)); gap:24px">
+      <!-- Buttons -->
+      <section class="card" style="padding:24px; display:flex; flex-direction:column; gap:18px">
+        <h2 style="font-size:16px; font-weight:600">Buttons</h2>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+          <button class="btn btn-primary">Primary</button>
+          <button class="btn btn-secondary">Secondary</button>
+          <button class="btn btn-ghost">Ghost</button>
+          <button class="btn btn-danger">Delete</button>
+          <button class="btn btn-pos"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Approve</button>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+          <button class="btn btn-primary btn-sm">Small</button>
+          <button class="btn btn-primary">Default</button>
+          <button class="btn btn-primary btn-lg">Large</button>
+          <button class="btn btn-secondary btn-icon" aria-label="Refresh"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M8 16H3v5"></path></svg></button>
+          <button class="btn btn-primary" disabled="{{ true }}"><svg class="spin" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.2-8.56"></path></svg>Publishing…</button>
+          <button class="btn btn-secondary" disabled="{{ true }}">Disabled</button>
+        </div>
+      </section>
+
+      <!-- Inputs -->
+      <section class="card" style="padding:24px; display:flex; flex-direction:column; gap:18px">
+        <h2 style="font-size:16px; font-weight:600">Inputs</h2>
+        <div style="display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:16px">
+          <div class="field"><label class="label" for="cl-a">Ticker</label><input id="cl-a" class="input num" value="LHL"><span class="hint">As listed on the exchange.</span></div>
+          <div class="field"><label class="label" for="cl-b">Search</label><div class="input-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input id="cl-b" class="input" placeholder="Name or ticker"></div></div>
+          <div class="field"><label class="label" for="cl-c">Close price (LKR)</label><input id="cl-c" class="input invalid num" value="24 5.50" aria-invalid="true"><span class="err">Enter a number, like 245.50.</span></div>
+          <div class="field"><label class="label" for="cl-d">Sector</label><div class="select-wrap"><select id="cl-d" class="select"><option>Logistics</option><option>Banking</option></select><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></div></div>
+        </div>
+        <div class="field"><div style="display:flex; justify-content:space-between"><label class="label" for="cl-e">Exit P/E</label><span class="num" style="font-weight:600">{{peText}}</span></div><input id="cl-e" type="range" min="6" max="20" step="0.1" value="{{pe}}" onChange="{{setPe}}"></div>
+        <div style="display:flex; gap:24px; flex-wrap:wrap; align-items:center">
+          <div style="display:flex; gap:10px; align-items:center"><button class="{{swCls}}" role="switch" aria-checked="{{sw}}" aria-labelledby="sw-l" onClick="{{toggleSw}}"></button><span id="sw-l" style="font-size:14px">Auto-publish</span></div>
+          <label style="display:flex; gap:8px; align-items:center; font-size:14px"><input type="checkbox" class="check" checked="{{ true }}" onChange="{{noop}}">Include insight</label>
+          <div class="seg" role="group" aria-label="Range"><button class="seg-btn" style="padding:0 12px">Today</button><button class="seg-btn on" style="padding:0 12px" aria-pressed="true">7 days</button><button class="seg-btn" style="padding:0 12px">30 days</button></div>
+        </div>
+      </section>
+
+      <!-- Badges -->
+      <section class="card" style="padding:24px; display:flex; flex-direction:column; gap:18px">
+        <h2 style="font-size:16px; font-weight:600">Badges and status pills</h2>
+        <div style="display:flex; gap:8px; flex-wrap:wrap">
+          <span class="pill pill-uploaded">Uploaded</span><span class="pill pill-processing">Processing</span><span class="pill pill-review">Needs review</span><span class="pill pill-approved">Approved</span><span class="pill pill-failed">Failed</span><span class="pill pill-superseded">Superseded</span>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap">
+          <span class="pill pill-draft">Draft</span><span class="pill pill-published">Published</span><span class="chip">Logistics</span><span class="chip num" style="color:var(--text)">LHL</span><span class="warn-chip"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4M12 17h.01"></path></svg>Outdated data</span>
+        </div>
+        <h3 style="font-size:13px; font-weight:600; color:var(--muted)">Upside badge</h3>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+          <span class="delta up"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"></path></svg>+29.6%</span>
+          <span class="delta down"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10M17 8v9H8"></path></svg>−8.0%</span>
+          <span class="delta flat">0.0%</span>
+          <span class="delta up delta-lg"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"></path></svg>+51.4%</span>
+          <span class="delta down delta-lg"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10M17 8v9H8"></path></svg>−13.5%</span>
+        </div>
+      </section>
+
+      <!-- Meters & gauges -->
+      <section class="card" style="padding:24px; display:flex; flex-direction:column; gap:18px">
+        <h2 style="font-size:16px; font-weight:600">Confidence meter and score gauge</h2>
+        <div style="display:flex; flex-direction:column; gap:12px">
+          <sc-for list="{{meters}}" as="m" hint-placeholder-count="3">
+            <div style="display:flex; align-items:center; gap:12px">
+              <span style="font-size:12px; color:var(--muted); width:72px">Confidence</span>
+              <div class="{{m.cls}}" style="flex:1" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{m.v}}" aria-label="Confidence"><span style="{{m.w}}"></span></div>
+              <span class="num" style="font-weight:600; width:24px; text-align:right">{{m.v}}</span>
+              <span style="font-size:12px; color:var(--muted); width:32px">{{m.word}}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex; gap:32px; flex-wrap:wrap">
+          <sc-for list="{{gauges}}" as="g" hint-placeholder-count="3">
+            <div style="display:flex; flex-direction:column; align-items:center">
+              <div style="position:relative; width:112px; height:64px">
+                <svg width="112" height="64" viewBox="0 0 112 64" role="img" aria-label="{{g.label}}">
+                  <path d="M10 58 A46 46 0 0 1 102 58" fill="none" style="stroke:var(--subtle-2)" stroke-width="9" stroke-linecap="round"></path>
+                  <path d="M10 58 A46 46 0 0 1 102 58" fill="none" style="{{g.stroke}}" stroke-width="9" stroke-linecap="round" pathLength="100" stroke-dasharray="{{g.dash}}"></path>
+                </svg>
+                <span class="num" style="position:absolute; left:0; right:0; bottom:2px; text-align:center; font-size:22px; font-weight:600">{{g.v}}</span>
+              </div>
+              <span style="font-size:12px; color:var(--muted)">AutoVise Score</span>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </div>
+
+    <!-- Company cards -->
+    <section style="display:flex; flex-direction:column; gap:16px">
+      <h2 style="font-size:16px; font-weight:600">Company card — ready, pending, outdated</h2>
+      <p style="font-size:14px; color:var(--muted); margin-top:-8px">Logo sizes, shapes, fallbacks and the uploader live on the Company logos sheet.</p>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap:20px">
+        <sc-for list="{{cards}}" as="c" hint-placeholder-count="3">
+          <a href="Company.dc.html" class="card co-card" style="display:flex; flex-direction:column; gap:18px; padding:20px; text-decoration:none; color:var(--text)">
+            <span aria-hidden="true" style="{{c.accentBar}}"></span>
+            <div style="display:flex; align-items:center; gap:12px">
+              <sc-if value="{{c.logo.isImg}}" hint-placeholder-val="{{ true }}"><span class="logo" style="{{c.logo.style}}"><img src="{{c.logo.src}}" alt=""></span></sc-if>
+              <sc-if value="{{c.logo.isMono}}" hint-placeholder-val="{{ false }}"><span class="logo logo-mono" style="{{c.logo.style}}" aria-hidden="true">{{c.logo.initials}}</span></sc-if>
+              <div style="min-width:0; flex:1; display:flex; flex-direction:column; gap:4px">
+                <span style="font-weight:600; font-size:15px">{{c.name}}</span>
+                <div style="display:flex; gap:8px; align-items:center"><span class="num" style="font-size:12px; color:var(--muted)">{{c.id}}</span><span class="chip">{{c.sector}}</span></div>
+              </div>
+              <sc-if value="{{c.outdated}}" hint-placeholder-val="{{ false }}"><span class="warn-chip">Outdated data</span></sc-if>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px">
+              <div style="display:flex; flex-direction:column; gap:2px"><span style="font-size:12px; color:var(--muted)">Current price</span><span class="num" style="font-size:18px; font-weight:600">{{c.price}}</span><span style="font-size:12px; color:var(--muted)">Updated {{c.updated}}</span></div>
+              <sc-if value="{{c.ready}}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex; flex-direction:column; gap:2px"><span style="font-size:12px; color:var(--muted)">3-yr target · base</span><span class="num" style="font-size:18px; font-weight:600">{{c.target}}</span><span class="{{c.dcls}}" style="align-self:flex-start; margin-top:2px">{{c.up}}</span></div>
+              </sc-if>
+              <sc-if value="{{c.pending}}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; flex-direction:column; gap:6px; padding:10px 12px; border-radius:10px; background:var(--subtle)"><span style="font-size:13px; font-weight:600">Prediction pending</span><span style="font-size:12px; color:var(--muted)">FY2026 reports are in review.</span></div>
+              </sc-if>
+            </div>
+            <svg viewBox="0 0 300 64" preserveAspectRatio="none" style="width:100%; height:56px; display:block" aria-hidden="true">
+              <line x1="200" y1="0" x2="200" y2="64" style="stroke:var(--border)" stroke-dasharray="2 3"></line>
+              <path d="{{c.hist}}" fill="none" style="stroke:var(--c1)" stroke-width="1.75" vector-effect="non-scaling-stroke"></path>
+              <path d="{{c.proj}}" fill="none" style="{{c.projStyle}}" stroke-width="1.75" stroke-dasharray="3 4" vector-effect="non-scaling-stroke"></path>
+            </svg>
+            <sc-if value="{{c.ready}}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex; align-items:center; gap:12px"><span style="font-size:12px; color:var(--muted); width:72px">Confidence</span><div class="{{c.mcls}}" style="flex:1"><span style="{{c.mw}}"></span></div><span class="num" style="font-size:13px; font-weight:600">{{c.conf}}</span></div>
+            </sc-if>
+          </a>
+        </sc-for>
+      </div>
+    </section>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(560px, 100%), 1fr)); gap:24px">
+      <!-- Citation chip -->
+      <section class="card" style="padding:24px; display:flex; flex-direction:column; gap:16px">
+        <h2 style="font-size:16px; font-weight:600">Citation chip and source preview</h2>
+        <p style="line-height:1.7">Throughput rose to 1.92 mn TEU in 2025, a record for the group. <button class="cite"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>Annual Report 2025, p.34</button></p>
+        <div class="popover" style="padding:16px; display:flex; flex-direction:column; gap:10px; max-width:420px">
+          <div style="display:flex; gap:8px; align-items:baseline; justify-content:space-between"><span style="font-weight:600; font-size:14px">Annual Report 2025</span><span style="font-size:12px; color:var(--muted)">p.34 · Operating review</span></div>
+          <p style="font-family:Georgia, 'Times New Roman', serif; font-size:14px; line-height:1.6; padding:8px 10px; border-radius:6px; background:var(--warn-soft)">“Container throughput handled across our terminals rose 14% to 1.92 million TEU.”</p>
+          <a href="#" style="font-size:13px">Open full report</a>
+        </div>
+      </section>
+
+      <!-- Chat -->
+      <section class="card" style="padding:24px; display:flex; flex-direction:column; gap:14px">
+        <h2 style="font-size:16px; font-weight:600">Chat bubbles</h2>
+        <div class="bubble user">What's the biggest risk to this view?</div>
+        <div style="display:flex; flex-direction:column; gap:8px">
+          <div class="bubble bot">Customer concentration. The top three shipping lines make up 46% of throughput.</div>
+          <div style="display:flex; gap:6px; align-items:center"><button class="cite">Annual Report 2025, p.58</button><span style="flex:1"></span>
+            <button class="btn btn-ghost btn-icon btn-sm on-up" aria-label="Helpful answer" aria-pressed="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10v12"></path><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"></path></svg></button>
+            <button class="btn btn-ghost btn-icon btn-sm" aria-label="Unhelpful answer" aria-pressed="false"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 14V2"></path><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"></path></svg></button>
+          </div>
+        </div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap">
+          <div class="bubble bot" style="align-self:flex-start"><span class="typing" aria-label="Consultant is typing"><i></i><i></i><i></i></span></div>
+          <div class="bubble bot" style="flex:1">Each 1.0× change in the exit P/E moves the target by about<span class="caret" aria-hidden="true"></span></div>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap"><button class="chip chip-btn">How sensitive is the target to the P/E?</button><button class="chip chip-btn">How does LHL compare with its sector?</button></div>
+      </section>
+
+      <!-- Tabs & table -->
+      <section class="card" style="padding:24px; display:flex; flex-direction:column; gap:16px">
+        <h2 style="font-size:16px; font-weight:600">Tabs and table</h2>
+        <div class="tabs" role="tablist" aria-label="Example tabs">
+          <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4"><button class="{{t.cls}}" role="tab" aria-selected="{{t.on}}" onClick="{{t.go}}">{{t.label}}</button></sc-for>
+        </div>
+        <div class="tbl-box" style="border-radius:10px">
+          <table class="tbl">
+            <thead><tr><th>Metric</th><th class="r">FY2024</th><th class="r">FY2025</th><th class="r">Trend</th></tr></thead>
+            <tbody>
+              <tr><td>Revenue</td><td class="r num">27,310</td><td class="r num" style="font-weight:600">30,940</td><td class="r"><span style="color:var(--pos)" aria-label="Up">▲</span></td></tr>
+              <tr><td>Net margin</td><td class="r num">9.3%</td><td class="r num" style="font-weight:600">9.2%</td><td class="r"><span style="color:var(--muted)" aria-label="Flat">▶</span></td></tr>
+              <tr class="changed"><td>Debt / equity <span class="hint">· changed</span></td><td class="r num">0.49</td><td class="r num" style="font-weight:600">0.44</td><td class="r"><span style="color:var(--pos)" aria-label="Down, which helps">▼</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Dialog & toasts -->
+      <section class="card" style="padding:24px; display:flex; flex-direction:column; gap:16px">
+        <h2 style="font-size:16px; font-weight:600">Dialog and toasts</h2>
+        <div class="dialog" role="dialog" aria-labelledby="ex-dlg" style="box-shadow:var(--shadow-md)">
+          <div style="padding:20px 20px 4px; display:flex; flex-direction:column; gap:8px">
+            <h3 id="ex-dlg" style="font-size:16px; font-weight:600">Publish the new LHL prediction?</h3>
+            <p style="font-size:14px; color:var(--muted); line-height:1.6">The public pitch switches to the draft immediately.</p>
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:8px; padding:16px 20px"><button class="btn btn-secondary btn-sm">Cancel</button><button class="btn btn-primary btn-sm">Publish now</button></div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:10px">
+          <div class="toast" role="status"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--pos); flex:none"><path d="M20 6 9 17l-5-5"></path></svg><div style="display:flex; flex-direction:column; gap:2px"><span style="font-weight:600; font-size:14px">Report approved</span><span style="font-size:13px; color:var(--muted)">A new draft is ready to review.</span></div></div>
+          <div class="toast" role="alert"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="color:var(--neg); flex:none"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4M12 16h.01"></path></svg><div style="display:flex; flex-direction:column; gap:2px"><span style="font-weight:600; font-size:14px">Extraction failed</span><span style="font-size:13px; color:var(--muted)">Pages 41–44 are scanned images.</span></div></div>
+          <div class="toast" role="status"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="color:var(--info); flex:none"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg><div style="display:flex; flex-direction:column; gap:2px"><span style="font-weight:600; font-size:14px">Recalculating</span><span style="font-size:13px; color:var(--muted)">LHL prediction will be ready in about 2 minutes.</span></div></div>
+        </div>
+      </section>
+    </div>
+    <span class="disclaimer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>Disclaimer line — shown wherever a prediction appears: Predictions are model estimates, not financial advice.</span>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark","system"],"default":"light","section":"Theme"},"$preview":{"width":1440,"height":3400}}'>
+const BRANDS = {
+  LHL: { name: 'Lanka Harbour Logistics', color: '#1F4E8C', logo: './logos/lhl.svg', logoDark: './logos/lhl-dark.svg', bg: 'transparent', shape: 'square' },
+  MPWR: { name: 'Meridian Power', color: '#6D28D9', logo: null },
+  IPL: { name: 'Island Pharma Labs', color: '#0284C7', logo: './logos/ipl.svg', logoDark: null, bg: 'dark', shape: 'square' }
+};
+const LOGO_PAD = { square: 0.16, round: 0.14, tall: 0.10, wide: 0.07 };
+function initialsOf(name) { return name.split(/\s+/).filter(w => /^[A-Z]/.test(w)).slice(0, 2).map(w => w[0]).join(''); }
+function logoTile(b, size, dark) {
+  const r = Math.min(14, Math.round(size * 0.25));
+  const box = 'width:' + size + 'px; height:' + size + 'px; border-radius:' + r + 'px;';
+  if (!b.logo) {
+    const bg = dark ? 'color-mix(in srgb, ' + b.color + ' 28%, #121A2D)' : 'color-mix(in srgb, ' + b.color + ' 13%, #FFFFFF)';
+    const fg = dark ? 'color-mix(in srgb, ' + b.color + ' 40%, #FFFFFF)' : 'color-mix(in srgb, ' + b.color + ' 80%, #000000)';
+    return { isImg: false, isMono: true, initials: initialsOf(b.name), style: box + ' background:' + bg + '; color:' + fg + '; border-color:color-mix(in srgb, ' + b.color + ' ' + (dark ? 40 : 22) + '%, transparent); font-size:' + Math.round(size * 0.36) + 'px' };
+  }
+  let bg = b.bg, src = b.logo;
+  if (dark && b.logoDark) src = b.logoDark;
+  else if (dark && bg === 'transparent') bg = 'light';
+  const fill = bg === 'light' ? '#FFFFFF' : bg === 'dark' ? '#0F172A' : 'transparent';
+  return { isImg: true, isMono: false, src: src, style: box + ' padding:' + Math.max(2, Math.round(size * (LOGO_PAD[b.shape] || 0.12))) + 'px; background:' + fill + (bg === 'dark' ? '; border-color:#1E293B' : '') };
+}
+function spark(seed, end, target) {
+  const n = 24, h = [];
+  for (let i = 0; i < n; i++) { const t = i / (n - 1); h.push(Math.pow(1 / 1.25, 1 - t) * (1 + 0.045 * Math.sin(i * 0.9 + seed) + 0.03 * Math.sin(i * 2.3 + seed * 1.7))); }
+  const k = end / h[n - 1]; const hv = h.map(v => v * k);
+  const pr = target ? [1, 2, 3].map(j => end * Math.pow(target / end, j / 3)) : [];
+  const all = hv.concat(pr), lo = Math.min.apply(null, all), hi = Math.max.apply(null, all);
+  const y = v => (58 - (v - lo) / ((hi - lo) || 1) * 52).toFixed(1);
+  return { hist: hv.map((v, i) => (i ? 'L' : 'M') + (i * 200 / 23).toFixed(1) + ' ' + y(v)).join(' '), proj: pr.length ? 'M200 ' + y(end) + ' ' + pr.map((v, i) => 'L' + (200 + (i + 1) * 33.3).toFixed(1) + ' ' + y(v)).join(' ') : '' };
+}
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { mode: null, pe: 12, sw: true, tab: 'pitch' }; }
+  theme() {
+    const m = this.state.mode || this.props.theme || 'light';
+    let dark = m === 'dark';
+    if (m === 'system') { try { dark = window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {} }
+    return {
+      themeName: dark ? 'Dark' : 'Light',
+      isDark: dark,
+      rootClass: dark ? 'av dark' : 'av',
+      segL: m === 'light' ? 'seg-btn on' : 'seg-btn', segD: m === 'dark' ? 'seg-btn on' : 'seg-btn', segS: m === 'system' ? 'seg-btn on' : 'seg-btn',
+      pL: m === 'light', pD: m === 'dark', pS: m === 'system',
+      setL: () => this.setState({ mode: 'light' }), setD: () => this.setState({ mode: 'dark' }), setS: () => this.setState({ mode: 'system' })
+    };
+  }
+  renderVals() {
+    const s = this.state;
+    const s1 = spark(1.2, 245.5, 318.1), s2 = spark(2.0, 19.8, null), s3 = spark(6.2, 167, 181.5);
+    const cards = [
+      { name: 'Lanka Harbour Logistics', id: 'LHL', sector: 'Logistics', tone: 't1', price: 'LKR 245.50', updated: '16 Oct 2026', target: 'LKR 318.10', up: '+29.6%', dcls: 'delta up', conf: 78, mcls: 'meter', ready: true, pending: false, outdated: false, sp: s1, projStyle: 'stroke:var(--pos)' },
+      { name: 'Meridian Power', id: 'MPWR', sector: 'Energy', tone: 't3', price: 'LKR 19.80', updated: '16 Oct 2026', target: '', up: '', dcls: '', conf: 0, mcls: 'meter', ready: false, pending: true, outdated: false, sp: s2, projStyle: 'stroke:var(--pos)' },
+      { name: 'Island Pharma Labs', id: 'IPL', sector: 'Healthcare', tone: 't6', price: 'LKR 167.00', updated: '02 Sep 2026', target: 'LKR 181.50', up: '+8.7%', dcls: 'delta up', conf: 52, mcls: 'meter low', ready: true, pending: false, outdated: true, sp: s3, projStyle: 'stroke:var(--pos)' }
+    ].map(c => Object.assign(c, {
+      initials: c.id.slice(0, 2), hist: c.sp.hist, proj: c.sp.proj, mw: 'width:' + c.conf + '%',
+      logo: logoTile(BRANDS[c.id], 48, this.theme().isDark),
+      accentBar: 'position:absolute; left:0; right:0; top:0; height:2px; opacity:.85; background:' + (this.theme().isDark ? 'color-mix(in srgb, ' + BRANDS[c.id].color + ' 65%, #FFFFFF)' : BRANDS[c.id].color)
+    }));
+    const TABS = [['pitch', 'The Pitch'], ['how', 'How We Got Here'], ['fin', 'Financials'], ['sim', 'What-if Simulator']];
+    return Object.assign(this.theme(), {
+      pe: s.pe, peText: Number(s.pe).toFixed(1) + '×', setPe: e => this.setState({ pe: parseFloat(e.target.value) }),
+      sw: s.sw, swCls: s.sw ? 'switch on' : 'switch', toggleSw: () => this.setState({ sw: !s.sw }),
+      noop: () => {},
+      meters: [[78, 'High', 'meter'], [64, 'Med', 'meter mid'], [47, 'Low', 'meter low']].map(m => ({ v: m[0], word: m[1], cls: m[2], w: 'width:' + m[0] + '%' })),
+      gauges: [[82, 'stroke:var(--accent)'], [58, 'stroke:var(--primary)'], [31, 'stroke:var(--c5)']].map(g => ({ v: g[0], stroke: g[1], dash: g[0] + ' 100', label: 'AutoVise Score ' + g[0] + ' out of 100' })),
+      cards: cards,
+      tabs: TABS.map(t => ({ label: t[1], on: s.tab === t[0], cls: s.tab === t[0] ? 'tab on' : 'tab', go: () => this.setState({ tab: t[0] }) }))
+    });
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AutoVise Admin — Companies</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./autovise.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="{{rootClass}}" style="min-height:100vh; background:var(--bg); color:var(--text); font-family:var(--font); display:flex">
+
+<aside class="{{side.cls}}" style="{{side.style}}" aria-label="Admin navigation">
+  <div style="display:flex; align-items:center; gap:10px; height:64px; padding:0 16px; border-bottom:1px solid var(--border)">
+    <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" style="flex:none"><rect width="28" height="28" rx="8" style="fill:var(--primary)"></rect><circle cx="14" cy="14" r="8.5" fill="none" style="stroke:var(--on-primary)" stroke-opacity=".35" stroke-width="1.5"></circle><path d="M8.5 17.5 12.5 13.5 15 16 19.5 10.5" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 10.5h3.5V14" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    <span class="sidelabel" style="font-weight:600; font-size:16px; letter-spacing:-0.02em">AutoVise</span>
+    <span class="sidelabel chip" style="height:20px; font-size:11px">Admin</span>
+  </div>
+  <nav style="display:flex; flex-direction:column; gap:2px; padding:12px; flex:1">
+    <sc-for list="{{side.nav}}" as="n" hint-placeholder-count="10">
+      <a class="{{n.cls}}" href="{{n.href}}" aria-current="{{n.current}}" title="{{n.label}}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"></path></svg>
+        <span class="sidelabel" style="flex:1">{{n.label}}</span>
+        <sc-if value="{{n.hasBadge}}" hint-placeholder-val="{{ false }}"><span class="sidelabel num" style="min-width:20px; height:20px; padding:0 6px; border-radius:999px; background:var(--subtle-2); color:var(--text); font-size:11px; display:inline-flex; align-items:center; justify-content:center">{{n.badge}}</span></sc-if>
+      </a>
+    </sc-for>
+  </nav>
+  <div style="padding:12px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:2px">
+    <a class="sidelink" href="Main.dc.html" title="View public site"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg><span class="sidelabel">View public site</span></a>
+    <button class="sidelink" style="border:0; background:none; cursor:pointer; font:inherit; width:100%" onClick="{{side.toggle}}" aria-label="{{side.toggleLabel}}" aria-expanded="{{side.expanded}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM9 3v18"></path></svg><span class="sidelabel">Collapse sidebar</span></button>
+  </div>
+</aside>
+
+<div style="flex:1 1 0; min-width:0; display:flex; flex-direction:column">
+  <header style="height:64px; display:flex; align-items:center; gap:16px; padding:0 24px; border-bottom:1px solid var(--border); background:var(--surface); position:relative; z-index:20">
+    <nav aria-label="Breadcrumb" style="display:flex; gap:8px; align-items:center; font-size:14px; min-width:0"><span style="font-weight:600">Companies</span></nav>
+    <div style="flex:1"></div>
+    <div class="seg" role="group" aria-label="Colour theme">
+      <button class="{{segL}}" aria-label="Light theme" aria-pressed="{{pL}}" onClick="{{setL}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg></button>
+      <button class="{{segD}}" aria-label="Dark theme" aria-pressed="{{pD}}" onClick="{{setD}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg></button>
+      <button class="{{segS}}" aria-label="Use system theme" aria-pressed="{{pS}}" onClick="{{setS}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg></button>
+    </div>
+    <div style="position:relative">
+      <button class="btn btn-ghost" style="padding:0 8px 0 4px; gap:10px" onClick="{{menu.toggle}}" aria-expanded="{{menu.open}}" aria-haspopup="menu">
+        <span style="width:32px; height:32px; border-radius:50%; background:var(--primary-soft); color:var(--primary-text); display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:600">NP</span>
+        <span class="hide-sm" style="display:flex; flex-direction:column; align-items:flex-start; line-height:1.2"><span style="font-size:13px; font-weight:500">Nimal Perera</span><span style="font-size:11px; color:var(--muted)">Lead analyst</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="color:var(--muted)"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+      <sc-if value="{{menu.open}}" hint-placeholder-val="{{ false }}">
+        <div class="popover" role="menu" style="position:absolute; right:0; top:48px; width:220px; padding:6px; display:flex; flex-direction:column">
+          <a class="sidelink" role="menuitem" href="#" style="height:36px">Profile</a>
+          <a class="sidelink" role="menuitem" href="#" style="height:36px">Audit log</a>
+          <a class="sidelink" role="menuitem" href="Login.dc.html" style="height:36px; color:var(--neg)">Sign out</a>
+        </div>
+      </sc-if>
+    </div>
+  </header>
+
+  <main style="padding:28px 24px 48px; display:flex; flex-direction:column; gap:20px; max-width:1400px; width:100%">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:16px; flex-wrap:wrap">
+      <div style="display:flex; flex-direction:column; gap:4px">
+        <h1 style="font-size:24px; font-weight:600">Companies</h1>
+        <p style="color:var(--muted)">Listed companies, their prices, and what the public site shows.</p>
+      </div>
+      <button class="btn btn-primary" onClick="{{openNew}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>New company</button>
+    </div>
+
+    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center">
+      <div class="input-icon" style="flex:1 1 280px; max-width:380px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <label for="c-q" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)">Search companies</label>
+        <input id="c-q" class="input" placeholder="Search name or ticker" value="{{q}}" onChange="{{setQ}}">
+      </div>
+      <div class="seg" role="group" aria-label="Status filter">
+        <button class="{{st.all.cls}}" aria-pressed="{{st.all.on}}" onClick="{{st.all.go}}" style="padding:0 12px">All <span class="num muted">{{st.all.n}}</span></button>
+        <button class="{{st.pub.cls}}" aria-pressed="{{st.pub.on}}" onClick="{{st.pub.go}}" style="padding:0 12px">Published <span class="num muted">{{st.pub.n}}</span></button>
+        <button class="{{st.draft.cls}}" aria-pressed="{{st.draft.on}}" onClick="{{st.draft.go}}" style="padding:0 12px">Draft <span class="num muted">{{st.draft.n}}</span></button>
+      </div>
+    </div>
+
+    <div class="tbl-box">
+      <table class="tbl" style="min-width:980px">
+        <thead><tr><th>Company</th><th>Sector</th><th>Status</th><th class="r">Price</th><th>Last updated</th><th class="r">Reports</th><th class="r">Actions</th></tr></thead>
+        <tbody>
+          <sc-for list="{{rows}}" as="c" hint-placeholder-count="8">
+            <tr>
+              <td>
+                <div style="display:flex; gap:12px; align-items:center">
+                  <sc-if value="{{c.logo.isImg}}" hint-placeholder-val="{{ true }}"><span class="logo" style="{{c.logo.style}}"><img src="{{c.logo.src}}" alt=""></span></sc-if>
+                  <sc-if value="{{c.logo.isMono}}" hint-placeholder-val="{{ false }}"><span class="logo logo-mono" style="{{c.logo.style}}" aria-hidden="true">{{c.logo.initials}}</span></sc-if>
+                  <div style="display:flex; flex-direction:column"><span style="font-weight:500">{{c.name}}</span><span class="num" style="font-size:12px; color:var(--muted)">{{c.id}}</span></div>
+                </div>
+              </td>
+              <td>{{c.sector}}</td>
+              <td><span class="{{c.pill}}">{{c.statusText}}</span></td>
+              <td class="r num">{{c.priceText}}</td>
+              <td>
+                <span class="tnum" style="{{c.dateStyle}}">{{c.updated}}</span>
+                <sc-if value="{{c.stale}}" hint-placeholder-val="{{ false }}"><span class="warn-chip" style="height:20px; margin-left:8px; font-size:11px">Stale</span></sc-if>
+              </td>
+              <td class="r num">{{c.reports}}</td>
+              <td class="r">
+                <div style="display:inline-flex; gap:4px">
+                  <button class="btn btn-ghost btn-sm" onClick="{{c.edit}}" aria-label="{{c.editLabel}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>Edit</button>
+                  <button class="btn btn-ghost btn-sm" onClick="{{c.price}}">Update price</button>
+                  <a class="btn btn-ghost btn-sm" href="Reports.dc.html">Reports</a>
+                </div>
+              </td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- Create / edit drawer -->
+<sc-if value="{{form.open}}" hint-placeholder-val="{{ false }}">
+  <div class="overlay" style="justify-content:flex-end; padding:0"></div>
+  <section class="drawer" role="dialog" aria-modal="true" aria-labelledby="form-h" style="width:min(1120px, 100%)">
+    <div style="display:flex; align-items:center; gap:12px; padding:18px 24px; border-bottom:1px solid var(--border)">
+      <div style="flex:1; display:flex; flex-direction:column; gap:2px">
+        <h2 id="form-h" style="font-size:18px; font-weight:600">{{form.title}}</h2>
+        <span style="font-size:13px; color:var(--muted)">{{form.sub}}</span>
+      </div>
+      <button class="btn btn-ghost btn-icon btn-sm" aria-label="Close" onClick="{{close}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+    </div>
+    <div style="flex:1; min-height:0; overflow-y:auto; display:flex; flex-wrap:wrap; align-items:flex-start">
+      <!-- Form column -->
+      <div style="flex:1 1 480px; min-width:0; padding:24px; display:flex; flex-direction:column; gap:22px">
+
+        <!-- Logo uploader -->
+        <section style="display:flex; flex-direction:column; gap:14px" aria-labelledby="logo-h">
+          <div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap">
+            <h3 id="logo-h" style="font-size:15px; font-weight:600">Company logo</h3>
+            <span class="hint">Shown on cards, the pitch header, tables and chat</span>
+          </div>
+
+          <sc-if value="{{up.showDrop}}" hint-placeholder-val="{{ false }}">
+            <div class="{{up.dropCls}}" style="padding:28px 20px">
+              <span style="width:44px; height:44px; border-radius:12px; background:var(--card); border:1px solid var(--border); display:inline-flex; align-items:center; justify-content:center; color:var(--primary-text)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"></path></svg></span>
+              <span style="font-weight:500; display:inline-flex; align-items:center; gap:2px; flex-wrap:wrap; justify-content:center">Drop logo here or <button class="btn btn-ghost btn-sm" style="padding:0 4px; height:auto; min-height:0; color:var(--primary-text); text-decoration:underline" onClick="{{up.browse}}">browse</button></span>
+              <span class="hint">PNG, SVG, JPG, WebP — max 2 MB. Transparent SVG or PNG works best.</span>
+            </div>
+          </sc-if>
+          <sc-if value="{{up.isError}}" hint-placeholder-val="{{ false }}">
+            <div role="alert" style="display:flex; gap:12px; align-items:flex-start; padding:12px 14px; border-radius:10px; background:var(--neg-soft); border:1px solid color-mix(in srgb, var(--neg) 35%, transparent)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="color:var(--neg); flex:none; margin-top:1px"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4M12 16h.01"></path></svg>
+              <div style="flex:1; display:flex; flex-direction:column; gap:2px"><span style="font-weight:600; font-size:14px">{{up.errTitle}}</span><span style="font-size:13px; line-height:1.5">{{up.errBody}}</span></div>
+              <button class="btn btn-secondary btn-sm" onClick="{{up.browse}}">Choose another file</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{up.isUploading}}" hint-placeholder-val="{{ false }}">
+            <div class="card" style="display:flex; gap:14px; align-items:center; padding:14px 16px; box-shadow:none">
+              <span class="num" style="width:40px; height:40px; border-radius:10px; background:var(--subtle); color:var(--muted); display:inline-flex; align-items:center; justify-content:center; font-size:10px; font-weight:600">SVG</span>
+              <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:8px">
+                <div style="display:flex; justify-content:space-between; gap:8px"><span class="num" style="font-size:13px; font-weight:500">{{up.fileName}}</span><span class="num muted" style="font-size:12px">{{up.pctText}}</span></div>
+                <div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{up.pct}}" aria-label="Logo upload progress"><span style="{{up.bar}}"></span></div>
+                <span class="hint">4 KB of 4 KB · checking dimensions</span>
+              </div>
+              <button class="btn btn-ghost btn-sm" onClick="{{up.cancel}}">Cancel</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{up.isUploaded}}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start">
+              <div style="display:flex; flex-direction:column; gap:8px">
+                <div class="checker" style="position:relative; width:168px; height:168px; border-radius:14px; border:1px solid var(--border); overflow:hidden" role="img" aria-label="Square fit preview of the uploaded logo">
+                  <img src="{{up.src}}" alt="" style="{{up.fitStyle}}">
+                  <span aria-hidden="true" style="position:absolute; inset:20px; border:1px dashed #6B7280; border-radius:6px"></span>
+                </div>
+                <span class="hint" style="width:168px">Dashed line: the 12% safe area every tile keeps clear.</span>
+              </div>
+              <div style="flex:1 1 220px; display:flex; flex-direction:column; gap:12px; min-width:0">
+                <div style="display:flex; flex-direction:column; gap:2px"><span class="num" style="font-size:13px; font-weight:500">{{up.fileName}}</span><span class="hint">SVG · 4 KB · 120 × 120 · uploaded just now</span></div>
+                <div class="field">
+                  <span class="label" id="fit-l">Fit in square</span>
+                  <div class="seg" role="group" aria-labelledby="fit-l" style="align-self:flex-start">
+                    <button class="{{up.fitContain.cls}}" aria-pressed="{{up.fitContain.on}}" onClick="{{up.fitContain.go}}" style="padding:0 12px">Fit (recommended)</button>
+                    <button class="{{up.fitCover.cls}}" aria-pressed="{{up.fitCover.on}}" onClick="{{up.fitCover.go}}" style="padding:0 12px">Crop to square</button>
+                  </div>
+                  <span class="hint">Public tiles always fit; crop only affects social previews.</span>
+                </div>
+                <div style="display:flex; gap:8px">
+                  <button class="btn btn-secondary btn-sm" onClick="{{up.browse}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"></path></svg>Replace</button>
+                  <button class="btn btn-ghost btn-sm" style="color:var(--neg)" onClick="{{up.remove}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>Remove</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <span class="label" id="bg-l">Tile background</span>
+              <div class="seg" role="group" aria-labelledby="bg-l" style="align-self:flex-start">
+                <sc-for list="{{up.bgOpts}}" as="o" hint-placeholder-count="3">
+                  <button class="{{o.cls}}" aria-pressed="{{o.on}}" onClick="{{o.go}}" style="padding:0 12px"><span style="{{o.swatch}}" aria-hidden="true"></span>{{o.label}}</button>
+                </sc-for>
+              </div>
+              <span class="hint">{{up.bgHint}}</span>
+            </div>
+
+            <div class="field">
+              <span class="label">Dark theme logo <span style="font-weight:400; color:var(--muted)">(optional)</span></span>
+              <sc-if value="{{up.hasDark}}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex; gap:12px; align-items:center; padding:10px 12px; border:1px solid var(--border); border-radius:10px">
+                  <span class="logo" style="width:40px; height:40px; border-radius:10px; padding:6px; background:#121A2D; border-color:#232C46"><img src="{{up.darkSrc}}" alt=""></span>
+                  <div style="flex:1; min-width:0; display:flex; flex-direction:column"><span class="num" style="font-size:13px; font-weight:500">lhl_mark_dark.svg</span><span class="hint">Used on transparent tiles in dark theme</span></div>
+                  <button class="btn btn-ghost btn-sm" onClick="{{up.removeDark}}">Remove</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{up.noDark}}" hint-placeholder-val="{{ false }}">
+                <div class="drop" style="padding:14px 16px; flex-direction:row; justify-content:flex-start; text-align:left; gap:12px">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--muted)"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+                  <span style="font-size:13px; flex:1">Drop a light-on-dark version, or <button class="btn btn-ghost btn-sm" style="padding:0 4px; height:auto; min-height:0; color:var(--primary-text); text-decoration:underline" onClick="{{up.addDark}}">browse</button>. Without one, dark theme puts this logo on a light tile.</span>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <div class="field">
+            <label class="label" for="brand-c">Brand colour</label>
+            <div style="display:flex; gap:10px; align-items:center">
+              <input id="brand-c" type="color" value="{{up.color}}" onChange="{{up.setColor}}" style="width:44px; height:40px; padding:2px; border:1px solid var(--border-strong); border-radius:10px; background:var(--card); cursor:pointer">
+              <label for="brand-hex" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)">Brand colour hex value</label>
+              <input id="brand-hex" class="input num" style="width:120px" value="{{up.hex}}" onChange="{{up.setHex}}">
+              <span class="hint">Monogram fallback tint and the 2 px card accent.</span>
+            </div>
+          </div>
+        </section>
+
+        <hr class="divider">
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap:16px">
+          <div class="field" style="grid-column:1 / -1"><label class="label" for="f-name">Company name</label><input id="f-name" class="input" value="{{form.name}}" onChange="{{form.noop}}"></div>
+          <div class="field"><label class="label" for="f-ticker">Ticker</label><input id="f-ticker" class="input num" value="{{form.ticker}}" onChange="{{form.noop}}"><span class="hint">As listed on the exchange.</span></div>
+          <div class="field"><label class="label" for="f-sector">Sector</label>
+            <div class="select-wrap"><select id="f-sector" class="select" value="{{form.sector}}" onChange="{{form.noop}}"><option>Logistics</option><option>Telecommunications</option><option>Plantations</option><option>Banking</option><option>Manufacturing</option><option>Leisure</option><option>Energy</option><option>Healthcare</option></select><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></div>
+          </div>
+        </div>
+        <div class="field"><label class="label" for="f-desc">Description</label><textarea id="f-desc" class="textarea" rows="3" value="{{form.desc}}" onChange="{{form.noop}}"></textarea><span class="hint">Shown under the company name on the public pitch. Keep to two sentences.</span></div>
+        <div class="field"><label class="label" for="f-web">Website</label><input id="f-web" class="input" value="{{form.web}}" onChange="{{form.noop}}" placeholder="https://"></div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap:16px">
+          <div class="field"><label class="label" for="f-cur">Currency</label>
+            <div class="select-wrap"><select id="f-cur" class="select" value="LKR" onChange="{{form.noop}}"><option>LKR</option><option>USD</option></select><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></div>
+          </div>
+          <div class="field"><label class="label" for="f-shares">Shares outstanding</label><input id="f-shares" class="input num" value="{{form.shares}}" onChange="{{form.noop}}"><span class="hint">Used to turn net income into EPS.</span></div>
+        </div>
+        <div style="display:flex; gap:12px; align-items:center; padding:14px 16px; border-radius:12px; background:var(--subtle)">
+          <button class="{{form.switchCls}}" role="switch" aria-checked="{{form.pub}}" aria-labelledby="pub-l" onClick="{{form.togglePub}}"></button>
+          <div style="display:flex; flex-direction:column"><span id="pub-l" style="font-weight:500">Visible on the public site</span><span class="hint">Drafts are only visible to admins.</span></div>
+        </div>
+      </div>
+
+      <!-- Live preview column -->
+      <aside style="flex:0 1 400px; min-width:300px; padding:24px; display:flex; flex-direction:column; gap:14px; background:var(--subtle); border-left:1px solid var(--border); align-self:stretch" aria-label="Live preview">
+        <div style="display:flex; flex-direction:column; gap:2px">
+          <h3 style="font-size:15px; font-weight:600">Live preview</h3>
+          <span class="hint">The public company card with this logo, in both themes.</span>
+        </div>
+        <sc-for list="{{pv}}" as="p" hint-placeholder-count="2">
+          <div class="{{p.cls}}" style="padding:12px; border-radius:14px; background:var(--bg); border:1px solid var(--border); display:flex; flex-direction:column; gap:10px; color:var(--text)">
+            <div style="display:flex; justify-content:space-between; align-items:center">
+              <span class="eyebrow">{{p.label}}</span>
+              <div style="display:flex; gap:6px; align-items:center">
+                <sc-if value="{{p.small.isImg}}" hint-placeholder-val="{{ true }}"><span class="logo" style="{{p.small.style}}"><img src="{{p.small.src}}" alt=""></span></sc-if>
+                <sc-if value="{{p.small.isMono}}" hint-placeholder-val="{{ false }}"><span class="logo logo-mono" style="{{p.small.style}}" aria-hidden="true">{{p.small.initials}}</span></sc-if>
+                <span class="hint num">32 px</span>
+              </div>
+            </div>
+            <div class="{{p.c.cardCls}}" style="{{p.c.cardStyle}}">
+              <span aria-hidden="true" style="{{p.c.accentBar}}"></span>
+              <div style="display:flex; align-items:center; gap:12px">
+                <sc-if value="{{p.c.logo.isImg}}" hint-placeholder-val="{{ true }}"><span class="logo" style="{{p.c.logo.style}}"><img src="{{p.c.logo.src}}" alt=""></span></sc-if>
+                <sc-if value="{{p.c.logo.isMono}}" hint-placeholder-val="{{ false }}"><span class="logo logo-mono" style="{{p.c.logo.style}}" aria-hidden="true">{{p.c.logo.initials}}</span></sc-if>
+                <div style="min-width:0; flex:1; display:flex; flex-direction:column; gap:4px">
+                  <span style="font-weight:600; font-size:15px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{p.c.name}}</span>
+                  <div style="display:flex; gap:8px; align-items:center"><span class="num" style="font-size:12px; color:var(--muted)">{{p.c.id}}</span><span class="chip">{{p.c.sector}}</span></div>
+                </div>
+                <span class="{{p.c.deltaClass}}" style="align-self:flex-start">{{p.c.upsideLabel}}</span>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px">
+                <div style="display:flex; flex-direction:column; gap:2px"><span style="font-size:12px; color:var(--muted)">Current price</span><span class="num" style="font-size:16px; font-weight:600">{{p.c.priceLabel}}</span></div>
+                <div style="display:flex; flex-direction:column; gap:2px"><span style="font-size:12px; color:var(--muted)">3-yr target · base</span><span class="num" style="font-size:16px; font-weight:600">{{p.c.targetLabel}}</span></div>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px"><span style="font-size:12px; color:var(--muted)">Confidence</span><div class="{{p.c.meterClass}}" style="flex:1"><span style="width:{{p.c.confPct}}"></span></div><span class="num" style="font-size:13px; font-weight:600">{{p.c.conf}}</span></div>
+              <svg viewBox="0 0 300 64" preserveAspectRatio="none" style="width:100%; height:44px; display:block" aria-hidden="true">
+                <path d="{{p.c.histPath}}" fill="none" style="stroke:var(--c1)" stroke-width="1.75" vector-effect="non-scaling-stroke"></path>
+                <path d="{{p.c.projPath}}" fill="none" style="{{p.c.projStyle}}" stroke-width="1.75" stroke-dasharray="3 4" vector-effect="non-scaling-stroke"></path>
+              </svg>
+            </div>
+          </div>
+        </sc-for>
+      </aside>
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:8px; padding:16px 24px; border-top:1px solid var(--border)">
+      <button class="btn btn-secondary" onClick="{{close}}">Cancel</button>
+      <button class="btn btn-primary" onClick="{{close}}" disabled="{{up.isUploading}}">{{form.saveLabel}}</button>
+    </div>
+  </section>
+</sc-if>
+
+<!-- Update price dialog -->
+<sc-if value="{{pr.open}}" hint-placeholder-val="{{ false }}">
+  <div class="overlay">
+    <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="pr-h" style="max-width:640px">
+      <div style="display:flex; align-items:flex-start; gap:12px; padding:20px 24px 0">
+        <sc-if value="{{pr.logo.isImg}}" hint-placeholder-val="{{ true }}"><span class="logo" style="{{pr.logo.style}}"><img src="{{pr.logo.src}}" alt=""></span></sc-if>
+        <sc-if value="{{pr.logo.isMono}}" hint-placeholder-val="{{ false }}"><span class="logo logo-mono" style="{{pr.logo.style}}" aria-hidden="true">{{pr.logo.initials}}</span></sc-if>
+        <div style="flex:1; display:flex; flex-direction:column; gap:2px">
+          <h2 id="pr-h" style="font-size:18px; font-weight:600">Update price</h2>
+          <span style="font-size:13px; color:var(--muted)">{{pr.name}} · <span class="num">{{pr.id}}</span></span>
+        </div>
+        <button class="btn btn-ghost btn-icon btn-sm" aria-label="Close" onClick="{{close}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+      </div>
+      <div style="padding:16px 24px 0">
+        <div class="tabs" role="tablist" aria-label="Price input">
+          <button class="{{pr.tManual.cls}}" role="tab" aria-selected="{{pr.tManual.on}}" onClick="{{pr.tManual.go}}">Enter a close</button>
+          <button class="{{pr.tCsv.cls}}" role="tab" aria-selected="{{pr.tCsv.on}}" onClick="{{pr.tCsv.go}}">Import CSV</button>
+        </div>
+      </div>
+      <div style="padding:20px 24px; display:flex; flex-direction:column; gap:20px">
+        <sc-if value="{{pr.tManual.on}}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex; flex-direction:column; gap:20px">
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(180px, 100%), 1fr)); gap:16px">
+              <div class="field"><label class="label" for="p-val">Close price (LKR)</label><input id="p-val" class="input num" value="{{pr.val}}" onChange="{{pr.setVal}}" inputmode="decimal"><span class="{{pr.changeCls}}">{{pr.changeText}}</span></div>
+              <div class="field"><label class="label" for="p-date">Trading date</label><input id="p-date" class="input num" type="date" value="2026-10-16" onChange="{{form.noop}}"></div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px">
+              <div style="display:flex; justify-content:space-between; align-items:baseline"><span class="label">Price history</span><span class="hint">Last 6 closes</span></div>
+              <svg viewBox="0 0 560 64" preserveAspectRatio="none" style="width:100%; height:56px" role="img" aria-label="Recent closing prices">
+                <path d="{{pr.spark}}" fill="none" style="stroke:var(--c1)" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+              </svg>
+              <div class="tbl-box" style="border-radius:10px">
+                <table class="tbl"><thead><tr><th>Date</th><th class="r">Close</th><th class="r">Change</th><th>Source</th></tr></thead>
+                  <tbody><sc-for list="{{pr.hist}}" as="h" hint-placeholder-count="6"><tr><td class="tnum">{{h.d}}</td><td class="r num">{{h.p}}</td><td class="r num" style="{{h.style}}">{{h.c}}</td><td style="font-size:13px; color:var(--muted)">{{h.src}}</td></tr></sc-for></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{pr.tCsv.on}}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex; flex-direction:column; gap:16px">
+            <div class="drop" style="padding:28px">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--muted)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"></path></svg>
+              <span style="font-weight:500">Drop a CSV here, or <button class="btn btn-ghost btn-sm" style="padding:0 4px; height:auto; color:var(--primary-text)">choose a file</button></span>
+              <span class="hint">Columns: date (YYYY-MM-DD), close. <a href="#">Download template</a></span>
+            </div>
+            <div style="display:flex; gap:12px; align-items:center; padding:12px 14px; border:1px solid var(--border); border-radius:10px">
+              <span class="num" style="width:36px; height:36px; border-radius:9px; background:var(--subtle); color:var(--muted); display:inline-flex; align-items:center; justify-content:center; font-size:10px; font-weight:600">CSV</span>
+              <div style="flex:1; display:flex; flex-direction:column"><span class="num" style="font-size:13px; font-weight:500">lhl_closes_sep_oct.csv</span><span style="font-size:12px; color:var(--muted)">23 rows read · 21 new · 2 skipped (dates already stored)</span></div>
+              <span class="pill pill-approved">Ready</span>
+            </div>
+            <div style="display:flex; gap:10px; padding:12px 14px; border-radius:10px; background:var(--warn-soft); font-size:13px; line-height:1.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--warn); flex:none; margin-top:2px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4M12 17h.01"></path></svg>
+              <span>Row 14 (2026-09-29) jumps 11.8% from the previous close. Check it before importing.</span>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; padding:16px 24px; border-top:1px solid var(--border); flex-wrap:wrap">
+        <span class="hint">Saving a price recalculates upside but not the target.</span>
+        <div style="display:flex; gap:8px">
+          <button class="btn btn-secondary" onClick="{{close}}">Cancel</button>
+          <button class="btn btn-primary" onClick="{{close}}">{{pr.saveLabel}}</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark","system"],"default":"light","section":"Theme"},"view":{"editor":"enum","options":["list","form","price"],"default":"list","section":"State"},"logoState":{"editor":"enum","options":["uploaded","empty","uploading","error-size","error-type"],"default":"uploaded","section":"State"},"collapsed":{"editor":"boolean","default":false,"section":"State"},"$preview":{"width":1440,"height":1000}}'>
+const NAV = [
+  ['dashboard', 'Dashboard', 'Dashboard.dc.html', 'M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z', ''],
+  ['companies', 'Companies', 'Companies.dc.html', 'M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18ZM6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4', ''],
+  ['reports', 'Reports', 'Reports.dc.html', 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M16 13H8M16 17H8M10 9H8', '3'],
+  ['predictions', 'Predictions', 'Predictions.dc.html', 'M3 3v18h18M19 9l-5 5-4-4-3 3', '2'],
+  ['sectors', 'Sectors', '#', 'M12 2H2v10l9.29 9.29a1 1 0 0 0 1.42 0l8.58-8.58a1 1 0 0 0 0-1.42ZM7 7h.01', ''],
+  ['events', 'Events', '#', 'M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 2v4M8 2v4M3 10h18', ''],
+  ['chat', 'Chat Insights', 'ChatInsights.dc.html', 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z', ''],
+  ['settings', 'Settings', 'Settings.dc.html', 'M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6', ''],
+  ['users', 'Users', '#', 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75', ''],
+  ['audit', 'Audit Log', '#', 'M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5M12 7v5l4 2', '']
+];
+const ACTIVE = 'companies';
+const BRANDS = {
+  LHL: { name: 'Lanka Harbour Logistics', color: '#1F4E8C', logo: './logos/lhl.svg', logoDark: './logos/lhl-dark.svg', bg: 'transparent', shape: 'square', file: 'lhl_mark.svg' },
+  STEL: { name: 'Serendib Telecom', color: '#0E9384', logo: './logos/serendib.svg', logoDark: './logos/serendib-dark.svg', bg: 'transparent', shape: 'wide', file: 'serendib_wordmark.svg' },
+  KHT: { name: 'Kandy Highland Tea', color: '#3F7D3A', logo: './logos/kht.svg', logoDark: './logos/kht-dark.svg', bg: 'transparent', shape: 'round', file: 'kht_seal.svg' },
+  CCB: { name: 'Colombo Capital Bank', color: '#8B1E3F', logo: './logos/ccb.svg', logoDark: null, bg: 'light', shape: 'tall', file: 'ccb_crest.svg' },
+  RCEM: { name: 'Ruhuna Cement', color: '#9A6A2F', logo: null },
+  GBH: { name: 'Galle Bay Hotels', color: '#C2410C', logo: './logos/gbh.svg', logoDark: './logos/gbh-dark.svg', bg: 'transparent', shape: 'wide', file: 'gbh_wordmark.svg' },
+  MPWR: { name: 'Meridian Power', color: '#6D28D9', logo: null },
+  IPL: { name: 'Island Pharma Labs', color: '#0284C7', logo: './logos/ipl.svg', logoDark: null, bg: 'dark', shape: 'square', file: 'ipl_icon_white.svg' }
+};
+const LOGO_PAD = { square: 0.16, round: 0.14, tall: 0.10, wide: 0.07 };
+function initialsOf(name) { return name.split(/\s+/).filter(w => /^[A-Z]/.test(w)).slice(0, 2).map(w => w[0]).join('') || '?'; }
+function logoTile(b, size, dark) {
+  const r = Math.min(14, Math.round(size * 0.25));
+  const box = 'width:' + size + 'px; height:' + size + 'px; border-radius:' + r + 'px;';
+  if (!b.logo) {
+    const bg = dark ? 'color-mix(in srgb, ' + b.color + ' 28%, #121A2D)' : 'color-mix(in srgb, ' + b.color + ' 13%, #FFFFFF)';
+    const fg = dark ? 'color-mix(in srgb, ' + b.color + ' 40%, #FFFFFF)' : 'color-mix(in srgb, ' + b.color + ' 80%, #000000)';
+    return { isImg: false, isMono: true, initials: initialsOf(b.name), style: box + ' background:' + bg + '; color:' + fg + '; border-color:color-mix(in srgb, ' + b.color + ' ' + (dark ? 40 : 22) + '%, transparent); font-size:' + Math.round(size * 0.36) + 'px' };
+  }
+  let bg = b.bg, src = b.logo;
+  if (dark && b.logoDark) src = b.logoDark;
+  else if (dark && bg === 'transparent') bg = 'light';
+  const fill = bg === 'light' ? '#FFFFFF' : bg === 'dark' ? '#0F172A' : 'transparent';
+  return { isImg: true, isMono: false, src: src, style: box + ' padding:' + Math.max(2, Math.round(size * (LOGO_PAD[b.shape] || 0.12))) + 'px; background:' + fill + (bg === 'dark' ? '; border-color:#1E293B' : '') };
+}
+function hist(seed, end, n, drift) {
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const t = i / (n - 1);
+    const w = 1 + 0.045 * Math.sin(i * 0.9 + seed) + 0.03 * Math.sin(i * 2.3 + seed * 1.7) + 0.018 * Math.sin(i * 5.1 + seed * 0.3);
+    out.push(Math.pow(1 / drift, 1 - t) * w);
+  }
+  const k = end / out[n - 1];
+  return out.map(v => v * k);
+}
+const fmt = n => 'LKR ' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+function cardData(c, b, dark) {
+  const h = hist(c.seed, c.price, 24, c.drift);
+  const tgt = c.target || c.price;
+  const proj = [1, 2, 3].map(n => c.price * Math.pow(tgt / c.price, n / 3));
+  const all = h.concat(proj), lo = Math.min.apply(null, all), hi = Math.max.apply(null, all);
+  const y = v => (58 - ((v - lo) / ((hi - lo) || 1)) * 52).toFixed(1);
+  const up = tgt / c.price - 1;
+  const tint = dark ? 'color-mix(in srgb, ' + b.color + ' 65%, #FFFFFF)' : b.color;
+  return {
+    id: c.id, sector: c.sector, name: b.name, logo: logoTile(b, 48, dark), cardCls: 'card co-card',
+    cardStyle: 'display:flex; flex-direction:column; gap:14px; padding:16px; color:var(--text)',
+    accentBar: 'position:absolute; left:0; right:0; top:0; height:2px; background:' + tint + '; opacity:.85',
+    priceLabel: fmt(c.price), targetLabel: c.target ? fmt(c.target) : '—',
+    upsideLabel: c.target ? (up >= 0 ? '+' : '−') + Math.abs(up * 100).toFixed(1) + '%' : 'Pending',
+    deltaClass: !c.target ? 'pill pill-draft' : up >= 0 ? 'delta up' : 'delta down',
+    conf: c.conf || '—', confPct: (c.conf || 0) + '%', meterClass: c.conf >= 70 ? 'meter' : (c.conf >= 60 ? 'meter mid' : 'meter low'),
+    histPath: h.map((v, i) => (i ? 'L' : 'M') + (i * 200 / 23).toFixed(1) + ' ' + y(v)).join(' '),
+    projPath: c.target ? 'M200 ' + y(c.price) + ' ' + proj.map((v, i) => 'L' + (200 + (i + 1) * 33.3).toFixed(1) + ' ' + y(v)).join(' ') : '',
+    projStyle: up >= 0 ? 'stroke: var(--pos)' : 'stroke: var(--neg)'
+  };
+}
+const COS = [
+  { id: 'LHL', sector: 'Logistics', status: 'published', price: 245.50, target: 318.10, conf: 78, seed: 1.2, drift: 1.3, updated: '16 Oct 2026', reports: 5, shares: '156,000,000', web: 'https://[company website]', desc: 'Port terminal operator and contract-logistics group with container, warehousing and freight-forwarding businesses.' },
+  { id: 'STEL', sector: 'Telecommunications', status: 'published', price: 112.25, target: 128.40, conf: 82, seed: 2.7, drift: 1.14, updated: '16 Oct 2026', reports: 5 },
+  { id: 'KHT', sector: 'Plantations', status: 'published', price: 86.10, target: 79.20, conf: 61, seed: 0.4, drift: 0.9, updated: '15 Oct 2026', reports: 4 },
+  { id: 'CCB', sector: 'Banking', status: 'published', price: 402.00, target: 476.30, conf: 74, seed: 3.3, drift: 1.22, updated: '16 Oct 2026', reports: 6 },
+  { id: 'RCEM', sector: 'Manufacturing', status: 'published', price: 58.70, target: 71.90, conf: 55, seed: 5.1, drift: 1.08, updated: '16 Oct 2026', reports: 4 },
+  { id: 'GBH', sector: 'Leisure', status: 'published', price: 33.40, target: 41.10, conf: 47, seed: 4.4, drift: 1.4, updated: '14 Oct 2026', reports: 3, stale: true },
+  { id: 'MPWR', sector: 'Energy', status: 'draft', price: 19.80, target: null, conf: null, seed: 2.0, drift: 1.05, updated: '16 Oct 2026', reports: 2 },
+  { id: 'IPL', sector: 'Healthcare', status: 'published', price: 167.00, target: 181.50, conf: 52, seed: 6.2, drift: 1.1, updated: '02 Sep 2026', reports: 3, stale: true }
+];
+const HIST = [['16 Oct 2026', 245.50, 'CSE end-of-day'], ['15 Oct 2026', 242.75, 'CSE end-of-day'], ['14 Oct 2026', 243.10, 'CSE end-of-day'], ['13 Oct 2026', 238.40, 'Manual · N. Perera'], ['10 Oct 2026', 239.90, 'CSE end-of-day'], ['09 Oct 2026', 236.20, 'CSV import']];
+const ERRORS = {
+  'error-size': ['File too large', 'lhl_logo_print.png is 3.4 MB. Logos must be 2 MB or smaller — export a smaller PNG, or use SVG.'],
+  'error-type': ['Unsupported file type', 'lhl_logo.tiff is a TIFF image. Use PNG, SVG, JPG or WebP.']
+};
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { mode: null, collapsed: null, menu: false, q: '', st: 'all', view: null, target: 'LHL', prTab: 'manual', val: '248.25', pub: null,
+      logo: null, pct: null, bg: null, color: null, hex: null, fit: 'contain', darkLogo: null };
+  }
+  componentWillUnmount() { clearInterval(this.iv); }
+  theme() {
+    const m = this.state.mode || this.props.theme || 'light';
+    let dark = m === 'dark';
+    if (m === 'system') { try { dark = window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {} }
+    return {
+      isDark: dark,
+      rootClass: dark ? 'av dark' : 'av',
+      segL: m === 'light' ? 'seg-btn on' : 'seg-btn', segD: m === 'dark' ? 'seg-btn on' : 'seg-btn', segS: m === 'system' ? 'seg-btn on' : 'seg-btn',
+      pL: m === 'light', pD: m === 'dark', pS: m === 'system',
+      setL: () => this.setState({ mode: 'light' }), setD: () => this.setState({ mode: 'dark' }), setS: () => this.setState({ mode: 'system' })
+    };
+  }
+  shell() {
+    const s = this.state;
+    const col = s.collapsed === null ? !!this.props.collapsed : s.collapsed;
+    return {
+      side: {
+        cls: col ? 'side-collapsed hide-sm' : 'hide-sm',
+        style: 'flex:none; width:' + (col ? 72 : 248) + 'px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; transition:width .2s',
+        nav: NAV.map(n => ({ label: n[1], href: n[2], icon: n[3], badge: n[4], hasBadge: !!n[4], cls: n[0] === ACTIVE ? 'sidelink on' : 'sidelink', current: n[0] === ACTIVE ? 'page' : 'false' })),
+        toggle: () => this.setState({ collapsed: !col }),
+        toggleLabel: col ? 'Expand sidebar' : 'Collapse sidebar', expanded: !col
+      },
+      menu: { open: s.menu, toggle: () => this.setState({ menu: !s.menu }) }
+    };
+  }
+  startUpload() {
+    clearInterval(this.iv);
+    this.setState({ logo: 'uploading', pct: 6 });
+    this.iv = setInterval(() => {
+      const p = Math.min(100, (this.state.pct || 0) + 14);
+      if (p >= 100) { clearInterval(this.iv); this.setState({ logo: 'uploaded', pct: 100, darkLogo: this.state.darkLogo === null ? true : this.state.darkLogo }); }
+      else this.setState({ pct: p });
+    }, 220);
+  }
+  renderVals() {
+    const s = this.state;
+    const th = this.theme();
+    const dark = th.isDark;
+    const view = s.view || this.props.view || 'list';
+    const q = s.q.trim().toLowerCase();
+    const rows = COS.filter(c => (s.st === 'all' || c.status === s.st) && (!q || BRANDS[c.id].name.toLowerCase().indexOf(q) >= 0 || c.id.toLowerCase().indexOf(q) >= 0)).map(c => ({
+      id: c.id, name: BRANDS[c.id].name, sector: c.sector, logo: logoTile(BRANDS[c.id], 32, dark),
+      pill: 'pill pill-' + c.status, statusText: c.status === 'published' ? 'Published' : 'Draft',
+      priceText: 'LKR ' + c.price.toFixed(2), updated: c.updated, stale: !!c.stale,
+      dateStyle: c.stale ? 'color:var(--warn); font-weight:500' : '',
+      reports: c.reports, editLabel: 'Edit ' + BRANDS[c.id].name,
+      edit: () => this.setState({ view: 'form', target: c.id, logo: null, bg: null, color: null, hex: null, darkLogo: null }),
+      price: () => this.setState({ view: 'price', target: c.id, prTab: 'manual' })
+    }));
+    const count = k => COS.filter(c => k === 'all' || c.status === k).length;
+    const mk = k => ({ on: s.st === k, cls: s.st === k ? 'seg-btn on' : 'seg-btn', n: count(k), go: () => this.setState({ st: k }) });
+    const isNew = s.target === null;
+    const c = isNew ? null : COS.filter(x => x.id === s.target)[0];
+    const base = isNew ? Object.assign({}, BRANDS.LHL, { name: 'New company' }) : BRANDS[c.id];
+    const pub = s.pub === null ? (c ? c.status === 'published' : false) : s.pub;
+
+    // logo uploader state
+    let ls = s.logo || (isNew ? 'empty' : (this.props.logoState || 'uploaded'));
+    if (ls === 'uploaded' && !base.logo) ls = 'empty';
+    const fileLogo = base.logo || BRANDS.LHL.logo;
+    const fileDark = base.logo ? base.logoDark : BRANDS.LHL.logoDark;
+    const hasDark = s.darkLogo === null ? !!fileDark : (s.darkLogo && !!fileDark);
+    const bg = s.bg || base.bg || 'transparent';
+    const color = s.color || base.color;
+    const pct = ls === 'uploading' ? (s.pct === null ? 64 : s.pct) : 0;
+    const brand = Object.assign({}, base, { color: color, bg: bg, logo: ls === 'uploaded' ? fileLogo : null, logoDark: ls === 'uploaded' && hasDark ? fileDark : null, shape: base.shape || 'square' });
+    const bgDefs = [['light', 'Light', '#FFFFFF'], ['dark', 'Dark', '#0F172A'], ['transparent', 'Transparent', 'transparent']];
+    const sample = c || COS[0];
+    const preview = [false, true].map(d => ({
+      cls: d ? 'av dark' : 'av', label: d ? 'Dark theme' : 'Light theme',
+      c: cardData(sample, brand, d), small: logoTile(brand, 32, d)
+    }));
+
+    const v = parseFloat(s.val);
+    const last = HIST[0][1];
+    const ch = isNaN(v) ? null : (v / last - 1) * 100;
+    const hv = HIST.map(h => h[1]).reverse();
+    const lo = Math.min.apply(null, hv), hi = Math.max.apply(null, hv);
+    const spark = hv.map((p, i) => (i ? 'L' : 'M') + (i * 112).toFixed(0) + ' ' + (58 - (p - lo) / (hi - lo) * 52).toFixed(1)).join(' ');
+    const close = () => { clearInterval(this.iv); this.setState({ view: 'list', pub: null }); };
+    return Object.assign(th, this.shell(), {
+      rows: rows, q: s.q, setQ: e => this.setState({ q: e.target.value }),
+      st: { all: mk('all'), pub: mk('published'), draft: mk('draft') },
+      openNew: () => this.setState({ view: 'form', target: null, logo: null, bg: null, color: null, hex: null, darkLogo: null }),
+      close: close,
+      form: {
+        open: view === 'form',
+        title: isNew ? 'New company' : 'Edit company',
+        sub: isNew ? 'Starts as a draft until you publish it' : base.name + ' · last saved 12 Oct 2026',
+        name: isNew ? '' : base.name, ticker: isNew ? '' : c.id, sector: isNew ? 'Logistics' : c.sector,
+        desc: isNew ? '' : (c.desc || ''), web: isNew ? '' : (c.web || ''), shares: isNew ? '' : (c.shares || ''),
+        pub: pub, switchCls: pub ? 'switch on' : 'switch', togglePub: () => this.setState({ pub: !pub }),
+        saveLabel: isNew ? 'Create company' : 'Save changes', noop: () => {}
+      },
+      up: {
+        showDrop: ls === 'empty' || ls === 'error-size' || ls === 'error-type',
+        dropCls: ERRORS[ls] ? 'drop err' : 'drop',
+        isError: !!ERRORS[ls], errTitle: ERRORS[ls] ? ERRORS[ls][0] : '', errBody: ERRORS[ls] ? ERRORS[ls][1] : '',
+        isUploading: ls === 'uploading', isUploaded: ls === 'uploaded',
+        pct: pct, pctText: pct + '%', bar: 'width:' + pct + '%',
+        fileName: base.file || 'logo.svg',
+        src: fileLogo, darkSrc: fileDark,
+        fitStyle: 'position:absolute; inset:0; width:100%; height:100%; object-fit:' + s.fit + '; padding:' + (s.fit === 'contain' ? '20px' : '0'),
+        fitContain: { on: s.fit === 'contain', cls: s.fit === 'contain' ? 'seg-btn on' : 'seg-btn', go: () => this.setState({ fit: 'contain' }) },
+        fitCover: { on: s.fit === 'cover', cls: s.fit === 'cover' ? 'seg-btn on' : 'seg-btn', go: () => this.setState({ fit: 'cover' }) },
+        bgOpts: bgDefs.map(o => ({ label: o[1], on: bg === o[0], cls: bg === o[0] ? 'seg-btn on' : 'seg-btn', go: () => this.setState({ bg: o[0] }),
+          swatch: 'width:12px; height:12px; border-radius:3px; border:1px solid var(--border-strong); background:' + (o[0] === 'transparent' ? 'repeating-linear-gradient(45deg, #CBD5E1 0 3px, #FFFFFF 3px 6px)' : o[2]) })),
+        bgHint: bg === 'transparent' ? (hasDark ? 'Logo sits on the card colour; dark theme uses the dark-theme logo.' : 'No dark-theme logo yet, so dark theme falls back to a light tile.') : bg === 'light' ? 'White tile in both themes — best for full-colour logos.' : 'Deep navy tile in both themes — best for logos drawn in white.',
+        hasDark: hasDark, noDark: !hasDark,
+        removeDark: () => this.setState({ darkLogo: false }), addDark: () => this.setState({ darkLogo: true }),
+        color: color, hex: s.hex !== null ? s.hex : color.toUpperCase(),
+        setColor: e => this.setState({ color: e.target.value, hex: e.target.value.toUpperCase() }),
+        setHex: e => { const t = e.target.value; this.setState(/^#[0-9a-fA-F]{6}$/.test(t) ? { hex: t, color: t } : { hex: t }); },
+        browse: () => this.startUpload(),
+        cancel: () => { clearInterval(this.iv); this.setState({ logo: 'empty' }); },
+        remove: () => this.setState({ logo: 'empty', darkLogo: false })
+      },
+      pv: preview,
+      pr: {
+        open: view === 'price', name: base.name, id: c ? c.id : '', logo: logoTile(base, 32, dark),
+        tManual: { on: s.prTab === 'manual', cls: s.prTab === 'manual' ? 'tab on' : 'tab', go: () => this.setState({ prTab: 'manual' }) },
+        tCsv: { on: s.prTab === 'csv', cls: s.prTab === 'csv' ? 'tab on' : 'tab', go: () => this.setState({ prTab: 'csv' }) },
+        val: s.val, setVal: e => this.setState({ val: e.target.value }),
+        changeText: ch === null ? 'Enter a number' : (ch >= 0 ? '+' : '−') + Math.abs(ch).toFixed(1) + '% vs last close (LKR ' + last.toFixed(2) + ')',
+        changeCls: ch === null ? 'err' : 'hint',
+        hist: HIST.map((h, i) => { const prev = HIST[i + 1]; const d = prev ? (h[1] / prev[1] - 1) * 100 : 0; return { d: h[0], p: h[1].toFixed(2), c: prev ? (d >= 0 ? '+' : '−') + Math.abs(d).toFixed(2) + '%' : '—', style: !prev ? 'color:var(--muted)' : d >= 0 ? 'color:var(--pos)' : 'color:var(--neg)', src: h[2] }; }),
+        spark: spark,
+        saveLabel: s.prTab === 'csv' ? 'Import 21 rows' : 'Save price'
+      }
+    });
+  }
+}
+</script>
+</body>
+</html>

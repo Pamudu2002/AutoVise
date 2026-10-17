@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AutoVise Admin — Dashboard</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./autovise.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="{{rootClass}}" style="min-height:100vh; background:var(--bg); color:var(--text); font-family:var(--font); display:flex">
+
+<!-- Sidebar -->
+<aside class="{{side.cls}}" style="{{side.style}}" aria-label="Admin navigation">
+  <div style="display:flex; align-items:center; gap:10px; height:64px; padding:0 16px; border-bottom:1px solid var(--border)">
+    <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" style="flex:none"><rect width="28" height="28" rx="8" style="fill:var(--primary)"></rect><circle cx="14" cy="14" r="8.5" fill="none" style="stroke:var(--on-primary)" stroke-opacity=".35" stroke-width="1.5"></circle><path d="M8.5 17.5 12.5 13.5 15 16 19.5 10.5" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 10.5h3.5V14" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    <span class="sidelabel" style="font-weight:600; font-size:16px; letter-spacing:-0.02em">AutoVise</span>
+    <span class="sidelabel chip" style="height:20px; font-size:11px">Admin</span>
+  </div>
+  <nav style="display:flex; flex-direction:column; gap:2px; padding:12px; flex:1">
+    <sc-for list="{{side.nav}}" as="n" hint-placeholder-count="10">
+      <a class="{{n.cls}}" href="{{n.href}}" aria-current="{{n.current}}" title="{{n.label}}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"></path></svg>
+        <span class="sidelabel" style="flex:1">{{n.label}}</span>
+        <sc-if value="{{n.hasBadge}}" hint-placeholder-val="{{ false }}"><span class="sidelabel num" style="min-width:20px; height:20px; padding:0 6px; border-radius:999px; background:var(--subtle-2); color:var(--text); font-size:11px; display:inline-flex; align-items:center; justify-content:center">{{n.badge}}</span></sc-if>
+      </a>
+    </sc-for>
+  </nav>
+  <div style="padding:12px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:2px">
+    <a class="sidelink" href="Main.dc.html" title="View public site"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg><span class="sidelabel">View public site</span></a>
+    <button class="sidelink" style="border:0; background:none; cursor:pointer; font:inherit; width:100%" onClick="{{side.toggle}}" aria-label="{{side.toggleLabel}}" aria-expanded="{{side.expanded}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM9 3v18"></path></svg><span class="sidelabel">Collapse sidebar</span></button>
+  </div>
+</aside>
+
+<div style="flex:1 1 0; min-width:0; display:flex; flex-direction:column">
+  <!-- Top bar -->
+  <header style="height:64px; display:flex; align-items:center; gap:16px; padding:0 24px; border-bottom:1px solid var(--border); background:var(--surface); position:relative; z-index:20">
+    <nav aria-label="Breadcrumb" style="display:flex; gap:8px; align-items:center; font-size:14px; min-width:0">
+      <span style="font-weight:600">Dashboard</span>
+    </nav>
+    <div style="flex:1"></div>
+    <div class="input-icon hide-sm" style="width:280px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+      <label for="adm-q" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)">Search admin</label>
+      <input id="adm-q" class="input" style="height:36px" placeholder="Search companies, reports…">
+    </div>
+    <div class="seg" role="group" aria-label="Colour theme">
+      <button class="{{segL}}" aria-label="Light theme" aria-pressed="{{pL}}" onClick="{{setL}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg></button>
+      <button class="{{segD}}" aria-label="Dark theme" aria-pressed="{{pD}}" onClick="{{setD}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg></button>
+      <button class="{{segS}}" aria-label="Use system theme" aria-pressed="{{pS}}" onClick="{{setS}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg></button>
+    </div>
+    <div style="position:relative">
+      <button class="btn btn-ghost" style="padding:0 8px 0 4px; gap:10px" onClick="{{menu.toggle}}" aria-expanded="{{menu.open}}" aria-haspopup="menu">
+        <span style="width:32px; height:32px; border-radius:50%; background:var(--primary-soft); color:var(--primary-text); display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:600">NP</span>
+        <span class="hide-sm" style="display:flex; flex-direction:column; align-items:flex-start; line-height:1.2"><span style="font-size:13px; font-weight:500">Nimal Perera</span><span style="font-size:11px; color:var(--muted)">Lead analyst</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="color:var(--muted)"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+      <sc-if value="{{menu.open}}" hint-placeholder-val="{{ false }}">
+        <div class="popover" role="menu" style="position:absolute; right:0; top:48px; width:220px; padding:6px; display:flex; flex-direction:column">
+          <div style="padding:8px 10px 10px; border-bottom:1px solid var(--border); margin-bottom:4px"><div style="font-size:13px; font-weight:500">nimal@autovise.lk</div><div style="font-size:12px; color:var(--muted)">Role: Admin</div></div>
+          <a class="sidelink" role="menuitem" href="#" style="height:36px">Profile</a>
+          <a class="sidelink" role="menuitem" href="#" style="height:36px">Audit log</a>
+          <a class="sidelink" role="menuitem" href="Login.dc.html" style="height:36px; color:var(--neg)">Sign out</a>
+        </div>
+      </sc-if>
+    </div>
+  </header>
+
+  <main style="padding:28px 24px 48px; display:flex; flex-direction:column; gap:24px; max-width:1400px; width:100%">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:16px; flex-wrap:wrap">
+      <div style="display:flex; flex-direction:column; gap:4px">
+        <h1 style="font-size:24px; font-weight:600">Dashboard</h1>
+        <p style="color:var(--muted)">What needs attention today · Saturday 17 Oct 2026</p>
+      </div>
+      <a class="btn btn-primary" href="Reports.dc.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"></path></svg>Upload reports</a>
+    </div>
+
+    <!-- KPIs -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(190px, 100%), 1fr)); gap:16px">
+      <a href="Companies.dc.html" class="card" style="padding:18px; display:flex; flex-direction:column; gap:6px; text-decoration:none; color:var(--text)">
+        <span style="font-size:13px; color:var(--muted)">Companies</span>
+        <span class="num" style="font-size:28px; font-weight:600">8</span>
+        <span style="font-size:12px; color:var(--muted)">7 published · 1 draft</span>
+      </a>
+      <a href="Reports.dc.html" class="card" style="padding:18px; display:flex; flex-direction:column; gap:6px; text-decoration:none; color:var(--text)">
+        <span style="font-size:13px; color:var(--muted)">Reports processing</span>
+        <span class="num" style="font-size:28px; font-weight:600">{{kpi.processing}}</span>
+        <span style="font-size:12px; color:var(--muted)">Typical run 4–6 min</span>
+      </a>
+      <a href="Reports.dc.html" class="card" style="{{kpi.failedStyle}}">
+        <span style="font-size:13px; color:var(--muted)">Failed jobs</span>
+        <span class="num" style="{{kpi.failedNumStyle}}">{{kpi.failed}}</span>
+        <span style="font-size:12px; color:var(--muted)">{{kpi.failedNote}}</span>
+      </a>
+      <a href="Predictions.dc.html" class="card" style="padding:18px; display:flex; flex-direction:column; gap:6px; text-decoration:none; color:var(--text)">
+        <span style="font-size:13px; color:var(--muted)">Predictions awaiting review</span>
+        <span class="num" style="font-size:28px; font-weight:600">2</span>
+        <span style="font-size:12px; color:var(--muted)">Oldest: 1 day</span>
+      </a>
+      <a href="ChatInsights.dc.html" class="card" style="padding:18px; display:flex; flex-direction:column; gap:6px; text-decoration:none; color:var(--text)">
+        <span style="font-size:13px; color:var(--muted)">Chats today</span>
+        <span class="num" style="font-size:28px; font-weight:600">146</span>
+        <span style="font-size:12px; color:var(--muted)">9 answers down-voted</span>
+      </a>
+    </div>
+
+    <div style="display:flex; gap:24px; flex-wrap:wrap; align-items:flex-start">
+      <!-- Queue -->
+      <section class="card" style="flex:999 1 560px; min-width:0; display:flex; flex-direction:column" aria-labelledby="q-h">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--border); gap:12px; flex-wrap:wrap">
+          <div style="display:flex; flex-direction:column; gap:2px">
+            <h2 id="q-h" style="font-size:16px; font-weight:600">Processing queue</h2>
+            <span style="font-size:12px; color:var(--muted)">Uploads from the last 7 days</span>
+          </div>
+          <a class="btn btn-ghost btn-sm" href="Reports.dc.html">View all reports</a>
+        </div>
+        <ul style="margin:0; padding:0; list-style:none">
+          <sc-for list="{{queue}}" as="q" hint-placeholder-count="8">
+            <li style="display:flex; gap:14px; align-items:center; padding:14px 20px; border-bottom:1px solid var(--border); flex-wrap:wrap">
+              <span style="width:36px; height:36px; border-radius:9px; background:var(--subtle); color:var(--muted); display:inline-flex; align-items:center; justify-content:center; flex:none; font:600 10px var(--mono)">{{q.ext}}</span>
+              <div style="flex:1 1 240px; min-width:0; display:flex; flex-direction:column; gap:2px">
+                <span class="num" style="font-size:13px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{q.file}}</span>
+                <span style="font-size:12px; color:var(--muted)">{{q.meta}}</span>
+                <sc-if value="{{q.hasErr}}" hint-placeholder-val="{{ false }}"><span style="font-size:12px; color:var(--neg)">{{q.err}}</span></sc-if>
+              </div>
+              <div style="width:160px; display:flex; flex-direction:column; gap:6px">
+                <span class="{{q.pill}}" style="align-self:flex-start">{{q.status}}</span>
+                <sc-if value="{{q.isProc}}" hint-placeholder-val="{{ false }}"><div class="meter" role="progressbar" aria-valuenow="{{q.pct}}" aria-valuemin="0" aria-valuemax="100" aria-label="Processing progress"><span style="{{q.bar}}"></span></div></sc-if>
+              </div>
+              <span style="width:90px; font-size:12px; color:var(--muted)">{{q.when}}</span>
+              <div style="width:96px; display:flex; justify-content:flex-end">
+                <sc-if value="{{q.canReview}}" hint-placeholder-val="{{ false }}"><a class="btn btn-secondary btn-sm" href="ReportReview.dc.html">Review</a></sc-if>
+                <sc-if value="{{q.canRetry}}" hint-placeholder-val="{{ false }}"><button class="btn btn-secondary btn-sm" onClick="{{q.retry}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M8 16H3v5"></path></svg>Retry</button></sc-if>
+              </div>
+            </li>
+          </sc-for>
+        </ul>
+      </section>
+
+      <!-- Right column -->
+      <div style="flex:1 1 320px; min-width:0; display:flex; flex-direction:column; gap:24px">
+        <section class="card" style="display:flex; flex-direction:column" aria-labelledby="stale-h">
+          <div style="display:flex; gap:10px; align-items:center; padding:18px 20px; border-bottom:1px solid var(--border)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--warn-mark)"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4M12 17h.01"></path></svg>
+            <h2 id="stale-h" style="font-size:16px; font-weight:600">Stale prices</h2>
+            <span class="warn-chip" style="margin-left:auto">2</span>
+          </div>
+          <ul style="margin:0; padding:0; list-style:none">
+            <li style="display:flex; gap:12px; align-items:center; padding:14px 20px; border-bottom:1px solid var(--border)">
+              <span class="logo-tile t6" style="width:36px; height:36px; font-size:12px; border-radius:9px" aria-hidden="true">IP</span>
+              <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:2px">
+                <span style="font-weight:500; font-size:14px">Island Pharma Labs</span>
+                <span class="tnum" style="font-size:12px; color:var(--warn)">Last price 02 Sep 2026 · 45 days old</span>
+              </div>
+              <a class="btn btn-secondary btn-sm" href="Companies-price.dc.html">Update</a>
+            </li>
+            <li style="display:flex; gap:12px; align-items:center; padding:14px 20px">
+              <span class="logo-tile t2" style="width:36px; height:36px; font-size:12px; border-radius:9px" aria-hidden="true">GB</span>
+              <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:2px">
+                <span style="font-weight:500; font-size:14px">Galle Bay Hotels</span>
+                <span class="tnum" style="font-size:12px; color:var(--warn)">Last price 14 Oct 2026 · 2 trading days</span>
+              </div>
+              <a class="btn btn-secondary btn-sm" href="Companies-price.dc.html">Update</a>
+            </li>
+          </ul>
+        </section>
+
+        <section class="card" style="display:flex; flex-direction:column" aria-labelledby="rev-h">
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--border)">
+            <h2 id="rev-h" style="font-size:16px; font-weight:600">Awaiting your review</h2>
+            <a href="Predictions.dc.html" style="font-size:13px">Open</a>
+          </div>
+          <ul style="margin:0; padding:0; list-style:none">
+            <li style="display:flex; gap:12px; align-items:center; padding:14px 20px; border-bottom:1px solid var(--border)">
+              <div style="flex:1; display:flex; flex-direction:column; gap:2px">
+                <span style="font-weight:500; font-size:14px">LHL · new draft</span>
+                <span class="num" style="font-size:12px; color:var(--muted)">309.40 → 318.10</span>
+              </div>
+              <span class="delta up">+2.8%</span>
+            </li>
+            <li style="display:flex; gap:12px; align-items:center; padding:14px 20px">
+              <div style="flex:1; display:flex; flex-direction:column; gap:2px">
+                <span style="font-weight:500; font-size:14px">KHT · new draft</span>
+                <span class="num" style="font-size:12px; color:var(--muted)">84.60 → 79.20</span>
+              </div>
+              <span class="delta down">−6.4%</span>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark","system"],"default":"light","section":"Theme"},"collapsed":{"editor":"boolean","default":false,"section":"State"},"$preview":{"width":1440,"height":1150}}'>
+const NAV = [
+  ['dashboard', 'Dashboard', 'Dashboard.dc.html', 'M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z', ''],
+  ['companies', 'Companies', 'Companies.dc.html', 'M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18ZM6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4', ''],
+  ['reports', 'Reports', 'Reports.dc.html', 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M16 13H8M16 17H8M10 9H8', '3'],
+  ['predictions', 'Predictions', 'Predictions.dc.html', 'M3 3v18h18M19 9l-5 5-4-4-3 3', '2'],
+  ['sectors', 'Sectors', '#', 'M12 2H2v10l9.29 9.29a1 1 0 0 0 1.42 0l8.58-8.58a1 1 0 0 0 0-1.42ZM7 7h.01', ''],
+  ['events', 'Events', '#', 'M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 2v4M8 2v4M3 10h18', ''],
+  ['chat', 'Chat Insights', 'ChatInsights.dc.html', 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z', ''],
+  ['settings', 'Settings', 'Settings.dc.html', 'M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6', ''],
+  ['users', 'Users', '#', 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75', ''],
+  ['audit', 'Audit Log', '#', 'M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5M12 7v5l4 2', '']
+];
+const ACTIVE = 'dashboard';
+const QUEUE = [
+  { file: 'LHL_Q2_2026_Interim.pdf', ext: 'PDF', meta: 'Lanka Harbour Logistics · Quarterly · Apr–Jun 2026', status: 'review', when: '12 min ago' },
+  { file: 'MPWR_Annual_Report_2025.pdf', ext: 'PDF', meta: 'Meridian Power · Annual · FY2025', status: 'processing', pct: 64, when: '18 min ago' },
+  { file: 'MPWR_AR2025_segment_data.xlsx', ext: 'XLS', meta: 'Meridian Power · Annual · FY2025', status: 'processing', pct: 22, when: '18 min ago' },
+  { file: 'GBH_Q2_2026_Interim.pdf', ext: 'PDF', meta: 'Galle Bay Hotels · Quarterly · Apr–Jun 2026', status: 'processing', pct: 8, when: '3 min ago' },
+  { file: 'RCEM_Annual_Report_2025_v2.pdf', ext: 'PDF', meta: 'Ruhuna Cement · Annual · FY2025 · version 2', status: 'failed', err: 'Pages 41–44 are scanned images — no readable text.', when: '1 h ago' },
+  { file: 'KHT_Q2_2026_Interim.pdf', ext: 'PDF', meta: 'Kandy Highland Tea · Quarterly · Apr–Jun 2026', status: 'uploaded', when: 'Just now' },
+  { file: 'STEL_Q2_2026_Interim.pdf', ext: 'PDF', meta: 'Serendib Telecom · Quarterly · Apr–Jun 2026', status: 'approved', when: 'Yesterday' },
+  { file: 'CCB_Annual_Report_2025.pdf', ext: 'PDF', meta: 'Colombo Capital Bank · Annual · FY2025 · version 1', status: 'superseded', when: '3 days ago' }
+];
+const STATUS = { uploaded: 'Uploaded', processing: 'Processing', review: 'Needs review', approved: 'Approved', failed: 'Failed', superseded: 'Superseded' };
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { mode: null, collapsed: null, menu: false, retried: [] }; }
+  theme() {
+    const m = this.state.mode || this.props.theme || 'light';
+    let dark = m === 'dark';
+    if (m === 'system') { try { dark = window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {} }
+    return {
+      rootClass: dark ? 'av dark' : 'av',
+      segL: m === 'light' ? 'seg-btn on' : 'seg-btn', segD: m === 'dark' ? 'seg-btn on' : 'seg-btn', segS: m === 'system' ? 'seg-btn on' : 'seg-btn',
+      pL: m === 'light', pD: m === 'dark', pS: m === 'system',
+      setL: () => this.setState({ mode: 'light' }), setD: () => this.setState({ mode: 'dark' }), setS: () => this.setState({ mode: 'system' })
+    };
+  }
+  shell() {
+    const s = this.state;
+    const col = s.collapsed === null ? !!this.props.collapsed : s.collapsed;
+    return {
+      side: {
+        cls: col ? 'side-collapsed hide-sm' : 'hide-sm',
+        style: 'flex:none; width:' + (col ? 72 : 248) + 'px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; transition:width .2s',
+        nav: NAV.map(n => ({ label: n[1], href: n[2], icon: n[3], badge: n[4], hasBadge: !!n[4], cls: n[0] === ACTIVE ? 'sidelink on' : 'sidelink', current: n[0] === ACTIVE ? 'page' : 'false' })),
+        toggle: () => this.setState({ collapsed: !col }),
+        toggleLabel: col ? 'Expand sidebar' : 'Collapse sidebar', expanded: !col
+      },
+      menu: { open: s.menu, toggle: () => this.setState({ menu: !s.menu }) }
+    };
+  }
+  renderVals() {
+    const s = this.state;
+    const queue = QUEUE.map((q, i) => {
+      const st = s.retried.indexOf(i) >= 0 ? 'processing' : q.status;
+      const pct = st === 'processing' ? (q.pct || 2) : 0;
+      return {
+        file: q.file, ext: q.ext, meta: q.meta, when: q.when,
+        status: STATUS[st] + (st === 'processing' ? ' · ' + pct + '%' : ''), pill: 'pill pill-' + st,
+        isProc: st === 'processing', pct: pct, bar: 'width:' + pct + '%',
+        hasErr: st === 'failed', err: q.err || '',
+        canReview: st === 'review', canRetry: st === 'failed',
+        retry: () => this.setState({ retried: s.retried.concat([i]) })
+      };
+    });
+    const failed = queue.filter(q => q.canRetry).length;
+    const processing = queue.filter(q => q.isProc).length;
+    return Object.assign(this.theme(), this.shell(), {
+      queue: queue,
+      kpi: {
+        processing: processing, failed: failed,
+        failedNote: failed ? 'RCEM annual report · retry or re-upload' : 'All jobs healthy',
+        failedStyle: 'padding:18px; display:flex; flex-direction:column; gap:6px; text-decoration:none; color:var(--text)' + (failed ? '; border-color:var(--neg); background:var(--neg-soft)' : ''),
+        failedNumStyle: 'font-size:28px; font-weight:600' + (failed ? '; color:var(--neg)' : '')
+      }
+    });
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AutoVise Admin — Reports (dark)</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./autovise.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="font-family:'Geist', ui-sans-serif, system-ui, sans-serif; color:#E6E9F2; background:#0A0F1C">
+<dc-import name="Reports" theme="dark" dialog="none" hint-size="100%,1150px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1150}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

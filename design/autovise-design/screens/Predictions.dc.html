@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AutoVise Admin — Predictions</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./autovise.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="{{rootClass}}" style="min-height:100vh; background:var(--bg); color:var(--text); font-family:var(--font); display:flex">
+
+<aside class="{{side.cls}}" style="{{side.style}}" aria-label="Admin navigation">
+  <div style="display:flex; align-items:center; gap:10px; height:64px; padding:0 16px; border-bottom:1px solid var(--border)">
+    <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" style="flex:none"><rect width="28" height="28" rx="8" style="fill:var(--primary)"></rect><circle cx="14" cy="14" r="8.5" fill="none" style="stroke:var(--on-primary)" stroke-opacity=".35" stroke-width="1.5"></circle><path d="M8.5 17.5 12.5 13.5 15 16 19.5 10.5" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 10.5h3.5V14" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    <span class="sidelabel" style="font-weight:600; font-size:16px; letter-spacing:-0.02em">AutoVise</span>
+    <span class="sidelabel chip" style="height:20px; font-size:11px">Admin</span>
+  </div>
+  <nav style="display:flex; flex-direction:column; gap:2px; padding:12px; flex:1">
+    <sc-for list="{{side.nav}}" as="n" hint-placeholder-count="10">
+      <a class="{{n.cls}}" href="{{n.href}}" aria-current="{{n.current}}" title="{{n.label}}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"></path></svg>
+        <span class="sidelabel" style="flex:1">{{n.label}}</span>
+        <sc-if value="{{n.hasBadge}}" hint-placeholder-val="{{ false }}"><span class="sidelabel num" style="min-width:20px; height:20px; padding:0 6px; border-radius:999px; background:var(--subtle-2); color:var(--text); font-size:11px; display:inline-flex; align-items:center; justify-content:center">{{n.badge}}</span></sc-if>
+      </a>
+    </sc-for>
+  </nav>
+  <div style="padding:12px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:2px">
+    <a class="sidelink" href="Main.dc.html" title="View public site"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg><span class="sidelabel">View public site</span></a>
+    <button class="sidelink" style="border:0; background:none; cursor:pointer; font:inherit; width:100%" onClick="{{side.toggle}}" aria-label="{{side.toggleLabel}}" aria-expanded="{{side.expanded}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM9 3v18"></path></svg><span class="sidelabel">Collapse sidebar</span></button>
+  </div>
+</aside>
+
+<div style="flex:1 1 0; min-width:0; display:flex; flex-direction:column">
+  <header style="height:64px; display:flex; align-items:center; gap:16px; padding:0 24px; border-bottom:1px solid var(--border); background:var(--surface); position:relative; z-index:20">
+    <nav aria-label="Breadcrumb" style="display:flex; gap:8px; align-items:center; font-size:14px"><span style="font-weight:600">Predictions</span></nav>
+    <div style="flex:1"></div>
+    <div class="seg" role="group" aria-label="Colour theme">
+      <button class="{{segL}}" aria-label="Light theme" aria-pressed="{{pL}}" onClick="{{setL}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg></button>
+      <button class="{{segD}}" aria-label="Dark theme" aria-pressed="{{pD}}" onClick="{{setD}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg></button>
+      <button class="{{segS}}" aria-label="Use system theme" aria-pressed="{{pS}}" onClick="{{setS}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg></button>
+    </div>
+    <div style="position:relative">
+      <button class="btn btn-ghost" style="padding:0 8px 0 4px; gap:10px" onClick="{{menu.toggle}}" aria-expanded="{{menu.open}}" aria-haspopup="menu">
+        <span style="width:32px; height:32px; border-radius:50%; background:var(--primary-soft); color:var(--primary-text); display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:600">NP</span>
+        <span class="hide-sm" style="display:flex; flex-direction:column; align-items:flex-start; line-height:1.2"><span style="font-size:13px; font-weight:500">Nimal Perera</span><span style="font-size:11px; color:var(--muted)">Lead analyst</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="color:var(--muted)"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+      <sc-if value="{{menu.open}}" hint-placeholder-val="{{ false }}">
+        <div class="popover" role="menu" style="position:absolute; right:0; top:48px; width:220px; padding:6px; display:flex; flex-direction:column">
+          <a class="sidelink" role="menuitem" href="#" style="height:36px">Profile</a>
+          <a class="sidelink" role="menuitem" href="Login.dc.html" style="height:36px; color:var(--neg)">Sign out</a>
+        </div>
+      </sc-if>
+    </div>
+  </header>
+
+  <main style="padding:24px; display:flex; gap:24px; flex-wrap:wrap; align-items:flex-start; max-width:1400px; width:100%">
+    <!-- List -->
+    <section class="card" style="flex:1 1 280px; max-width:340px; display:flex; flex-direction:column" aria-label="Predictions">
+      <div style="padding:16px 16px 12px; display:flex; flex-direction:column; gap:4px; border-bottom:1px solid var(--border)">
+        <h1 style="font-size:18px; font-weight:600">Predictions</h1>
+        <span style="font-size:12px; color:var(--muted)">2 drafts waiting for review</span>
+      </div>
+      <ul style="margin:0; padding:6px; list-style:none; display:flex; flex-direction:column; gap:2px">
+        <sc-for list="{{list}}" as="l" hint-placeholder-count="8">
+          <li>
+            <button style="{{l.style}}" onClick="{{l.pick}}" aria-pressed="{{l.on}}">
+              <span class="logo-tile {{l.tone}}" style="width:32px; height:32px; font-size:11px; border-radius:8px" aria-hidden="true">{{l.initials}}</span>
+              <span style="flex:1; min-width:0; display:flex; flex-direction:column; align-items:flex-start; text-align:left"><span style="font-weight:500; font-size:14px">{{l.id}}</span><span class="num" style="font-size:12px; color:var(--muted)">{{l.sub}}</span></span>
+              <span class="{{l.pill}}">{{l.status}}</span>
+            </button>
+          </li>
+        </sc-for>
+      </ul>
+    </section>
+
+    <!-- Detail -->
+    <section style="flex:999 1 640px; min-width:0; display:flex; flex-direction:column; gap:20px">
+      <div class="card" style="padding:20px; display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start">
+        <div style="flex:1 1 320px; display:flex; flex-direction:column; gap:6px">
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+            <h2 style="font-size:20px; font-weight:600">{{d.name}}</h2>
+            <span class="{{d.pill}}">{{d.statusText}}</span>
+          </div>
+          <span style="font-size:13px; color:var(--muted)">{{d.versions}}</span>
+          <span style="font-size:13px; display:inline-flex; gap:6px; align-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--muted)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6"></path></svg>Triggered by: {{d.trigger}}</span>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap">
+          <button class="btn btn-ghost" onClick="{{note.open}}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>Add override note</button>
+          <button class="btn btn-secondary" onClick="{{rerun}}" disabled="{{d.busy}}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M8 16H3v5"></path></svg>{{d.rerunLabel}}</button>
+          <button class="btn btn-primary" onClick="{{askPublish}}" disabled="{{d.cantPublish}}">Publish</button>
+        </div>
+      </div>
+
+      <!-- Old vs new -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(180px, 100%), 1fr)); gap:16px">
+        <sc-for list="{{d.cmp}}" as="c" hint-placeholder-count="5">
+          <div class="card" style="padding:16px; display:flex; flex-direction:column; gap:8px">
+            <span style="font-size:12px; color:var(--muted)">{{c.label}}</span>
+            <div style="display:flex; align-items:baseline; gap:8px; flex-wrap:wrap">
+              <span class="num" style="font-size:13px; color:var(--muted); text-decoration:line-through">{{c.old}}</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="color:var(--muted)"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+              <span class="num" style="font-size:20px; font-weight:600">{{c.now}}</span>
+            </div>
+            <span class="{{c.cls}}" style="align-self:flex-start">{{c.delta}}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <!-- Assumptions -->
+      <section class="card" style="padding:20px; display:flex; flex-direction:column; gap:14px">
+        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:baseline">
+          <h3 style="font-size:16px; font-weight:600">Assumptions</h3>
+          <span style="font-size:12px; color:var(--muted); display:inline-flex; gap:8px; align-items:center"><span style="width:12px; height:12px; border-radius:3px; background:var(--warn-soft); border:1px solid var(--warn-mark)"></span>Changed in this draft</span>
+        </div>
+        <div class="tbl-box" style="border-radius:10px">
+          <table class="tbl">
+            <thead><tr><th>Assumption</th><th class="r">Published</th><th class="r">Draft</th><th>Why it changed</th></tr></thead>
+            <tbody>
+              <sc-for list="{{d.assume}}" as="a" hint-placeholder-count="7">
+                <tr class="{{a.cls}}"><td style="font-weight:500">{{a.name}}</td><td class="r num muted">{{a.old}}</td><td class="r num" style="font-weight:600">{{a.now}}</td><td style="font-size:13px; color:var(--muted)">{{a.why}}</td></tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Override notes -->
+      <section class="card" style="padding:20px; display:flex; flex-direction:column; gap:14px">
+        <h3 style="font-size:16px; font-weight:600">Override notes</h3>
+        <sc-if value="{{note.editing}}" hint-placeholder-val="{{ false }}">
+          <div class="field">
+            <label class="label" for="note-in">New note</label>
+            <textarea id="note-in" class="textarea" rows="3" placeholder="What did you change by hand, and why? This is shown in the audit log." value="{{note.draft}}" onChange="{{note.setDraft}}"></textarea>
+            <div style="display:flex; gap:8px; justify-content:flex-end"><button class="btn btn-ghost btn-sm" onClick="{{note.cancel}}">Cancel</button><button class="btn btn-primary btn-sm" onClick="{{note.save}}" disabled="{{note.empty}}">Save note</button></div>
+          </div>
+        </sc-if>
+        <sc-if value="{{note.has}}" hint-placeholder-val="{{ true }}">
+          <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:12px">
+            <sc-for list="{{note.list}}" as="n" hint-placeholder-count="1">
+              <li style="display:flex; gap:12px">
+                <span style="width:28px; height:28px; border-radius:50%; background:var(--primary-soft); color:var(--primary-text); display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; flex:none">{{n.who}}</span>
+                <div style="display:flex; flex-direction:column; gap:2px"><span style="font-size:12px; color:var(--muted)">{{n.meta}}</span><p style="font-size:14px; line-height:1.55">{{n.text}}</p></div>
+              </li>
+            </sc-for>
+          </ul>
+        </sc-if>
+        <sc-if value="{{note.none}}" hint-placeholder-val="{{ false }}"><p style="font-size:14px; color:var(--muted)">No manual overrides on this draft.</p></sc-if>
+      </section>
+    </section>
+  </main>
+</div>
+
+<!-- Publish confirm -->
+<sc-if value="{{confirm.open}}" hint-placeholder-val="{{ false }}">
+  <div class="overlay">
+    <section class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="pub-h" style="max-width:480px">
+      <div style="padding:24px 24px 8px; display:flex; flex-direction:column; gap:12px">
+        <h2 id="pub-h" style="font-size:18px; font-weight:600">Publish the new {{d.id}} prediction?</h2>
+        <p style="color:var(--muted); line-height:1.6">The public pitch, chart and chat will switch to the draft immediately. The current version moves to history and can be restored.</p>
+        <div style="display:flex; gap:12px; padding:12px 14px; border-radius:10px; background:var(--subtle); align-items:center">
+          <span class="num muted" style="text-decoration:line-through">{{d.oldBase}}</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="color:var(--muted)"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          <span class="num" style="font-weight:600">{{d.newBase}}</span>
+          <span class="{{d.baseCls}}" style="margin-left:auto">{{d.baseDelta}}</span>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:8px; padding:16px 24px 20px">
+        <button class="btn btn-secondary" onClick="{{confirm.close}}">Cancel</button>
+        <button class="btn btn-primary" onClick="{{confirm.go}}">Publish now</button>
+      </div>
+    </section>
+  </div>
+</sc-if>
+<sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+  <div class="toast" role="status" style="position:fixed; right:24px; bottom:24px; z-index:70">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--pos); flex:none; margin-top:1px"><path d="M20 6 9 17l-5-5"></path></svg>
+    <div style="flex:1; display:flex; flex-direction:column; gap:2px"><span style="font-weight:600; font-size:14px">Prediction published</span><span style="font-size:13px; color:var(--muted)">{{toastText}}</span></div>
+    <button class="btn btn-ghost btn-sm" onClick="{{hideToast}}">Dismiss</button>
+  </div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark","system"],"default":"light","section":"Theme"},"collapsed":{"editor":"boolean","default":false,"section":"State"},"$preview":{"width":1440,"height":1300}}'>
+const NAV = [
+  ['dashboard', 'Dashboard', 'Dashboard.dc.html', 'M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z', ''],
+  ['companies', 'Companies', 'Companies.dc.html', 'M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18ZM6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4', ''],
+  ['reports', 'Reports', 'Reports.dc.html', 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M16 13H8M16 17H8M10 9H8', '3'],
+  ['predictions', 'Predictions', 'Predictions.dc.html', 'M3 3v18h18M19 9l-5 5-4-4-3 3', '2'],
+  ['sectors', 'Sectors', '#', 'M12 2H2v10l9.29 9.29a1 1 0 0 0 1.42 0l8.58-8.58a1 1 0 0 0 0-1.42ZM7 7h.01', ''],
+  ['events', 'Events', '#', 'M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 2v4M8 2v4M3 10h18', ''],
+  ['chat', 'Chat Insights', 'ChatInsights.dc.html', 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z', ''],
+  ['settings', 'Settings', 'Settings.dc.html', 'M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6', ''],
+  ['users', 'Users', '#', 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75', ''],
+  ['audit', 'Audit Log', '#', 'M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5M12 7v5l4 2', '']
+];
+const ACTIVE = 'predictions';
+const LIST = [
+  { id: 'LHL', tone: 't1', status: 'draft', sub: '309.40 → 318.10' },
+  { id: 'KHT', tone: 't3', status: 'draft', sub: '84.60 → 79.20' },
+  { id: 'STEL', tone: 't2', status: 'published', sub: '128.40 · 16 Oct' },
+  { id: 'CCB', tone: 't4', status: 'published', sub: '476.30 · 15 Oct' },
+  { id: 'RCEM', tone: 't5', status: 'published', sub: '71.90 · 12 Oct' },
+  { id: 'GBH', tone: 't2', status: 'published', sub: '41.10 · 09 Oct' },
+  { id: 'IPL', tone: 't6', status: 'published', sub: '181.50 · 03 Sep' },
+  { id: 'MPWR', tone: 't3', status: 'pending', sub: 'Waiting for reports' }
+];
+const DETAIL = {
+  LHL: {
+    name: 'Lanka Harbour Logistics', versions: 'Draft v14 compared with published v13 (09 Sep 2026)', trigger: 'Q2 2026 Interim Report approved, 17 Oct 2026',
+    cmp: [['Bear case', 205.10, 212.40, 1], ['Base case · 3 yr', 309.40, 318.10, 1], ['Bull case', 362.00, 371.80, 1], ['Confidence', 76, 78, 0], ['AutoVise Score', 72, 74, 0]],
+    assume: [
+      ['EPS growth, per year', '10.5%', '11.0%', 'Q2 throughput +13% and guidance reaffirmed at 10–12%'],
+      ['Base EPS (2025)', 'LKR 18.20', 'LKR 18.20', ''],
+      ['Exit P/E', '12.0×', '12.0×', ''],
+      ['Qualitative tilt', '+5.0%', '+6.5%', 'Growth outlook score up 78 → 82 (Kelaniya warehouse)'],
+      ['Growth outlook score', '78', '82', 'New capacity online, 74% occupied'],
+      ['Risk profile score', '58', '58', ''],
+      ['Debt / equity input', '0.44', '0.42', 'Q2 balance sheet, p.8']
+    ],
+    notes: [{ who: 'AS', meta: 'A. Silva · 09 Sep 2026 · on v13', text: 'Held exit P/E at 12.0× rather than the model’s 12.6× until the concession renewal terms are clearer.' }]
+  },
+  KHT: {
+    name: 'Kandy Highland Tea', versions: 'Draft v9 compared with published v8 (21 Aug 2026)', trigger: 'Q2 2026 Interim Report approved, 16 Oct 2026',
+    cmp: [['Bear case', 68.20, 64.50, 1], ['Base case · 3 yr', 84.60, 79.20, 1], ['Bull case', 101.40, 96.30, 1], ['Confidence', 63, 61, 0], ['AutoVise Score', 51, 48, 0]],
+    assume: [
+      ['EPS growth, per year', '2.0%', '0.5%', 'Auction prices down 8% in the quarter'],
+      ['Base EPS (2025)', 'LKR 9.16', 'LKR 9.16', ''],
+      ['Exit P/E', '9.5×', '9.4×', 'Sector benchmark eased'],
+      ['Qualitative tilt', '−1.0%', '−2.0%', 'Weather risk flagged in the report'],
+      ['Growth outlook score', '48', '45', 'Lower yields guided for H2'],
+      ['Risk profile score', '52', '52', '']
+    ],
+    notes: []
+  }
+};
+const money = n => 'LKR ' + n.toFixed(2);
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { mode: null, collapsed: null, menu: false, pick: 'LHL', notes: {}, editing: false, draft: '', confirm: false, published: [], busy: false, toast: false };
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  theme() {
+    const m = this.state.mode || this.props.theme || 'light';
+    let dark = m === 'dark';
+    if (m === 'system') { try { dark = window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {} }
+    return {
+      rootClass: dark ? 'av dark' : 'av',
+      segL: m === 'light' ? 'seg-btn on' : 'seg-btn', segD: m === 'dark' ? 'seg-btn on' : 'seg-btn', segS: m === 'system' ? 'seg-btn on' : 'seg-btn',
+      pL: m === 'light', pD: m === 'dark', pS: m === 'system',
+      setL: () => this.setState({ mode: 'light' }), setD: () => this.setState({ mode: 'dark' }), setS: () => this.setState({ mode: 'system' })
+    };
+  }
+  shell() {
+    const s = this.state;
+    const col = s.collapsed === null ? !!this.props.collapsed : s.collapsed;
+    return {
+      side: {
+        cls: col ? 'side-collapsed hide-sm' : 'hide-sm',
+        style: 'flex:none; width:' + (col ? 72 : 248) + 'px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; transition:width .2s',
+        nav: NAV.map(n => ({ label: n[1], href: n[2], icon: n[3], badge: n[4], hasBadge: !!n[4], cls: n[0] === ACTIVE ? 'sidelink on' : 'sidelink', current: n[0] === ACTIVE ? 'page' : 'false' })),
+        toggle: () => this.setState({ collapsed: !col }),
+        toggleLabel: col ? 'Expand sidebar' : 'Collapse sidebar', expanded: !col
+      },
+      menu: { open: s.menu, toggle: () => this.setState({ menu: !s.menu }) }
+    };
+  }
+  renderVals() {
+    const s = this.state;
+    const pick = DETAIL[s.pick] ? s.pick : 'LHL';
+    const D = DETAIL[pick];
+    const isPub = id => s.published.indexOf(id) >= 0;
+    const list = LIST.map(l => {
+      const st = l.status === 'draft' && isPub(l.id) ? 'published' : l.status;
+      const on = l.id === pick;
+      return {
+        id: l.id, tone: l.tone, initials: l.id.slice(0, 2), sub: l.sub, on: on,
+        status: st === 'draft' ? 'Draft' : st === 'published' ? 'Published' : 'Pending',
+        pill: 'pill ' + (st === 'draft' ? 'pill-review' : st === 'published' ? 'pill-published' : 'pill-draft'),
+        style: 'width:100%; display:flex; gap:12px; align-items:center; padding:10px; border-radius:10px; border:0; cursor:pointer; font:inherit; color:var(--text); background:' + (on ? 'var(--primary-soft)' : 'transparent'),
+        pick: () => { if (DETAIL[l.id]) this.setState({ pick: l.id, editing: false }); }
+      };
+    });
+    const cmp = D.cmp.map(c => {
+      const d = c[3] ? (c[2] / c[1] - 1) * 100 : c[2] - c[1];
+      return {
+        label: c[0], old: c[3] ? c[1].toFixed(2) : String(c[1]), now: c[3] ? c[2].toFixed(2) : String(c[2]),
+        delta: c[3] ? (d >= 0 ? '+' : '−') + Math.abs(d).toFixed(1) + '%' : (d >= 0 ? '+' : '−') + Math.abs(d) + ' pts',
+        cls: d > 0 ? 'delta up' : d < 0 ? 'delta down' : 'delta flat'
+      };
+    });
+    const notes = (s.notes[pick] || []).concat(D.notes);
+    const base = D.cmp[1];
+    const bd = (base[2] / base[1] - 1) * 100;
+    const pub = isPub(pick);
+    return Object.assign(this.theme(), this.shell(), {
+      list: list,
+      d: {
+        id: pick, name: D.name, versions: D.versions, trigger: D.trigger,
+        pill: pub ? 'pill pill-published' : 'pill pill-review', statusText: pub ? 'Published' : 'Draft · needs review',
+        cmp: cmp,
+        assume: D.assume.map(a => ({ name: a[0], old: a[1], now: a[2], why: a[3] || '—', cls: a[1] !== a[2] ? 'changed' : '' })),
+        oldBase: money(base[1]), newBase: money(base[2]), baseDelta: (bd >= 0 ? '+' : '−') + Math.abs(bd).toFixed(1) + '%', baseCls: bd >= 0 ? 'delta up' : 'delta down',
+        busy: s.busy, rerunLabel: s.busy ? 'Rerunning…' : 'Rerun', cantPublish: pub || s.busy
+      },
+      note: {
+        list: notes, has: notes.length > 0, none: notes.length === 0 && !s.editing, editing: s.editing,
+        draft: s.draft, empty: !s.draft.trim(), setDraft: e => this.setState({ draft: e.target.value }),
+        open: () => this.setState({ editing: true, draft: '' }), cancel: () => this.setState({ editing: false }),
+        save: () => { const n = Object.assign({}, s.notes); n[pick] = [{ who: 'NP', meta: 'N. Perera · just now · on draft', text: s.draft.trim() }].concat(n[pick] || []); this.setState({ notes: n, editing: false, draft: '' }); }
+      },
+      rerun: () => { this.setState({ busy: true }); this.t = setTimeout(() => this.setState({ busy: false }), 1500); },
+      askPublish: () => this.setState({ confirm: true }),
+      confirm: { open: s.confirm, close: () => this.setState({ confirm: false }), go: () => this.setState({ confirm: false, published: s.published.concat([pick]), toast: true }) },
+      toast: s.toast, toastText: pick + ' base case is now ' + money(base[2]) + ' on the public site.', hideToast: () => this.setState({ toast: false })
+    });
+  }
+}
+</script>
+</body>
+</html>

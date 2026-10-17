@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AutoVise Admin — Sign in</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./autovise.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="{{rootClass}}" style="min-height:100vh; background:var(--bg); color:var(--text); font-family:var(--font); display:flex; flex-direction:column">
+  <div style="display:flex; justify-content:space-between; align-items:center; padding:20px 24px">
+    <a href="Main.dc.html" style="font-size:13px; color:var(--muted); text-decoration:none; display:inline-flex; align-items:center; gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>Back to public site</a>
+    <div class="seg" role="group" aria-label="Colour theme">
+      <button class="{{segL}}" aria-label="Light theme" aria-pressed="{{pL}}" onClick="{{setL}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg></button>
+      <button class="{{segD}}" aria-label="Dark theme" aria-pressed="{{pD}}" onClick="{{setD}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg></button>
+      <button class="{{segS}}" aria-label="Use system theme" aria-pressed="{{pS}}" onClick="{{setS}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg></button>
+    </div>
+  </div>
+
+  <main style="flex:1; display:flex; align-items:center; justify-content:center; padding:24px 16px 64px">
+    <div style="width:100%; max-width:420px; display:flex; flex-direction:column; gap:24px; align-items:center">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center">
+        <svg width="44" height="44" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="8" style="fill:var(--primary)"></rect><circle cx="14" cy="14" r="8.5" fill="none" style="stroke:var(--on-primary)" stroke-opacity=".35" stroke-width="1.5"></circle><path d="M8.5 17.5 12.5 13.5 15 16 19.5 10.5" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 10.5h3.5V14" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div style="display:flex; flex-direction:column; gap:4px">
+          <h1 style="font-size:24px; font-weight:600">Sign in to AutoVise Admin</h1>
+          <p style="color:var(--muted); font-size:14px">For analysts and administrators only.</p>
+        </div>
+      </div>
+
+      <form class="card" onSubmit="{{submit}}" style="width:100%; padding:28px; display:flex; flex-direction:column; gap:18px; box-shadow:var(--shadow-md)" novalidate="{{ true }}">
+        <sc-if value="{{showError}}" hint-placeholder-val="{{ false }}">
+          <div role="alert" style="display:flex; gap:10px; padding:12px 14px; border-radius:10px; background:var(--neg-soft); color:var(--text); font-size:13px; line-height:1.5">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="color:var(--neg); flex:none; margin-top:2px"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4M12 16h.01"></path></svg>
+            <span>That email and password don't match. Two more attempts before the account locks for 15 minutes.</span>
+          </div>
+        </sc-if>
+        <div class="field">
+          <label class="label" for="email">Work email</label>
+          <input id="email" class="{{emailCls}}" type="email" autocomplete="email" placeholder="name@company.com" value="{{email}}" onChange="{{setEmail}}" aria-invalid="{{emailBad}}">
+          <sc-if value="{{emailBad}}" hint-placeholder-val="{{ false }}"><span class="err">Enter your work email.</span></sc-if>
+        </div>
+        <div class="field">
+          <div style="display:flex; justify-content:space-between; align-items:baseline">
+            <label class="label" for="pw">Password</label>
+            <a href="#" style="font-size:13px">Forgot password?</a>
+          </div>
+          <div style="position:relative; display:flex">
+            <input id="pw" class="{{pwCls}}" type="{{pwType}}" autocomplete="current-password" value="{{pw}}" onChange="{{setPw}}" style="padding-right:48px" aria-invalid="{{pwBad}}">
+            <button type="button" class="btn btn-ghost btn-icon btn-sm" style="position:absolute; right:4px; top:4px" aria-label="{{pwToggleLabel}}" onClick="{{togglePw}}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
+          <sc-if value="{{pwBad}}" hint-placeholder-val="{{ false }}"><span class="err">Enter your password.</span></sc-if>
+        </div>
+        <label style="display:flex; gap:10px; align-items:center; font-size:14px; cursor:pointer">
+          <input type="checkbox" class="check" checked="{{keep}}" onChange="{{toggleKeep}}">Keep me signed in for 7 days
+        </label>
+        <sc-if value="{{notDone}}" hint-placeholder-val="{{ true }}">
+          <button class="btn btn-primary btn-lg" type="submit" disabled="{{loading}}" style="width:100%">{{submitLabel}}</button>
+        </sc-if>
+        <sc-if value="{{done}}" hint-placeholder-val="{{ false }}">
+          <a class="btn btn-pos btn-lg" href="Dashboard.dc.html" style="width:100%"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Signed in — open dashboard</a>
+        </sc-if>
+      </form>
+      <p style="font-size:12px; color:var(--muted); text-align:center">Protected area. Sign-ins and changes are recorded in the audit log.</p>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark","system"],"default":"light","section":"Theme"},"error":{"editor":"boolean","default":false,"section":"State"},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { mode: null, email: 'analyst@autovise.lk', pw: '', showPw: false, keep: true, touched: false, loading: false, done: false }; }
+  componentWillUnmount() { clearTimeout(this.t); }
+  theme() {
+    const m = this.state.mode || this.props.theme || 'light';
+    let dark = m === 'dark';
+    if (m === 'system') { try { dark = window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {} }
+    return {
+      rootClass: dark ? 'av dark' : 'av',
+      segL: m === 'light' ? 'seg-btn on' : 'seg-btn', segD: m === 'dark' ? 'seg-btn on' : 'seg-btn', segS: m === 'system' ? 'seg-btn on' : 'seg-btn',
+      pL: m === 'light', pD: m === 'dark', pS: m === 'system',
+      setL: () => this.setState({ mode: 'light' }), setD: () => this.setState({ mode: 'dark' }), setS: () => this.setState({ mode: 'system' })
+    };
+  }
+  renderVals() {
+    const s = this.state;
+    const emailBad = s.touched && !/.+@.+\..+/.test(s.email);
+    const pwBad = s.touched && !s.pw;
+    return Object.assign(this.theme(), {
+      email: s.email, pw: s.pw, keep: s.keep,
+      emailBad: emailBad, pwBad: pwBad,
+      emailCls: emailBad ? 'input invalid' : 'input', pwCls: pwBad ? 'input invalid' : 'input',
+      pwType: s.showPw ? 'text' : 'password', pwToggleLabel: s.showPw ? 'Hide password' : 'Show password',
+      showError: !!this.props.error && !s.done,
+      loading: s.loading, done: s.done, notDone: !s.done,
+      submitLabel: s.loading ? 'Signing in…' : 'Sign in',
+      setEmail: e => this.setState({ email: e.target.value }),
+      setPw: e => this.setState({ pw: e.target.value }),
+      togglePw: () => this.setState({ showPw: !s.showPw }),
+      toggleKeep: () => this.setState({ keep: !s.keep }),
+      submit: e => {
+        e.preventDefault();
+        this.setState({ touched: true });
+        if (!/.+@.+\..+/.test(s.email) || !s.pw) return;
+        this.setState({ loading: true });
+        this.t = setTimeout(() => this.setState({ loading: false, done: true }), 900);
+      }
+    });
+  }
+}
+</script>
+</body>
+</html>

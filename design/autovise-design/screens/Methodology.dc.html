@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AutoVise — Methodology and disclaimer</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./autovise.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="{{rootClass}}" style="min-height:100vh; background:var(--bg); color:var(--text); font-family:var(--font)">
+
+<header style="position:sticky; top:0; z-index:30; background:var(--surface); border-bottom:1px solid var(--border)">
+  <div class="wrap" style="height:64px; display:flex; align-items:center; gap:28px">
+    <a href="Main.dc.html" aria-label="AutoVise home" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text)">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="8" style="fill:var(--primary)"></rect><circle cx="14" cy="14" r="8.5" fill="none" style="stroke:var(--on-primary)" stroke-opacity=".35" stroke-width="1.5"></circle><path d="M8.5 17.5 12.5 13.5 15 16 19.5 10.5" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 10.5h3.5V14" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      <span style="font-weight:600; font-size:18px; letter-spacing:-0.025em">AutoVise</span>
+    </a>
+    <nav aria-label="Primary" class="hide-sm" style="display:flex; gap:2px">
+      <a class="navlink" href="Main.dc.html">Companies</a>
+      <a class="navlink" href="Compare.dc.html">Compare</a>
+      <a class="navlink" href="TrackRecord.dc.html">Track Record</a>
+      <a class="{{navMethod}}" href="Methodology.dc.html">Methodology</a>
+    </nav>
+    <div style="flex:1"></div>
+    <div class="seg" role="group" aria-label="Colour theme">
+      <button class="{{segL}}" aria-label="Light theme" aria-pressed="{{pL}}" onClick="{{setL}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg></button>
+      <button class="{{segD}}" aria-label="Dark theme" aria-pressed="{{pD}}" onClick="{{setD}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg></button>
+      <button class="{{segS}}" aria-label="Use system theme" aria-pressed="{{pS}}" onClick="{{setS}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg></button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" style="padding-top:48px; padding-bottom:80px; display:flex; gap:56px; flex-wrap:wrap; align-items:flex-start">
+  <!-- TOC -->
+  <aside style="flex:0 1 220px; display:flex; flex-direction:column; gap:16px" aria-label="On this page">
+    <div class="seg" role="group" aria-label="Document" style="align-self:flex-start">
+      <button class="{{docM.cls}}" aria-pressed="{{docM.on}}" onClick="{{docM.go}}" style="padding:0 12px">Methodology</button>
+      <button class="{{docD.cls}}" aria-pressed="{{docD.on}}" onClick="{{docD.go}}" style="padding:0 12px">Disclaimer</button>
+    </div>
+    <span class="eyebrow">On this page</span>
+    <nav style="display:flex; flex-direction:column; gap:2px; border-left:1px solid var(--border)">
+      <sc-for list="{{toc}}" as="t" hint-placeholder-count="7">
+        <a href="{{t.href}}" style="padding:6px 0 6px 14px; margin-left:-1px; border-left:2px solid transparent; color:var(--muted); text-decoration:none; font-size:14px">{{t.text}}</a>
+      </sc-for>
+    </nav>
+  </aside>
+
+  <!-- Methodology -->
+  <sc-if value="{{docM.on}}" hint-placeholder-val="{{ true }}">
+    <article style="flex:999 1 560px; min-width:0; max-width:700px; display:flex; flex-direction:column; gap:40px; font-size:16.5px; line-height:1.75">
+      <header style="display:flex; flex-direction:column; gap:14px">
+        <span class="eyebrow">Methodology · last revised 1 Oct 2026</span>
+        <h1 style="font-size:40px; line-height:1.12; font-weight:600">How AutoVise builds a prediction</h1>
+        <p style="font-size:18px; color:var(--muted); line-height:1.6">Every target on AutoVise can be traced back to a page in a company's own reports. This page explains each step, the limits of the model, and how you should — and should not — use what it produces.</p>
+      </header>
+
+      <section id="m-what" style="display:flex; flex-direction:column; gap:14px">
+        <h2 style="font-size:24px; font-weight:600">1. What we predict</h2>
+        <p>For each listed company we publish a share-price range three years ahead: a bear case, a base case and a bull case. The base case is our central estimate; the bear and bull cases show what happens if growth or valuation turn out materially worse or better. We also publish a checkpoint every 12 months so the prediction can be scored as it goes — see the Track Record.</p>
+      </section>
+
+      <section id="m-data" style="display:flex; flex-direction:column; gap:14px">
+        <h2 style="font-size:24px; font-weight:600">2. Where the numbers come from</h2>
+        <p>Our analysts upload each company's annual and interim reports. The system extracts the financial statements and the management commentary, and every extracted figure carries a page reference. An analyst reviews and approves the extraction before it can affect a prediction. If a report is replaced — for example a restated annual report — the old version is kept, marked as superseded, and the prediction is recalculated.</p>
+        <p>Share prices are refreshed each trading day. If a company's price or reports go out of date, its card is marked <strong style="font-weight:600">Outdated data</strong> and its confidence falls.</p>
+      </section>
+
+      <section id="m-model" style="display:flex; flex-direction:column; gap:14px">
+        <h2 style="font-size:24px; font-weight:600">3. The valuation model</h2>
+        <p>The base-case target combines three parts:</p>
+        <div class="card" style="padding:20px 22px; display:flex; flex-direction:column; gap:10px; box-shadow:none">
+          <code class="num" style="font-size:15px; line-height:1.6; color:var(--text)">Target = EPS<sub>year 3</sub> × Exit P/E × (1 + Qualitative tilt)</code>
+          <span style="font-size:13px; color:var(--muted); line-height:1.6">EPS<sub>year 3</sub> = latest full-year EPS × (1 + growth)<sup>3</sup></span>
+        </div>
+        <ul style="margin:0; padding-left:22px; display:flex; flex-direction:column; gap:10px">
+          <li><strong style="font-weight:600">Earnings growth.</strong> Based on the company's own multi-year record, management guidance in the reports, and the sector median. Capped at 30% a year.</li>
+          <li><strong style="font-weight:600">Exit multiple.</strong> The P/E we expect investors to pay in year three. It starts from today's multiple and moves toward the sector benchmark unless the reports give a clear reason it should not. Capped at 25×.</li>
+          <li><strong style="font-weight:600">Qualitative tilt.</strong> A small adjustment — never more than ±10% — for strengths and weaknesses that do not show up in the numbers yet.</li>
+        </ul>
+        <p>The waterfall on each company's How We Got Here tab shows exactly how much each part adds or subtracts.</p>
+      </section>
+
+      <section id="m-qual" style="display:flex; flex-direction:column; gap:14px">
+        <h2 style="font-size:24px; font-weight:600">4. Qualitative factors</h2>
+        <p>We score six factors from 0 to 100 using the text of the reports: management, growth outlook, competitive position, risk profile, governance and sentiment. Each score comes with a one-line justification and the passages it was drawn from. The six scores are combined into the qualitative tilt; a company with average scores receives no tilt at all.</p>
+      </section>
+
+      <section id="m-conf" style="display:flex; flex-direction:column; gap:14px">
+        <h2 style="font-size:24px; font-weight:600">5. Confidence and the AutoVise Score</h2>
+        <p><strong style="font-weight:600">Confidence (0–100)</strong> tells you how much to trust the prediction itself. It rises with recent, complete, reviewed data and falls when the bear and bull cases are far apart. Below 60 we show it in amber.</p>
+        <p><strong style="font-weight:600">The AutoVise Score (0–100)</strong> summarises the opportunity: 40% upside to the base case, 40% qualitative quality, 20% confidence. It is a way to sort companies, not a rating to buy.</p>
+      </section>
+
+      <section id="m-update" style="display:flex; flex-direction:column; gap:14px">
+        <h2 style="font-size:24px; font-weight:600">6. When predictions change</h2>
+        <p>A prediction is recalculated whenever a new report is approved, a report is replaced or deleted, or our analysts change an assumption. The new draft is compared with the published version, and a reviewer must approve it before it goes live. Any manual override is recorded with a note.</p>
+      </section>
+
+      <section id="m-limits" style="display:flex; flex-direction:column; gap:14px">
+        <h2 style="font-size:24px; font-weight:600">7. What the model cannot see</h2>
+        <p>The model only knows what is in the reports and the price history. It does not anticipate takeovers, sudden regulatory changes, fraud or market-wide shocks. It is weakest for companies with short histories, volatile earnings, or reports that are late. Treat every target as one informed view, not a forecast you can rely on.</p>
+      </section>
+
+      <div style="padding:16px 18px; border-radius:12px; background:var(--warn-soft); color:var(--text); display:flex; gap:12px; font-size:14px; line-height:1.6">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--warn); flex:none; margin-top:2px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4M12 17h.01"></path></svg>
+        <span>Predictions are model estimates, not financial advice. Read the <a href="Disclaimer.dc.html">full disclaimer</a> before relying on anything you read here.</span>
+      </div>
+    </article>
+  </sc-if>
+
+  <!-- Disclaimer -->
+  <sc-if value="{{docD.on}}" hint-placeholder-val="{{ false }}">
+    <article style="flex:999 1 560px; min-width:0; max-width:700px; display:flex; flex-direction:column; gap:36px; font-size:16.5px; line-height:1.75">
+      <header style="display:flex; flex-direction:column; gap:14px">
+        <span class="eyebrow">Disclaimer · last revised 1 Oct 2026</span>
+        <h1 style="font-size:40px; line-height:1.12; font-weight:600">Disclaimer</h1>
+        <p style="font-size:18px; color:var(--muted); line-height:1.6">Please read this before using any prediction, pitch or chat answer on AutoVise.</p>
+      </header>
+      <section id="d-advice" style="display:flex; flex-direction:column; gap:12px">
+        <h2 style="font-size:22px; font-weight:600">Not financial advice</h2>
+        <p>AutoVise provides general research for information and education. It does not take your objectives, financial situation or needs into account, and nothing on this site is personal financial, investment, tax or legal advice.</p>
+      </section>
+      <section id="d-reco" style="display:flex; flex-direction:column; gap:12px">
+        <h2 style="font-size:22px; font-weight:600">No recommendation</h2>
+        <p>Targets, scores and pitches are not recommendations to buy, sell or hold any security. Consult a licensed investment adviser before making an investment decision.</p>
+      </section>
+      <section id="d-model" style="display:flex; flex-direction:column; gap:12px">
+        <h2 style="font-size:22px; font-weight:600">Model estimates can be wrong</h2>
+        <p>Predictions are produced by a model from company reports and price data. They may be inaccurate, incomplete or out of date, and actual prices can fall outside the published range. Past accuracy, including figures shown on the Track Record page, does not guarantee future results.</p>
+      </section>
+      <section id="d-chat" style="display:flex; flex-direction:column; gap:12px">
+        <h2 style="font-size:22px; font-weight:600">The AI consultant</h2>
+        <p>Chat answers are generated automatically and may contain errors. Check the cited source before relying on any figure. Questions you ask may be reviewed in aggregate to improve answers; do not share personal financial details in the chat.</p>
+      </section>
+      <section id="d-data" style="display:flex; flex-direction:column; gap:12px">
+        <h2 style="font-size:22px; font-weight:600">Data and prices</h2>
+        <p>Share prices may be delayed. Financial data is taken from published reports and may be restated by the company after we process it.</p>
+      </section>
+      <section id="d-contact" style="display:flex; flex-direction:column; gap:12px">
+        <h2 style="font-size:22px; font-weight:600">Contact</h2>
+        <p>Questions about this disclaimer: <a href="#">[CONTACT EMAIL]</a></p>
+      </section>
+    </article>
+  </sc-if>
+</main>
+
+<footer style="border-top:1px solid var(--border); background:var(--surface)">
+  <div class="wrap" style="padding-top:28px; padding-bottom:28px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap">
+    <p style="font-size:12px; color:var(--muted); max-width:760px; line-height:1.6">AutoVise publishes model-generated estimates for research and education. Predictions are model estimates, not financial advice. Share prices may be delayed.</p>
+    <nav aria-label="Footer" style="display:flex; gap:20px; font-size:13px"><a href="Methodology.dc.html">Methodology</a><a href="Disclaimer.dc.html">Disclaimer</a></nav>
+  </div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark","system"],"default":"light","section":"Theme"},"doc":{"editor":"enum","options":["methodology","disclaimer"],"default":"methodology","section":"State"},"$preview":{"width":1440,"height":2400}}'>
+const TOC_M = [['#m-what', 'What we predict'], ['#m-data', 'Where the numbers come from'], ['#m-model', 'The valuation model'], ['#m-qual', 'Qualitative factors'], ['#m-conf', 'Confidence and Score'], ['#m-update', 'When predictions change'], ['#m-limits', 'What the model cannot see']];
+const TOC_D = [['#d-advice', 'Not financial advice'], ['#d-reco', 'No recommendation'], ['#d-model', 'Model estimates can be wrong'], ['#d-chat', 'The AI consultant'], ['#d-data', 'Data and prices'], ['#d-contact', 'Contact']];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { mode: null, doc: null }; }
+  theme() {
+    const m = this.state.mode || this.props.theme || 'light';
+    let dark = m === 'dark';
+    if (m === 'system') { try { dark = window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {} }
+    return {
+      rootClass: dark ? 'av dark' : 'av',
+      segL: m === 'light' ? 'seg-btn on' : 'seg-btn', segD: m === 'dark' ? 'seg-btn on' : 'seg-btn', segS: m === 'system' ? 'seg-btn on' : 'seg-btn',
+      pL: m === 'light', pD: m === 'dark', pS: m === 'system',
+      setL: () => this.setState({ mode: 'light' }), setD: () => this.setState({ mode: 'dark' }), setS: () => this.setState({ mode: 'system' })
+    };
+  }
+  renderVals() {
+    const doc = this.state.doc || this.props.doc || 'methodology';
+    const mk = k => ({ on: doc === k, cls: doc === k ? 'seg-btn on' : 'seg-btn', go: () => this.setState({ doc: k }) });
+    return Object.assign(this.theme(), {
+      docM: mk('methodology'), docD: mk('disclaimer'),
+      navMethod: doc === 'methodology' ? 'navlink on' : 'navlink',
+      toc: (doc === 'methodology' ? TOC_M : TOC_D).map(t => ({ href: t[0], text: t[1] }))
+    });
+  }
+}
+</script>
+</body>
+</html>

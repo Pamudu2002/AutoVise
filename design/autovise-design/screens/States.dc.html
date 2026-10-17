@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AutoVise — States</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./autovise.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="{{rootClass}}" style="min-height:100vh; background:var(--bg); color:var(--text); font-family:var(--font)">
+  <main class="wrap" style="padding-top:48px; padding-bottom:80px; display:flex; flex-direction:column; gap:48px">
+    <header style="display:flex; flex-direction:column; gap:8px">
+      <span class="eyebrow">AutoVise · {{themeName}} theme</span>
+      <h1 style="font-size:32px; font-weight:600">Loading, empty, error and feedback states</h1>
+    </header>
+
+    <!-- Loading -->
+    <section style="display:flex; flex-direction:column; gap:16px" aria-labelledby="ld-h">
+      <h2 id="ld-h" style="font-size:18px; font-weight:600">Loading skeletons</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap:20px" aria-busy="true" aria-label="Loading companies">
+        <sc-for list="{{three}}" as="x" hint-placeholder-count="3">
+          <div class="card" style="padding:20px; display:flex; flex-direction:column; gap:18px">
+            <div style="display:flex; gap:12px; align-items:center"><div class="sk" style="width:44px; height:44px; border-radius:11px"></div><div style="flex:1; display:flex; flex-direction:column; gap:8px"><div class="sk" style="height:14px; width:70%"></div><div class="sk" style="height:12px; width:40%"></div></div></div>
+            <div style="display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px"><div style="display:flex; flex-direction:column; gap:8px"><div class="sk" style="height:10px; width:60%"></div><div class="sk" style="height:18px; width:80%"></div></div><div style="display:flex; flex-direction:column; gap:8px"><div class="sk" style="height:10px; width:60%"></div><div class="sk" style="height:18px; width:80%"></div></div></div>
+            <div class="sk" style="height:56px"></div>
+            <div class="sk" style="height:6px; border-radius:999px"></div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(560px, 100%), 1fr)); gap:20px">
+        <div class="card" style="padding:20px; display:flex; flex-direction:column; gap:14px" aria-busy="true" aria-label="Loading chart">
+          <div class="sk" style="height:16px; width:45%"></div>
+          <div style="position:relative; height:220px; border-radius:10px; overflow:hidden" class="sk"></div>
+          <div style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:12px"><div class="sk" style="height:56px; border-radius:10px"></div><div class="sk" style="height:56px; border-radius:10px"></div><div class="sk" style="height:56px; border-radius:10px"></div></div>
+        </div>
+        <div class="tbl-box" aria-busy="true" aria-label="Loading table">
+          <table class="tbl">
+            <thead><tr><th>Report</th><th>Type</th><th>Status</th><th class="r">Uploaded</th></tr></thead>
+            <tbody>
+              <sc-for list="{{five}}" as="x" hint-placeholder-count="5">
+                <tr><td><div class="sk" style="height:12px; width:180px"></div></td><td><div class="sk" style="height:12px; width:70px"></div></td><td><div class="sk" style="height:20px; width:90px; border-radius:999px"></div></td><td class="r"><div class="sk" style="height:12px; width:80px; margin-left:auto"></div></td></tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Empty -->
+    <section style="display:flex; flex-direction:column; gap:16px" aria-labelledby="em-h">
+      <h2 id="em-h" style="font-size:18px; font-weight:600">Empty states</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(360px, 100%), 1fr)); gap:20px">
+        <div class="card" style="padding:40px 28px; display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center">
+          <span style="width:52px; height:52px; border-radius:14px; background:var(--primary-soft); color:var(--primary-text); display:inline-flex; align-items:center; justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18ZM6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4"></path></svg></span>
+          <h3 style="font-size:16px; font-weight:600">No companies yet</h3>
+          <p style="color:var(--muted); max-width:300px; font-size:14px; line-height:1.6">Add a company, then upload its latest annual report to generate the first prediction.</p>
+          <a class="btn btn-primary" href="Companies-form.dc.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>New company</a>
+        </div>
+        <div class="card" style="padding:28px; display:flex; flex-direction:column; gap:14px">
+          <div class="drop" style="padding:32px 20px; flex:1">
+            <span style="width:44px; height:44px; border-radius:12px; background:var(--card); border:1px solid var(--border); display:inline-flex; align-items:center; justify-content:center; color:var(--primary-text)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"></path></svg></span>
+            <h3 style="font-size:16px; font-weight:600">No reports uploaded</h3>
+            <p style="color:var(--muted); max-width:300px; font-size:14px; line-height:1.6">Drop an annual or interim report here. Meridian Power stays “Prediction pending” until one is approved.</p>
+            <button class="btn btn-secondary btn-sm">Choose files</button>
+          </div>
+        </div>
+        <div class="card" style="padding:40px 28px; display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center">
+          <span style="width:52px; height:52px; border-radius:14px; background:var(--subtle); color:var(--muted); display:inline-flex; align-items:center; justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></span>
+          <h3 style="font-size:16px; font-weight:600">Prediction pending</h3>
+          <p style="color:var(--muted); max-width:320px; font-size:14px; line-height:1.6">We're reviewing Meridian Power's 2025 reports. The pitch, target and consultant appear here once a reviewer approves them.</p>
+          <span class="tnum" style="font-size:13px; color:var(--muted)">Current price LKR 19.80 · 16 Oct 2026</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Error -->
+    <section style="display:flex; flex-direction:column; gap:16px" aria-labelledby="er-h">
+      <h2 id="er-h" style="font-size:18px; font-weight:600">Error states</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(360px, 100%), 1fr)); gap:20px">
+        <div class="card" role="alert" style="padding:28px; display:flex; flex-direction:column; gap:12px; align-items:flex-start">
+          <span style="width:44px; height:44px; border-radius:12px; background:var(--neg-soft); color:var(--neg); display:inline-flex; align-items:center; justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4M12 16h.01"></path></svg></span>
+          <h3 style="font-size:16px; font-weight:600">We couldn't load predictions</h3>
+          <p style="color:var(--muted); font-size:14px; line-height:1.6">The prediction service didn't respond. Your filters are kept — try again in a moment.</p>
+          <div style="display:flex; gap:8px"><button class="btn btn-primary btn-sm" onClick="{{retry}}"><svg class="{{retryIcon}}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M8 16H3v5"></path></svg>{{retryLabel}}</button><a class="btn btn-ghost btn-sm" href="#">Status page</a></div>
+          <span class="num" style="font-size:11px; color:var(--muted)">Error ref · PRD-504-7F2C</span>
+        </div>
+        <div class="card" style="padding:20px; display:flex; flex-direction:column; gap:12px">
+          <span style="font-weight:600; font-size:15px">Price history and 3-year projection</span>
+          <div style="height:180px; border-radius:10px; border:1px dashed var(--border-strong); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; text-align:center; padding:16px">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--warn-mark)"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4M12 17h.01"></path></svg>
+            <span style="font-weight:500">Price history unavailable</span>
+            <span style="font-size:13px; color:var(--muted)">The pitch and target below are still current.</span>
+          </div>
+        </div>
+        <div class="card" style="padding:28px; display:flex; flex-direction:column; gap:12px; align-items:flex-start">
+          <span class="num" style="font-size:40px; font-weight:600; color:var(--muted)">404</span>
+          <h3 style="font-size:16px; font-weight:600">We don't cover that company</h3>
+          <p style="color:var(--muted); font-size:14px; line-height:1.6">It may have been delisted or never added. Browse the companies we do cover.</p>
+          <a class="btn btn-secondary btn-sm" href="Main.dc.html">Browse companies</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Toasts & dialogs -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap:32px; align-items:start">
+      <section style="display:flex; flex-direction:column; gap:16px" aria-labelledby="to-h">
+        <h2 id="to-h" style="font-size:18px; font-weight:600">Toasts</h2>
+        <div style="display:flex; flex-direction:column; gap:12px">
+          <sc-for list="{{toasts}}" as="t" hint-placeholder-count="4">
+            <div class="toast" role="{{t.role}}">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="{{t.iconStyle}}"><path d="{{t.icon}}"></path></svg>
+              <div style="flex:1; display:flex; flex-direction:column; gap:2px"><span style="font-weight:600; font-size:14px">{{t.title}}</span><span style="font-size:13px; color:var(--muted)">{{t.body}}</span>
+                <sc-if value="{{t.hasAction}}" hint-placeholder-val="{{ false }}"><button class="btn btn-ghost btn-sm" style="align-self:flex-start; padding:0 6px; margin-top:4px; margin-left:-6px; color:var(--primary-text)">{{t.action}}</button></sc-if>
+              </div>
+              <button class="btn btn-ghost btn-icon btn-sm" aria-label="Dismiss" onClick="{{t.dismiss}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+            </div>
+          </sc-for>
+          <sc-if value="{{noToasts}}" hint-placeholder-val="{{ false }}"><button class="btn btn-secondary btn-sm" style="align-self:flex-start" onClick="{{resetToasts}}">Show toasts again</button></sc-if>
+        </div>
+      </section>
+
+      <section style="display:flex; flex-direction:column; gap:16px" aria-labelledby="dl-h">
+        <h2 id="dl-h" style="font-size:18px; font-weight:600">Confirmation dialogs</h2>
+        <div class="dialog" role="alertdialog" aria-labelledby="cd1" style="box-shadow:var(--shadow-md)">
+          <div style="padding:20px 20px 4px; display:flex; gap:14px">
+            <span style="width:40px; height:40px; border-radius:11px; background:var(--neg-soft); color:var(--neg); display:inline-flex; align-items:center; justify-content:center; flex:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></span>
+            <div style="display:flex; flex-direction:column; gap:6px"><h3 id="cd1" style="font-size:16px; font-weight:600">Delete Q1 2026 Interim Report?</h3><p style="font-size:14px; color:var(--muted); line-height:1.6">The LHL prediction will be recalculated without it and go back to review. The public target doesn't change until then.</p></div>
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:8px; padding:16px 20px"><button class="btn btn-secondary btn-sm">Cancel</button><button class="btn btn-danger btn-sm">Delete report</button></div>
+        </div>
+        <div class="dialog" role="alertdialog" aria-labelledby="cd2" style="box-shadow:var(--shadow-md)">
+          <div style="padding:20px 20px 4px; display:flex; flex-direction:column; gap:6px"><h3 id="cd2" style="font-size:16px; font-weight:600">Discard unsaved settings?</h3><p style="font-size:14px; color:var(--muted); line-height:1.6">You changed the score weights and the disclaimer. Leaving now loses those edits.</p></div>
+          <div style="display:flex; justify-content:flex-end; gap:8px; padding:16px 20px"><button class="btn btn-ghost btn-sm">Keep editing</button><button class="btn btn-secondary btn-sm">Discard</button></div>
+        </div>
+        <div class="dialog" role="alertdialog" aria-labelledby="cd3" style="box-shadow:var(--shadow-md)">
+          <div style="padding:20px 20px 4px; display:flex; flex-direction:column; gap:10px"><h3 id="cd3" style="font-size:16px; font-weight:600">Publish the new LHL prediction?</h3>
+            <div style="display:flex; gap:10px; padding:10px 12px; border-radius:10px; background:var(--subtle); align-items:center"><span class="num muted" style="text-decoration:line-through">LKR 309.40</span><span class="muted">→</span><span class="num" style="font-weight:600">LKR 318.10</span><span class="delta up" style="margin-left:auto">+2.8%</span></div>
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:8px; padding:16px 20px"><button class="btn btn-secondary btn-sm">Cancel</button><button class="btn btn-primary btn-sm">Publish now</button></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark","system"],"default":"light","section":"Theme"},"$preview":{"width":1440,"height":2100}}'>
+const TOASTS = [
+  { k: 'ok', role: 'status', title: 'Report approved', body: 'A new LHL prediction draft is ready to review.', icon: 'M20 6 9 17l-5-5', color: 'var(--pos)', action: 'Open draft' },
+  { k: 'err', role: 'alert', title: 'Upload failed', body: 'RCEM_Annual_Report_2025_v2.pdf is over 50 MB.', icon: 'M12 8v4M12 16h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0', color: 'var(--neg)', action: 'Try again' },
+  { k: 'warn', role: 'status', title: 'Price is 45 days old', body: 'Island Pharma Labs is shown as Outdated data.', icon: 'm21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3M12 9v4M12 17h.01', color: 'var(--warn-mark)', action: 'Update price' },
+  { k: 'info', role: 'status', title: 'Recalculating', body: 'The LHL prediction will be ready in about 2 minutes.', icon: 'M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0', color: 'var(--info)', action: '' }
+];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { mode: null, hidden: [], retrying: false }; }
+  componentWillUnmount() { clearTimeout(this.t); }
+  theme() {
+    const m = this.state.mode || this.props.theme || 'light';
+    let dark = m === 'dark';
+    if (m === 'system') { try { dark = window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {} }
+    return { themeName: dark ? 'Dark' : 'Light', rootClass: dark ? 'av dark' : 'av' };
+  }
+  renderVals() {
+    const s = this.state;
+    const toasts = TOASTS.filter(t => s.hidden.indexOf(t.k) < 0).map(t => Object.assign({}, t, {
+      iconStyle: 'color:' + t.color + '; flex:none; margin-top:1px', hasAction: !!t.action,
+      dismiss: () => this.setState({ hidden: s.hidden.concat([t.k]) })
+    }));
+    return Object.assign(this.theme(), {
+      three: [1, 2, 3], five: [1, 2, 3, 4, 5],
+      toasts: toasts, noToasts: toasts.length === 0, resetToasts: () => this.setState({ hidden: [] }),
+      retryLabel: s.retrying ? 'Retrying…' : 'Try again', retryIcon: s.retrying ? 'spin' : '',
+      retry: () => { this.setState({ retrying: true }); this.t = setTimeout(() => this.setState({ retrying: false }), 1500); }
+    });
+  }
+}
+</script>
+</body>
+</html>

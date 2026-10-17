@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AutoVise — Design tokens</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./autovise.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="av" style="min-height:100vh; background:var(--bg); color:var(--text); font-family:var(--font)">
+  <main class="wrap" style="padding-top:56px; padding-bottom:80px; display:flex; flex-direction:column; gap:56px">
+    <header style="display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap; align-items:flex-end">
+      <div style="display:flex; flex-direction:column; gap:12px; max-width:680px">
+        <div style="display:flex; align-items:center; gap:10px">
+          <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="8" style="fill:var(--primary)"></rect><circle cx="14" cy="14" r="8.5" fill="none" style="stroke:var(--on-primary)" stroke-opacity=".35" stroke-width="1.5"></circle><path d="M8.5 17.5 12.5 13.5 15 16 19.5 10.5" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 10.5h3.5V14" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span style="font-weight:600; font-size:18px; letter-spacing:-0.025em">AutoVise</span>
+        </div>
+        <h1 style="font-size:40px; font-weight:600; line-height:1.1">Design tokens</h1>
+        <p style="color:var(--muted); font-size:16px; line-height:1.6">One set of CSS variables, two themes. Every component reads from these — swap the class on the root from <code class="num">.av</code> to <code class="num">.av.dark</code> and the whole product follows.</p>
+      </div>
+      <div style="display:flex; gap:16px; font-size:13px; color:var(--muted)">
+        <span>Geist · Geist Mono</span><span>4 px base</span><span>WCAG AA</span>
+      </div>
+    </header>
+
+    <!-- Logo -->
+    <section style="display:flex; flex-direction:column; gap:16px">
+      <h2 style="font-size:22px; font-weight:600">Logo</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap:16px">
+        <div class="card" style="padding:40px; display:flex; align-items:center; justify-content:center; gap:14px">
+          <svg width="44" height="44" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="8" style="fill:var(--primary)"></rect><circle cx="14" cy="14" r="8.5" fill="none" style="stroke:var(--on-primary)" stroke-opacity=".35" stroke-width="1.5"></circle><path d="M8.5 17.5 12.5 13.5 15 16 19.5 10.5" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 10.5h3.5V14" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span style="font-weight:600; font-size:30px; letter-spacing:-0.03em">AutoVise</span>
+        </div>
+        <div class="av dark" style="padding:40px; display:flex; align-items:center; justify-content:center; gap:14px; border-radius:14px; border:1px solid var(--border); background:var(--card)">
+          <svg width="44" height="44" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="8" style="fill:var(--primary)"></rect><circle cx="14" cy="14" r="8.5" fill="none" style="stroke:var(--on-primary)" stroke-opacity=".35" stroke-width="1.5"></circle><path d="M8.5 17.5 12.5 13.5 15 16 19.5 10.5" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 10.5h3.5V14" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span style="font-weight:600; font-size:30px; letter-spacing:-0.03em; color:var(--text)">AutoVise</span>
+        </div>
+        <div class="card" style="padding:24px; display:flex; flex-direction:column; gap:8px; justify-content:center">
+          <span style="font-weight:600">Compass ring + upward trend</span>
+          <p style="font-size:14px; color:var(--muted); line-height:1.6">A faint compass ring for guidance, a rising line for the projection. Primary fill, on-primary stroke — it inverts cleanly in dark mode. Minimum size 20 px; keep one mark-width of clear space.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Colour -->
+    <section style="display:flex; flex-direction:column; gap:16px">
+      <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:baseline">
+        <h2 style="font-size:22px; font-weight:600">Colour</h2>
+        <span style="font-size:13px; color:var(--muted)">Contrast is measured against the card colour in each theme. Text needs 4.5:1, chart marks and UI edges 3:1.</span>
+      </div>
+      <div class="tbl-box">
+        <table class="tbl" style="min-width:1040px">
+          <thead><tr><th>Token</th><th>Use</th><th>Light</th><th class="r">Contrast</th><th>Dark</th><th class="r">Contrast</th></tr></thead>
+          <tbody>
+            <sc-for list="{{colors}}" as="c" hint-placeholder-count="20">
+              <tr>
+                <td><span class="num" style="font-size:13px; font-weight:500">{{c.name}}</span></td>
+                <td style="font-size:13px; color:var(--muted); max-width:260px">{{c.use}}</td>
+                <td><span style="display:inline-flex; align-items:center; gap:10px"><span style="{{c.lSw}}"></span><span class="num" style="font-size:12.5px">{{c.l}}</span></span></td>
+                <td class="r"><sc-if value="{{c.hasCheck}}" hint-placeholder-val="{{ true }}"><span style="display:inline-flex; gap:8px; align-items:center"><span class="num" style="font-size:12.5px">{{c.lr}}</span><span class="{{c.lCls}}">{{c.lPass}}</span></span></sc-if></td>
+                <td><span style="display:inline-flex; align-items:center; gap:10px"><span style="{{c.dSw}}"></span><span class="num" style="font-size:12.5px">{{c.d}}</span></span></td>
+                <td class="r"><sc-if value="{{c.hasCheck}}" hint-placeholder-val="{{ true }}"><span style="display:inline-flex; gap:8px; align-items:center"><span class="num" style="font-size:12.5px">{{c.dr}}</span><span class="{{c.dCls}}">{{c.dPass}}</span></span></sc-if></td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Semantic pairs in both themes -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(460px, 100%), 1fr)); gap:16px">
+        <div class="av" style="padding:24px; border-radius:14px; border:1px solid var(--border); background:var(--card); display:flex; flex-direction:column; gap:16px">
+          <span class="eyebrow">Light · gain, loss, warning</span>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+            <span class="delta up">+29.6%</span><span class="delta down">−8.0%</span><span class="delta flat">0.0%</span><span class="warn-chip">Outdated data</span><span class="pill pill-approved">Approved</span><span class="pill pill-failed">Failed</span><span class="pill pill-review">Needs review</span>
+          </div>
+          <div style="display:flex; gap:14px; align-items:center"><span style="width:24px; height:3px; background:var(--c1)"></span><span style="width:24px; height:3px; background:var(--c2)"></span><span style="width:24px; height:3px; background:var(--c3)"></span><span style="width:24px; height:3px; background:var(--c4)"></span><span style="width:24px; height:3px; background:var(--c5)"></span><span style="width:40px; height:14px; border-radius:3px; background:var(--band)"></span><span style="font-size:12px; color:var(--muted)">chart-1…5 · projection band</span></div>
+        </div>
+        <div class="av dark" style="padding:24px; border-radius:14px; border:1px solid var(--border); background:var(--card); display:flex; flex-direction:column; gap:16px; color:var(--text)">
+          <span class="eyebrow">Dark · gain, loss, warning</span>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+            <span class="delta up">+29.6%</span><span class="delta down">−8.0%</span><span class="delta flat">0.0%</span><span class="warn-chip">Outdated data</span><span class="pill pill-approved">Approved</span><span class="pill pill-failed">Failed</span><span class="pill pill-review">Needs review</span>
+          </div>
+          <div style="display:flex; gap:14px; align-items:center"><span style="width:24px; height:3px; background:var(--c1)"></span><span style="width:24px; height:3px; background:var(--c2)"></span><span style="width:24px; height:3px; background:var(--c3)"></span><span style="width:24px; height:3px; background:var(--c4)"></span><span style="width:24px; height:3px; background:var(--c5)"></span><span style="width:40px; height:14px; border-radius:3px; background:var(--band)"></span><span style="font-size:12px; color:var(--muted)">chart-1…5 · projection band</span></div>
+        </div>
+      </div>
+      <p style="font-size:13px; color:var(--muted); max-width:820px; line-height:1.6">Gain and loss never rely on colour alone: every delta carries a sign (+ / −) and an arrow, and charts pair colour with line style (solid history, dashed base, dotted bear/bull). Red and rose are reserved for downside and risk; amber only for warnings and low confidence.</p>
+    </section>
+
+    <!-- Type -->
+    <section style="display:flex; flex-direction:column; gap:16px">
+      <h2 style="font-size:22px; font-weight:600">Type scale</h2>
+      <div class="card" style="display:flex; flex-direction:column">
+        <sc-for list="{{type}}" as="t" hint-placeholder-count="10">
+          <div style="display:grid; grid-template-columns:200px minmax(0, 1fr); gap:24px; align-items:baseline; padding:18px 24px; border-bottom:1px solid var(--border)">
+            <div style="display:flex; flex-direction:column; gap:2px"><span style="font-weight:600; font-size:13px">{{t.name}}</span><span class="num" style="font-size:12px; color:var(--muted)">{{t.spec}}</span></div>
+            <span style="{{t.style}}">{{t.sample}}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- Spacing / radius / shadow -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap:24px">
+      <section style="display:flex; flex-direction:column; gap:16px">
+        <h2 style="font-size:22px; font-weight:600">Spacing</h2>
+        <div class="card" style="padding:20px 24px; display:flex; flex-direction:column; gap:10px">
+          <sc-for list="{{space}}" as="s" hint-placeholder-count="10">
+            <div style="display:grid; grid-template-columns:64px 40px minmax(0, 1fr); gap:12px; align-items:center">
+              <span class="num" style="font-size:12.5px">{{s.name}}</span>
+              <span class="num muted" style="font-size:12.5px">{{s.px}}</span>
+              <span style="{{s.bar}}"></span>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      <section style="display:flex; flex-direction:column; gap:16px">
+        <h2 style="font-size:22px; font-weight:600">Radius</h2>
+        <div class="card" style="padding:24px; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:20px">
+          <sc-for list="{{radius}}" as="r" hint-placeholder-count="6">
+            <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start">
+              <span style="{{r.box}}"></span>
+              <span class="num" style="font-size:12.5px; font-weight:500">{{r.name}}</span>
+              <span style="font-size:12px; color:var(--muted)">{{r.use}}</span>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </div>
+
+    <section style="display:flex; flex-direction:column; gap:16px">
+      <h2 style="font-size:22px; font-weight:600">Elevation</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(460px, 100%), 1fr)); gap:16px">
+        <div class="av" style="padding:32px; border-radius:14px; background:var(--bg); border:1px solid var(--border); display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:20px">
+          <div style="height:96px; border-radius:14px; background:var(--card); box-shadow:var(--shadow-sm); border:1px solid var(--border); padding:12px; font-size:12px" class="num">shadow-sm<br><span class="muted">cards</span></div>
+          <div style="height:96px; border-radius:14px; background:var(--card); box-shadow:var(--shadow-md); padding:12px; font-size:12px" class="num">shadow-md<br><span class="muted">raised</span></div>
+          <div style="height:96px; border-radius:14px; background:var(--card); box-shadow:var(--shadow-lg); padding:12px; font-size:12px" class="num">shadow-lg<br><span class="muted">dialogs</span></div>
+        </div>
+        <div class="av dark" style="padding:32px; border-radius:14px; background:var(--bg); border:1px solid var(--border); display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:20px; color:var(--text)">
+          <div style="height:96px; border-radius:14px; background:var(--card); border:1px solid var(--border); padding:12px; font-size:12px" class="num">border only<br><span class="muted">cards</span></div>
+          <div style="height:96px; border-radius:14px; background:var(--subtle); border:1px solid var(--border-strong); padding:12px; font-size:12px" class="num">lighter fill<br><span class="muted">raised</span></div>
+          <div style="height:96px; border-radius:14px; background:var(--card); box-shadow:var(--shadow-lg); border:1px solid var(--border); padding:12px; font-size:12px" class="num">shadow-lg<br><span class="muted">overlays only</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section style="display:flex; flex-direction:column; gap:16px">
+      <h2 style="font-size:22px; font-weight:600">Number formatting</h2>
+      <div class="tbl-box">
+        <table class="tbl">
+          <thead><tr><th>Kind</th><th>Rule</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Price</td><td style="color:var(--muted)">Currency code, space, two decimals, Geist Mono tabular</td><td class="num" style="font-weight:600">LKR 245.50</td></tr>
+            <tr><td>Change</td><td style="color:var(--muted)">Always signed, one decimal, true minus sign (−)</td><td class="num" style="font-weight:600">+18.4% · −8.0%</td></tr>
+            <tr><td>Multiple</td><td style="color:var(--muted)">One decimal, multiplication sign</td><td class="num" style="font-weight:600">13.5×</td></tr>
+            <tr><td>Large values</td><td style="color:var(--muted)">Thousands separators; unit in the column header</td><td class="num" style="font-weight:600">30,940 <span class="muted" style="font-weight:400">LKR mn</span></td></tr>
+            <tr><td>Scores</td><td style="color:var(--muted)">Integer 0–100, no unit</td><td class="num" style="font-weight:600">74</td></tr>
+            <tr><td>Dates</td><td style="color:var(--muted)">Day, short month, year</td><td class="num" style="font-weight:600">16 Oct 2026</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2400}}'>
+const CARD_L = '#FFFFFF', CARD_D = '#121A2D';
+// [token, use, light, dark, check: 'text' | 'ui' | null]
+const COLORS = [
+  ['--bg', 'Page background', '#F6F7F9', '#0A0F1C', null],
+  ['--surface', 'Header, sidebar, footer', '#FFFFFF', '#0E1424', null],
+  ['--card', 'Cards, dialogs, inputs', '#FFFFFF', '#121A2D', null],
+  ['--subtle', 'Quiet fills, table headers, hover', '#F0F2F6', '#182036', null],
+  ['--border', 'Dividers, card edges', '#E2E6ED', '#232C46', null],
+  ['--border-strong', 'Input and button edges', '#8A93A5', '#5B6888', 'ui'],
+  ['--text', 'Body and headings', '#0D1424', '#E6E9F2', 'text'],
+  ['--muted', 'Secondary text, labels, axes', '#556073', '#9BA4BB', 'text'],
+  ['--primary', 'Buttons, active tabs, links, brand', '#1F2B7A', '#8D9BFF', 'text'],
+  ['--accent', 'Score gauge, catalysts, highlights', '#0F766E', '#2DD4BF', 'text'],
+  ['--positive', 'Gains, upside, approved', '#047857', '#34D399', 'text'],
+  ['--negative', 'Losses, downside, risk, failed', '#BE123C', '#FB7185', 'text'],
+  ['--warning', 'Warnings, low confidence, stale data', '#9A4D0B', '#FBBF24', 'text'],
+  ['--chart-1', 'History line, first series', '#1F2B7A', '#8D9BFF', 'ui'],
+  ['--chart-2', 'Base case, second series', '#0E9384', '#2DD4BF', 'ui'],
+  ['--chart-3', 'Medium confidence, third series', '#7C8BC4', '#5F6CB3', 'ui'],
+  ['--chart-4', 'Third compare series', '#D97706', '#FBBF24', 'ui'],
+  ['--chart-5', 'Reference lines, other', '#7F8A9D', '#6B7794', 'ui']
+];
+function lum(hex) {
+  const v = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255).map(c => c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+  return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
+}
+function ratio(a, b) { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+const sw = hex => 'width:28px; height:28px; border-radius:7px; background:' + hex + '; box-shadow:inset 0 0 0 1px rgba(13,20,36,.12); display:inline-block';
+const TYPE = [
+  ['Display', '48 / 1.08 · 600', 'font-size:48px; line-height:1.08; font-weight:600; letter-spacing:-0.02em', 'Pitched like a consultant'],
+  ['Heading 1', '32 / 1.15 · 600', 'font-size:32px; line-height:1.15; font-weight:600; letter-spacing:-0.02em', 'Compare companies'],
+  ['Heading 2', '22 / 1.3 · 600', 'font-size:22px; line-height:1.3; font-weight:600; letter-spacing:-0.02em', 'Earnings growth carries the case'],
+  ['Heading 3', '16 / 1.4 · 600', 'font-size:16px; line-height:1.4; font-weight:600', 'Valuation waterfall'],
+  ['Long-form body', '16.5 / 1.75 · 400', 'font-size:16.5px; line-height:1.75', 'We start from 2025 earnings per share and grow them at 11.0% a year.'],
+  ['Body', '14 / 1.5 · 400', 'font-size:14px; line-height:1.5', 'Debt/equity fell from 0.62 to 0.42, cutting finance costs.'],
+  ['Small', '13 / 1.5 · 400', 'font-size:13px; line-height:1.5; color:var(--muted)', 'Last updated from reports dated 30 Jun 2026'],
+  ['Caption / eyebrow', '12 / 1.4 · 500 · +6%', 'font-size:12px; font-weight:500; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)', '03 · Valuation walkthrough'],
+  ['Figure — large', 'Geist Mono 22 · 600 · tnum', 'font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:22px; font-weight:600', 'LKR 245.50   +29.6%'],
+  ['Figure — table', 'Geist Mono 14 · 400 · tnum', 'font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:14px', '18,420   21,060   24,880   27,310   30,940']
+];
+class Component extends DCLogic {
+  renderVals() {
+    const colors = COLORS.map(c => {
+      const need = c[4] === 'text' ? 4.5 : 3;
+      const lr = c[4] ? ratio(c[2], CARD_L) : 0, dr = c[4] ? ratio(c[3], CARD_D) : 0;
+      const tag = (r) => r >= need ? (c[4] === 'text' ? (r >= 7 ? 'AAA' : 'AA') : 'Pass 3:1') : 'Fail';
+      const cls = r => r >= need ? 'pill pill-approved' : 'pill pill-failed';
+      return {
+        name: c[0], use: c[1], l: c[2], d: c[3], lSw: sw(c[2]), dSw: sw(c[3]), hasCheck: !!c[4],
+        lr: lr.toFixed(1) + ':1', dr: dr.toFixed(1) + ':1', lPass: tag(lr), dPass: tag(dr), lCls: cls(lr), dCls: cls(dr)
+      };
+    });
+    return {
+      colors: colors,
+      type: TYPE.map(t => ({ name: t[0], spec: t[1], style: t[2], sample: t[3] })),
+      space: [['space-1', 4], ['space-2', 8], ['space-3', 12], ['space-4', 16], ['space-5', 20], ['space-6', 24], ['space-8', 32], ['space-10', 40], ['space-12', 48], ['space-16', 64]].map(s => ({ name: s[0], px: s[1], bar: 'height:12px; width:' + s[1] * 4 + 'px; max-width:100%; border-radius:3px; background:var(--primary-soft); box-shadow:inset 0 0 0 1px var(--primary)' })),
+      radius: [['radius-xs · 6', 6, 'Badges, cite chips'], ['radius-sm · 8', 8, 'Small buttons'], ['radius-md · 10', 10, 'Inputs, buttons'], ['radius-lg · 14', 14, 'Cards'], ['radius-xl · 16', 16, 'Dialogs, sheets'], ['radius-full', 999, 'Pills, meters']].map(r => ({ name: r[0], use: r[2], box: 'width:72px; height:48px; border-radius:' + Math.min(r[1], 24) + 'px; background:var(--subtle); border:1.5px solid var(--border-strong)' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

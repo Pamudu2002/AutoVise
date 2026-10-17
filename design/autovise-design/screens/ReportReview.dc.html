@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AutoVise Admin — Review Q2 2026 Interim Report</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./autovise.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="{{rootClass}}" style="height:100vh; background:var(--bg); color:var(--text); font-family:var(--font); display:flex; overflow:hidden">
+
+<aside class="{{side.cls}}" style="{{side.style}}" aria-label="Admin navigation">
+  <div style="display:flex; align-items:center; gap:10px; height:64px; padding:0 22px; border-bottom:1px solid var(--border)">
+    <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" style="flex:none"><rect width="28" height="28" rx="8" style="fill:var(--primary)"></rect><circle cx="14" cy="14" r="8.5" fill="none" style="stroke:var(--on-primary)" stroke-opacity=".35" stroke-width="1.5"></circle><path d="M8.5 17.5 12.5 13.5 15 16 19.5 10.5" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 10.5h3.5V14" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    <span class="sidelabel" style="font-weight:600; font-size:16px; letter-spacing:-0.02em">AutoVise</span>
+  </div>
+  <nav style="display:flex; flex-direction:column; gap:2px; padding:12px; flex:1">
+    <sc-for list="{{side.nav}}" as="n" hint-placeholder-count="10">
+      <a class="{{n.cls}}" href="{{n.href}}" aria-current="{{n.current}}" title="{{n.label}}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"></path></svg>
+        <span class="sidelabel" style="flex:1">{{n.label}}</span>
+      </a>
+    </sc-for>
+  </nav>
+  <div style="padding:12px; border-top:1px solid var(--border)">
+    <button class="sidelink" style="border:0; background:none; cursor:pointer; font:inherit; width:100%" onClick="{{side.toggle}}" aria-label="{{side.toggleLabel}}" aria-expanded="{{side.expanded}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM9 3v18"></path></svg><span class="sidelabel">Collapse sidebar</span></button>
+  </div>
+</aside>
+
+<div style="flex:1 1 0; min-width:0; display:flex; flex-direction:column; min-height:0">
+  <!-- Review bar -->
+  <header style="min-height:64px; display:flex; align-items:center; gap:16px; padding:10px 20px; border-bottom:1px solid var(--border); background:var(--surface); flex-wrap:wrap">
+    <a class="btn btn-ghost btn-icon btn-sm" href="Reports.dc.html" aria-label="Back to reports"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></a>
+    <div style="display:flex; flex-direction:column; min-width:0; flex:1 1 280px">
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+        <h1 style="font-size:16px; font-weight:600">Q2 2026 Interim Report</h1>
+        <span class="chip num">v1</span>
+        <span class="{{statusPill}}">{{statusText}}</span>
+      </div>
+      <span style="font-size:12px; color:var(--muted)">Lanka Harbour Logistics · Quarterly · Apr–Jun 2026 · <span class="num">LHL_Q2_2026_Interim.pdf</span></span>
+    </div>
+    <span class="tnum hide-sm" style="font-size:13px; color:var(--muted)">{{checkedText}}</span>
+    <div class="seg" role="group" aria-label="Colour theme">
+      <button class="{{segL}}" aria-label="Light theme" aria-pressed="{{pL}}" onClick="{{setL}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg></button>
+      <button class="{{segD}}" aria-label="Dark theme" aria-pressed="{{pD}}" onClick="{{setD}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg></button>
+      <button class="{{segS}}" aria-label="Use system theme" aria-pressed="{{pS}}" onClick="{{setS}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg></button>
+    </div>
+    <button class="btn btn-secondary" onClick="{{reextract}}" disabled="{{busy}}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M8 16H3v5"></path></svg>Re-extract</button>
+    <button class="btn btn-primary" onClick="{{approve}}" disabled="{{cantApprove}}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>{{approveLabel}}</button>
+  </header>
+
+  <div style="flex:1; min-height:0; display:flex; flex-wrap:wrap">
+    <!-- PDF viewer -->
+    <section style="flex:1 1 520px; min-width:0; min-height:0; display:flex; flex-direction:column; background:var(--subtle); border-right:1px solid var(--border)" aria-label="Report PDF">
+      <div style="height:48px; display:flex; align-items:center; gap:8px; padding:0 12px; border-bottom:1px solid var(--border); background:var(--surface)">
+        <button class="btn btn-ghost btn-icon btn-sm" aria-label="Previous page" onClick="{{prevPage}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button>
+        <span class="num" style="font-size:13px">Page {{page.n}} / 24</span>
+        <button class="btn btn-ghost btn-icon btn-sm" aria-label="Next page" onClick="{{nextPage}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
+        <span style="flex:1"></span>
+        <button class="btn btn-ghost btn-icon btn-sm" aria-label="Zoom out" onClick="{{zoomOut}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5M8 11h6"></path></svg></button>
+        <span class="num" style="font-size:13px; width:44px; text-align:center">{{zoomText}}</span>
+        <button class="btn btn-ghost btn-icon btn-sm" aria-label="Zoom in" onClick="{{zoomIn}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5M8 11h6M11 8v6"></path></svg></button>
+      </div>
+      <div style="flex:1; min-height:0; overflow:auto; padding:24px; display:flex; justify-content:center">
+        <div style="{{paperStyle}}">
+          <div style="display:flex; justify-content:space-between; font-size:10px; color:#6B7280; letter-spacing:.04em; text-transform:uppercase"><span>Lanka Harbour Logistics PLC</span><span>Interim Report · Q2 2026</span></div>
+          <h2 style="font-family:Georgia, 'Times New Roman', serif; font-size:20px; font-weight:600; color:#111827; margin-top:18px">{{page.title}}</h2>
+          <span style="font-size:11px; color:#6B7280">{{page.sub}}</span>
+          <sc-if value="{{page.isTable}}" hint-placeholder-val="{{ true }}">
+            <div style="margin-top:18px; display:flex; flex-direction:column; font-size:12px">
+              <div style="display:grid; grid-template-columns:minmax(0, 1fr) 90px 90px; padding:6px 8px; border-bottom:1.5px solid #111827; font-weight:600; color:#111827"><span>LKR million</span><span style="text-align:right">Q2 2026</span><span style="text-align:right">Q2 2025</span></div>
+              <sc-for list="{{page.rows}}" as="r" hint-placeholder-count="8">
+                <div style="{{r.style}}"><span>{{r.label}}</span><span style="text-align:right; font-variant-numeric:tabular-nums">{{r.now}}</span><span style="text-align:right; font-variant-numeric:tabular-nums; color:#6B7280">{{r.prior}}</span></div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{page.isText}}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:18px; display:flex; flex-direction:column; gap:12px; font-family:Georgia, 'Times New Roman', serif; font-size:13px; line-height:1.65; color:#1F2937">
+              <sc-for list="{{page.paras}}" as="p" hint-placeholder-count="4"><p style="{{p.style}}">{{p.text}}</p></sc-for>
+            </div>
+          </sc-if>
+          <div style="margin-top:auto; padding-top:24px; text-align:center; font-size:10px; color:#6B7280">{{page.n}}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Extracted data -->
+    <section style="flex:1 1 560px; min-width:0; min-height:0; overflow-y:auto; display:flex; flex-direction:column; background:var(--bg)" aria-label="Extracted data">
+      <sc-if value="{{busy}}" hint-placeholder-val="{{ false }}">
+        <div style="padding:20px; display:flex; flex-direction:column; gap:12px" aria-busy="true" aria-label="Re-extracting">
+          <span class="pill pill-processing" style="align-self:flex-start">Re-extracting from 24 pages…</span>
+          <div class="sk" style="height:18px; width:40%"></div>
+          <div class="sk" style="height:40px"></div><div class="sk" style="height:40px"></div><div class="sk" style="height:40px"></div><div class="sk" style="height:40px"></div><div class="sk" style="height:40px"></div>
+          <div class="sk" style="height:18px; width:32%; margin-top:16px"></div>
+          <div class="sk" style="height:96px"></div><div class="sk" style="height:96px"></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{notBusy}}" hint-placeholder-val="{{ true }}">
+        <div style="padding:20px; display:flex; flex-direction:column; gap:24px">
+          <section style="display:flex; flex-direction:column; gap:12px">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px; flex-wrap:wrap">
+              <h2 style="font-size:15px; font-weight:600">Quantitative metrics</h2>
+              <span style="font-size:12px; color:var(--muted)">Select a row to see it on the page · LKR million</span>
+            </div>
+            <div class="tbl-box">
+              <table class="tbl" style="font-size:13px">
+                <thead><tr><th>Metric</th><th class="r">Value</th><th>Source</th><th>Read</th><th class="r"><span style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)">Actions</span></th></tr></thead>
+                <tbody>
+                  <sc-for list="{{metrics}}" as="m" hint-placeholder-count="10">
+                    <tr style="{{m.rowStyle}}">
+                      <td style="font-weight:500">{{m.label}}</td>
+                      <td class="r">
+                        <sc-if value="{{m.editing}}" hint-placeholder-val="{{ false }}">
+                          <label for="{{m.inputId}}" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)">{{m.label}} value</label>
+                          <input id="{{m.inputId}}" class="input num" style="height:32px; width:110px; text-align:right" value="{{m.draft}}" onChange="{{m.setDraft}}">
+                        </sc-if>
+                        <sc-if value="{{m.notEditing}}" hint-placeholder-val="{{ true }}"><span class="num" style="font-weight:600">{{m.value}}</span><sc-if value="{{m.edited}}" hint-placeholder-val="{{ false }}"><span style="display:block; font-size:11px; color:var(--warn)">edited · was {{m.orig}}</span></sc-if></sc-if>
+                      </td>
+                      <td><button class="cite" onClick="{{m.select}}">p.{{m.page}}</button></td>
+                      <td><span class="{{m.confCls}}">{{m.confText}}</span></td>
+                      <td class="r">
+                        <sc-if value="{{m.editing}}" hint-placeholder-val="{{ false }}">
+                          <div style="display:inline-flex; gap:4px"><button class="btn btn-primary btn-sm" onClick="{{m.save}}">Save</button><button class="btn btn-ghost btn-sm" onClick="{{m.cancel}}">Cancel</button></div>
+                        </sc-if>
+                        <sc-if value="{{m.notEditing}}" hint-placeholder-val="{{ true }}">
+                          <button class="btn btn-ghost btn-icon btn-sm" aria-label="{{m.editLabel}}" onClick="{{m.edit}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg></button>
+                        </sc-if>
+                      </td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section style="display:flex; flex-direction:column; gap:12px">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px; flex-wrap:wrap">
+              <h2 style="font-size:15px; font-weight:600">Qualitative insights</h2>
+              <span style="font-size:12px; color:var(--muted)">{{includedText}}</span>
+            </div>
+            <sc-for list="{{insights}}" as="i" hint-placeholder-count="4">
+              <article class="card" style="{{i.cardStyle}}">
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+                  <span class="chip" style="color:var(--text)">{{i.cat}}</span>
+                  <span class="{{i.sentCls}}">{{i.sent}}</span>
+                  <span style="font-size:12px; color:var(--muted)">Impact: <strong style="color:var(--text); font-weight:600">{{i.impact}}</strong></span>
+                  <span style="flex:1"></span>
+                  <label style="display:inline-flex; gap:8px; align-items:center; font-size:13px; cursor:pointer"><input type="checkbox" class="check" checked="{{i.on}}" onChange="{{i.toggle}}">Include</label>
+                </div>
+                <p style="font-weight:500; line-height:1.5">{{i.summary}}</p>
+                <blockquote style="margin:0; padding:10px 12px; border-radius:8px; background:var(--subtle); font-family:Georgia, 'Times New Roman', serif; font-size:13.5px; line-height:1.6; color:var(--text)">“{{i.quote}}”</blockquote>
+                <button class="cite" style="align-self:flex-start" onClick="{{i.select}}">Page {{i.page}}</button>
+              </article>
+            </sc-for>
+          </section>
+        </div>
+      </sc-if>
+    </section>
+  </div>
+</div>
+
+<sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+  <div class="toast" role="status" style="position:fixed; right:24px; bottom:24px; z-index:70">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--pos); flex:none; margin-top:1px"><path d="M20 6 9 17l-5-5"></path></svg>
+    <div style="flex:1; display:flex; flex-direction:column; gap:2px"><span style="font-weight:600; font-size:14px">Report approved</span><span style="font-size:13px; color:var(--muted)">A new LHL prediction draft is ready to review.</span></div>
+    <a class="btn btn-secondary btn-sm" href="Predictions.dc.html">Open</a>
+  </div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark","system"],"default":"light","section":"Theme"},"collapsed":{"editor":"boolean","default":true,"section":"State"},"$preview":{"width":1440,"height":1000}}'>
+const NAV = [
+  ['dashboard', 'Dashboard', 'Dashboard.dc.html', 'M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z'],
+  ['companies', 'Companies', 'Companies.dc.html', 'M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18ZM6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4'],
+  ['reports', 'Reports', 'Reports.dc.html', 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M16 13H8M16 17H8M10 9H8'],
+  ['predictions', 'Predictions', 'Predictions.dc.html', 'M3 3v18h18M19 9l-5 5-4-4-3 3'],
+  ['sectors', 'Sectors', '#', 'M12 2H2v10l9.29 9.29a1 1 0 0 0 1.42 0l8.58-8.58a1 1 0 0 0 0-1.42ZM7 7h.01'],
+  ['events', 'Events', '#', 'M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 2v4M8 2v4M3 10h18'],
+  ['chat', 'Chat Insights', 'ChatInsights.dc.html', 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'],
+  ['settings', 'Settings', 'Settings.dc.html', 'M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6'],
+  ['users', 'Users', '#', 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75'],
+  ['audit', 'Audit Log', '#', 'M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5M12 7v5l4 2']
+];
+const ACTIVE = 'reports';
+const METRICS = [
+  { k: 'tp', label: 'Container throughput (mn TEU)', value: '0.51', page: 3, conf: 88 },
+  { k: 'rev', label: 'Revenue', value: '8,214', page: 4, conf: 99 },
+  { k: 'gp', label: 'Gross profit', value: '2,382', page: 4, conf: 98 },
+  { k: 'op', label: 'Operating profit', value: '1,148', page: 4, conf: 97 },
+  { k: 'ni', label: 'Net income (to shareholders)', value: '771', page: 4, conf: 98 },
+  { k: 'eps', label: 'EPS (LKR)', value: '4.94', page: 4, conf: 99 },
+  { k: 'ta', label: 'Total assets', value: '52,610', page: 8, conf: 96 },
+  { k: 'te', label: 'Total equity', value: '17,940', page: 8, conf: 97 },
+  { k: 'debt', label: 'Total borrowings', value: '7,530', page: 8, conf: 71 },
+  { k: 'ocf', label: 'Operating cash flow', value: '1,402', page: 10, conf: 94 }
+];
+const INSIGHTS = [
+  { k: 'kel', cat: 'Growth outlook', summary: 'New Kelaniya warehouse opened in May and was 74% occupied by quarter end.', sent: 'Positive', impact: 'Medium', page: 3, quote: 'The Kelaniya facility commenced operations on 12 May 2026 and was 74% occupied by 30 June.' },
+  { k: 'guid', cat: 'Management', summary: 'Full-year throughput growth guidance reaffirmed at 10–12%.', sent: 'Positive', impact: 'High', page: 3, quote: 'We reaffirm our expectation of 10 to 12 per cent growth in throughput for the full year.' },
+  { k: 'fuel', cat: 'Risk', summary: 'Fuel and USD-linked costs grew faster than revenue this quarter.', sent: 'Negative', impact: 'Medium', page: 3, quote: 'Fuel costs increased 19% year on year, outpacing revenue growth of 12%.' },
+  { k: 'div', cat: 'Governance', summary: 'Board will review the dividend policy before the 2027 AGM.', sent: 'Neutral', impact: 'Low', page: 3, quote: 'The Board intends to review the dividend policy ahead of the 2027 Annual General Meeting.' }
+];
+const PAGES = {
+  3: { title: 'Chairman’s statement', sub: 'Highlights of the quarter', text: true, paras: [
+    { k: 'tp', t: 'Container throughput across our terminals reached 0.51 million TEU in the quarter, 13% higher than a year earlier.' },
+    { k: 'kel', t: 'The Kelaniya facility commenced operations on 12 May 2026 and was 74% occupied by 30 June.' },
+    { k: 'fuel', t: 'Fuel costs increased 19% year on year, outpacing revenue growth of 12%.' },
+    { k: 'guid', t: 'We reaffirm our expectation of 10 to 12 per cent growth in throughput for the full year.' },
+    { k: 'div', t: 'The Board intends to review the dividend policy ahead of the 2027 Annual General Meeting.' }
+  ] },
+  4: { title: 'Statement of profit or loss', sub: 'For the quarter ended 30 June 2026 · unaudited', rows: [
+    ['rev', 'Revenue', '8,214', '7,334'], ['', 'Cost of sales', '(5,832)', '(5,178)'], ['gp', 'Gross profit', '2,382', '2,156'], ['', 'Administrative expenses', '(1,234)', '(1,121)'],
+    ['op', 'Operating profit', '1,148', '1,035'], ['', 'Finance costs', '(142)', '(171)'], ['', 'Income tax', '(235)', '(210)'], ['ni', 'Profit attributable to shareholders', '771', '683'], ['eps', 'Earnings per share (LKR)', '4.94', '4.38']
+  ] },
+  8: { title: 'Statement of financial position', sub: 'As at 30 June 2026 · unaudited', rows: [
+    ['', 'Property, plant and equipment', '38,420', '36,915'], ['', 'Trade and other receivables', '6,880', '6,210'], ['', 'Cash and cash equivalents', '4,105', '3,640'], ['ta', 'Total assets', '52,610', '49,870'],
+    ['te', 'Total equity', '17,940', '16,805'], ['debt', 'Interest-bearing borrowings', '7,530', '7,395'], ['', 'Trade and other payables', '5,210', '4,960']
+  ] },
+  10: { title: 'Statement of cash flows', sub: 'For the six months ended 30 June 2026', rows: [
+    ['', 'Profit before tax', '1,006', '863'], ['', 'Depreciation and amortisation', '612', '574'], ['', 'Working-capital movements', '(216)', '(140)'], ['ocf', 'Net cash from operating activities', '1,402', '1,297'], ['', 'Capital expenditure', '(1,880)', '(1,120)']
+  ] }
+};
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { mode: null, collapsed: null, sel: 'debt', page: 8, zoom: 100, editing: null, draft: '', edits: {}, excluded: [], busy: false, approved: false, toast: false };
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  theme() {
+    const m = this.state.mode || this.props.theme || 'light';
+    let dark = m === 'dark';
+    if (m === 'system') { try { dark = window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {} }
+    return {
+      dark: dark,
+      rootClass: dark ? 'av dark' : 'av',
+      segL: m === 'light' ? 'seg-btn on' : 'seg-btn', segD: m === 'dark' ? 'seg-btn on' : 'seg-btn', segS: m === 'system' ? 'seg-btn on' : 'seg-btn',
+      pL: m === 'light', pD: m === 'dark', pS: m === 'system',
+      setL: () => this.setState({ mode: 'light' }), setD: () => this.setState({ mode: 'dark' }), setS: () => this.setState({ mode: 'system' })
+    };
+  }
+  renderVals() {
+    const s = this.state;
+    const th = this.theme();
+    const col = s.collapsed === null ? (this.props.collapsed !== false) : s.collapsed;
+    const pg = PAGES[s.page] || { title: 'Notes to the interim financial statements', sub: 'Page ' + s.page, text: true, paras: [{ k: '', t: 'This page contains no extracted values.' }] };
+    const hl = 'background:#FDE68A; box-shadow:0 0 0 2px #F59E0B;';
+    const page = {
+      n: s.page, title: pg.title, sub: pg.sub, isTable: !pg.text, isText: !!pg.text,
+      rows: (pg.rows || []).map(r => ({ label: r[1], now: r[2], prior: r[3], style: 'display:grid; grid-template-columns:minmax(0, 1fr) 90px 90px; padding:6px 8px; border-bottom:1px solid #E5E7EB; color:#111827; border-radius:3px;' + (r[0] && r[0] === s.sel ? hl : '') + (/total|profit attrib|net cash/i.test(r[1]) ? ' font-weight:600;' : '') })),
+      paras: (pg.paras || []).map(p => ({ text: p.t, style: 'margin:0; padding:4px 6px; border-radius:3px;' + (p.k && p.k === s.sel ? hl : '') }))
+    };
+    const goto = (k, p) => () => this.setState({ sel: k, page: p });
+    const metrics = METRICS.map(m => {
+      const val = s.edits[m.k] !== undefined ? s.edits[m.k] : m.value;
+      const editing = s.editing === m.k;
+      return {
+        label: m.label, page: m.page, value: val, orig: m.value, edited: s.edits[m.k] !== undefined,
+        editing: editing, notEditing: !editing, draft: s.draft, inputId: 'm-' + m.k,
+        setDraft: e => this.setState({ draft: e.target.value }),
+        edit: () => this.setState({ editing: m.k, draft: val, sel: m.k, page: m.page }),
+        save: () => { const ed = Object.assign({}, s.edits); ed[m.k] = s.draft; this.setState({ edits: ed, editing: null }); },
+        cancel: () => this.setState({ editing: null }),
+        editLabel: 'Edit ' + m.label,
+        select: goto(m.k, m.page),
+        confText: m.conf >= 85 ? m.conf + '%' : 'Check · ' + m.conf + '%',
+        confCls: m.conf >= 85 ? 'num muted' : 'warn-chip',
+        rowStyle: m.k === s.sel ? 'box-shadow:inset 3px 0 0 var(--primary); background:var(--primary-soft)' : ''
+      };
+    });
+    const insights = INSIGHTS.map(i => {
+      const on = s.excluded.indexOf(i.k) < 0;
+      return {
+        cat: i.cat, summary: i.summary, quote: i.quote, page: i.page, impact: i.impact, sent: i.sent, on: on,
+        sentCls: i.sent === 'Positive' ? 'pill pill-approved' : i.sent === 'Negative' ? 'pill pill-failed' : 'pill pill-draft',
+        toggle: () => this.setState({ excluded: on ? s.excluded.concat([i.k]) : s.excluded.filter(x => x !== i.k) }),
+        select: goto(i.k, i.page),
+        cardStyle: 'padding:16px; display:flex; flex-direction:column; gap:10px; box-shadow:none' + (on ? '' : '; opacity:.55') + (i.k === s.sel ? '; border-color:var(--primary)' : '')
+      };
+    });
+    const flagged = METRICS.filter(m => m.conf < 85 && s.edits[m.k] === undefined).length;
+    return Object.assign(th, {
+      side: {
+        cls: col ? 'side-collapsed hide-sm' : 'hide-sm',
+        style: 'flex:none; width:' + (col ? 72 : 248) + 'px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; transition:width .2s',
+        nav: NAV.map(n => ({ label: n[1], href: n[2], icon: n[3], cls: n[0] === ACTIVE ? 'sidelink on' : 'sidelink', current: n[0] === ACTIVE ? 'page' : 'false' })),
+        toggle: () => this.setState({ collapsed: !col }), toggleLabel: col ? 'Expand sidebar' : 'Collapse sidebar', expanded: !col
+      },
+      page: page, metrics: metrics, insights: insights,
+      paperStyle: 'width:' + Math.round(560 * s.zoom / 100) + 'px; flex:none; min-height:' + Math.round(760 * s.zoom / 100) + 'px; background:#FFFFFF; color:#111827; border-radius:4px; padding:40px 44px; display:flex; flex-direction:column; box-shadow:' + (th.dark ? '0 0 0 1px #232C46' : '0 10px 30px -10px rgba(13,20,36,.25)') + '; font-family:var(--font); ' + (th.dark ? 'filter:brightness(.92)' : ''),
+      zoomText: s.zoom + '%',
+      zoomIn: () => this.setState({ zoom: Math.min(150, s.zoom + 10) }), zoomOut: () => this.setState({ zoom: Math.max(70, s.zoom - 10) }),
+      prevPage: () => this.setState({ page: Math.max(1, s.page - 1) }), nextPage: () => this.setState({ page: Math.min(24, s.page + 1) }),
+      busy: s.busy, notBusy: !s.busy,
+      reextract: () => { this.setState({ busy: true, approved: false }); this.t = setTimeout(() => this.setState({ busy: false }), 1800); },
+      statusPill: s.approved ? 'pill pill-approved' : s.busy ? 'pill pill-processing' : 'pill pill-review',
+      statusText: s.approved ? 'Approved' : s.busy ? 'Processing' : 'Needs review',
+      checkedText: flagged ? flagged + ' value needs checking' : 'All values checked',
+      includedText: (INSIGHTS.length - s.excluded.length) + ' of ' + INSIGHTS.length + ' included in the prediction',
+      cantApprove: s.busy || s.approved,
+      approveLabel: s.approved ? 'Approved' : 'Approve',
+      approve: () => this.setState({ approved: true, toast: true }),
+      toast: s.toast
+    });
+  }
+}
+</script>
+</body>
+</html>

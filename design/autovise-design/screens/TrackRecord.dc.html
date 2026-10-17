@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AutoVise — Track record</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./autovise.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="{{rootClass}}" style="min-height:100vh; background:var(--bg); color:var(--text); font-family:var(--font)">
+
+<header style="position:sticky; top:0; z-index:30; background:var(--surface); border-bottom:1px solid var(--border)">
+  <div class="wrap" style="height:64px; display:flex; align-items:center; gap:28px">
+    <a href="Main.dc.html" aria-label="AutoVise home" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text)">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="8" style="fill:var(--primary)"></rect><circle cx="14" cy="14" r="8.5" fill="none" style="stroke:var(--on-primary)" stroke-opacity=".35" stroke-width="1.5"></circle><path d="M8.5 17.5 12.5 13.5 15 16 19.5 10.5" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 10.5h3.5V14" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      <span style="font-weight:600; font-size:18px; letter-spacing:-0.025em">AutoVise</span>
+    </a>
+    <nav aria-label="Primary" class="hide-sm" style="display:flex; gap:2px">
+      <a class="navlink" href="Main.dc.html">Companies</a>
+      <a class="navlink" href="Compare.dc.html">Compare</a>
+      <a class="navlink on" href="TrackRecord.dc.html" aria-current="page">Track Record</a>
+      <a class="navlink" href="Methodology.dc.html">Methodology</a>
+    </nav>
+    <div style="flex:1"></div>
+    <div class="seg" role="group" aria-label="Colour theme">
+      <button class="{{segL}}" aria-label="Light theme" aria-pressed="{{pL}}" onClick="{{setL}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg></button>
+      <button class="{{segD}}" aria-label="Dark theme" aria-pressed="{{pD}}" onClick="{{setD}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg></button>
+      <button class="{{segS}}" aria-label="Use system theme" aria-pressed="{{pS}}" onClick="{{setS}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg></button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" style="padding-top:40px; padding-bottom:72px; display:flex; flex-direction:column; gap:28px">
+  <div style="display:flex; flex-direction:column; gap:8px; max-width:760px">
+    <h1 style="font-size:32px; font-weight:600">Track record</h1>
+    <p style="color:var(--muted); font-size:15px; line-height:1.6">Every 12-month checkpoint we have published, scored against what the share price actually did. A prediction is a hit when the actual price lands inside its bear–bull band. Our first 3-year predictions resolve in October 2028.</p>
+  </div>
+
+  <!-- Summary -->
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap:16px">
+    <div class="card" style="padding:18px; display:flex; flex-direction:column; gap:6px">
+      <span style="font-size:13px; color:var(--muted)">Hit rate</span>
+      <span class="num" style="font-size:30px; font-weight:600">{{sum.hitRate}}</span>
+      <span style="font-size:12px; color:var(--muted)">{{sum.hits}} of {{sum.n}} inside the band</span>
+    </div>
+    <div class="card" style="padding:18px; display:flex; flex-direction:column; gap:6px">
+      <span style="font-size:13px; color:var(--muted)">Direction correct</span>
+      <span class="num" style="font-size:30px; font-weight:600">{{sum.dirRate}}</span>
+      <span style="font-size:12px; color:var(--muted)">Called up or down correctly</span>
+    </div>
+    <div class="card" style="padding:18px; display:flex; flex-direction:column; gap:6px">
+      <span style="font-size:13px; color:var(--muted)">Median absolute error</span>
+      <span class="num" style="font-size:30px; font-weight:600">{{sum.mae}}</span>
+      <span style="font-size:12px; color:var(--muted)">Actual vs predicted base price</span>
+    </div>
+    <div class="card" style="padding:18px; display:flex; flex-direction:column; gap:6px">
+      <span style="font-size:13px; color:var(--muted)">Still open</span>
+      <span class="num" style="font-size:30px; font-weight:600">14</span>
+      <span style="font-size:12px; color:var(--muted)">Checkpoints due Nov 2026 – Oct 2029</span>
+    </div>
+  </div>
+
+  <!-- Chart -->
+  <section class="card" style="padding:24px; display:flex; flex-direction:column; gap:18px">
+    <div style="display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; align-items:flex-end">
+      <div style="display:flex; flex-direction:column; gap:4px">
+        <h2 style="font-size:16px; font-weight:600">Predicted vs actual, 12 months on</h2>
+        <p style="font-size:13px; color:var(--muted)">Change from the price on the day each prediction was published.</p>
+      </div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end">
+        <div class="field" style="width:200px">
+          <label class="label" for="tr-co">Company</label>
+          <div class="select-wrap">
+            <select id="tr-co" class="select" value="{{co}}" onChange="{{setCo}}">
+              <sc-for list="{{coOptions}}" as="o" hint-placeholder-count="5"><option value="{{o}}">{{o}}</option></sc-for>
+            </select>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+          </div>
+        </div>
+        <div class="seg" role="group" aria-label="Outcome filter">
+          <button class="{{oc.all.cls}}" aria-pressed="{{oc.all.on}}" onClick="{{oc.all.go}}" style="padding:0 12px">All</button>
+          <button class="{{oc.hit.cls}}" aria-pressed="{{oc.hit.on}}" onClick="{{oc.hit.go}}" style="padding:0 12px">Hits</button>
+          <button class="{{oc.miss.cls}}" aria-pressed="{{oc.miss.on}}" onClick="{{oc.miss.go}}" style="padding:0 12px">Misses</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:20px; flex-wrap:wrap; font-size:12px; color:var(--muted)">
+      <span style="display:inline-flex; align-items:center; gap:6px"><span style="width:18px; height:8px; border-radius:4px; background:var(--band)"></span>Bear–bull band</span>
+      <span style="display:inline-flex; align-items:center; gap:6px"><span style="width:10px; height:10px; transform:rotate(45deg); border:2px solid var(--c1); background:var(--card)"></span>Predicted base</span>
+      <span style="display:inline-flex; align-items:center; gap:6px"><span style="width:10px; height:10px; border-radius:50%; background:var(--pos)"></span>Actual — hit</span>
+      <span style="display:inline-flex; align-items:center; gap:6px"><span style="width:10px; height:10px; border-radius:50%; background:var(--neg)"></span>Actual — miss</span>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:0" role="img" aria-label="{{chartLabel}}">
+      <div style="display:grid; grid-template-columns:190px minmax(0, 1fr); gap:16px; align-items:end; height:24px">
+        <span></span>
+        <div style="position:relative; height:100%">
+          <sc-for list="{{ticks}}" as="t" hint-placeholder-count="7"><span class="num" style="{{t.style}}">{{t.text}}</span></sc-for>
+        </div>
+      </div>
+      <sc-for list="{{rows}}" as="r" hint-placeholder-count="10">
+        <div style="display:grid; grid-template-columns:190px minmax(0, 1fr); gap:16px; align-items:center; height:48px; border-top:1px solid var(--border)">
+          <div style="display:flex; align-items:center; gap:10px">
+            <sc-if value="{{r.logo.isImg}}" hint-placeholder-val="{{ true }}"><span class="logo" style="{{r.logo.style}}"><img src="{{r.logo.src}}" alt=""></span></sc-if>
+            <sc-if value="{{r.logo.isMono}}" hint-placeholder-val="{{ false }}"><span class="logo logo-mono" style="{{r.logo.style}}" aria-hidden="true">{{r.logo.initials}}</span></sc-if>
+            <div style="display:flex; flex-direction:column; line-height:1.25">
+              <span class="num" style="font-size:13px; font-weight:600">{{r.co}}</span>
+              <span style="font-size:11.5px; color:var(--muted)">{{r.made}}</span>
+            </div>
+          </div>
+          <div style="position:relative; height:100%">
+            <span style="{{zeroStyle}}"></span>
+            <span style="{{r.bandStyle}}"></span>
+            <span style="{{r.linkStyle}}"></span>
+            <span style="{{r.predStyle}}"></span>
+            <span style="{{r.actStyle}}"></span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- Table -->
+  <section class="tbl-box">
+    <table class="tbl" style="min-width:900px">
+      <thead><tr><th>Company</th><th>Published</th><th class="r">Price then</th><th class="r">Predicted (12 m)</th><th class="r">Band</th><th class="r">Actual</th><th class="r">Error</th><th>Outcome</th></tr></thead>
+      <tbody>
+        <sc-for list="{{rows}}" as="r" hint-placeholder-count="10">
+          <tr>
+            <td><div style="display:flex; align-items:center; gap:12px">
+              <sc-if value="{{r.logo.isImg}}" hint-placeholder-val="{{ true }}"><span class="logo" style="{{r.logo.style}}"><img src="{{r.logo.src}}" alt=""></span></sc-if>
+              <sc-if value="{{r.logo.isMono}}" hint-placeholder-val="{{ false }}"><span class="logo logo-mono" style="{{r.logo.style}}" aria-hidden="true">{{r.logo.initials}}</span></sc-if>
+              <div style="display:flex; flex-direction:column"><span style="font-weight:500">{{r.name}}</span><span class="num muted" style="font-size:12px">{{r.co}}</span></div>
+            </div></td>
+            <td class="tnum">{{r.made}}</td>
+            <td class="r num">{{r.startText}}</td>
+            <td class="r num">{{r.predText}}</td>
+            <td class="r num muted">{{r.bandText}}</td>
+            <td class="r num" style="font-weight:600">{{r.actText}}</td>
+            <td class="r num">{{r.errText}}</td>
+            <td><span class="{{r.pill}}">{{r.outcome}}</span></td>
+          </tr>
+        </sc-for>
+      </tbody>
+    </table>
+  </section>
+  <span class="disclaimer">Past accuracy does not guarantee future results. Predictions are model estimates, not financial advice.</span>
+</main>
+
+<footer style="border-top:1px solid var(--border); background:var(--surface)">
+  <div class="wrap" style="padding-top:28px; padding-bottom:28px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap">
+    <p style="font-size:12px; color:var(--muted); max-width:760px; line-height:1.6">AutoVise publishes model-generated estimates for research and education. Predictions are model estimates, not financial advice. Share prices may be delayed.</p>
+    <nav aria-label="Footer" style="display:flex; gap:20px; font-size:13px"><a href="Methodology.dc.html">Methodology</a><a href="Disclaimer.dc.html">Disclaimer</a></nav>
+  </div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark","system"],"default":"light","section":"Theme"},"$preview":{"width":1440,"height":1800}}'>
+const NAMES = { LHL: 'Lanka Harbour Logistics', STEL: 'Serendib Telecom', KHT: 'Kandy Highland Tea', CCB: 'Colombo Capital Bank', RCEM: 'Ruhuna Cement', GBH: 'Galle Bay Hotels', IPL: 'Island Pharma Labs' };
+const PRED = [
+  ['LHL', '15 Oct 2024', 198.20, 221.00, 196.00, 240.00, 228.40],
+  ['STEL', '15 Oct 2024', 98.50, 107.30, 95.00, 118.00, 104.10],
+  ['KHT', '22 Oct 2024', 92.40, 88.00, 76.00, 99.00, 81.20],
+  ['CCB', '12 Nov 2024', 341.00, 382.50, 340.00, 415.00, 366.80],
+  ['RCEM', '19 Nov 2024', 52.10, 60.40, 50.00, 68.00, 49.30],
+  ['GBH', '10 Dec 2024', 27.80, 31.90, 26.00, 37.00, 30.10],
+  ['IPL', '14 Jan 2025', 151.00, 166.20, 145.00, 182.00, 159.40],
+  ['STEL', '08 Apr 2025', 104.60, 113.80, 101.00, 124.00, 126.70],
+  ['LHL', '15 Apr 2025', 214.00, 236.50, 210.00, 258.00, 239.20],
+  ['CCB', '20 May 2025', 359.00, 398.00, 355.00, 436.00, 388.50]
+].map(r => {
+  const [co, made, start, pred, low, high, act] = r;
+  const hit = act >= low && act <= high;
+  const dirOk = Math.sign(pred - start) === Math.sign(act - start);
+  const err = (act - pred) / pred * 100;
+  return { co, made, start, pred, low, high, act, hit, dirOk, err };
+});
+const BRANDS = {
+  LHL: { name: 'Lanka Harbour Logistics', color: '#1F4E8C', logo: './logos/lhl.svg', logoDark: './logos/lhl-dark.svg', bg: 'transparent', shape: 'square' },
+  STEL: { name: 'Serendib Telecom', color: '#0E9384', logo: './logos/serendib.svg', logoDark: './logos/serendib-dark.svg', bg: 'transparent', shape: 'wide' },
+  KHT: { name: 'Kandy Highland Tea', color: '#3F7D3A', logo: './logos/kht.svg', logoDark: './logos/kht-dark.svg', bg: 'transparent', shape: 'round' },
+  CCB: { name: 'Colombo Capital Bank', color: '#8B1E3F', logo: './logos/ccb.svg', logoDark: null, bg: 'light', shape: 'tall' },
+  RCEM: { name: 'Ruhuna Cement', color: '#9A6A2F', logo: null },
+  GBH: { name: 'Galle Bay Hotels', color: '#C2410C', logo: './logos/gbh.svg', logoDark: './logos/gbh-dark.svg', bg: 'transparent', shape: 'wide' },
+  IPL: { name: 'Island Pharma Labs', color: '#0284C7', logo: './logos/ipl.svg', logoDark: null, bg: 'dark', shape: 'square' }
+};
+const LOGO_PAD = { square: 0.16, round: 0.14, tall: 0.10, wide: 0.07 };
+function initialsOf(name) { return name.split(/\s+/).filter(w => /^[A-Z]/.test(w)).slice(0, 2).map(w => w[0]).join(''); }
+function logoTile(b, size, dark) {
+  const r = Math.min(14, Math.round(size * 0.25));
+  const box = 'width:' + size + 'px; height:' + size + 'px; border-radius:' + r + 'px;';
+  if (!b.logo) {
+    const bg = dark ? 'color-mix(in srgb, ' + b.color + ' 28%, #121A2D)' : 'color-mix(in srgb, ' + b.color + ' 13%, #FFFFFF)';
+    const fg = dark ? 'color-mix(in srgb, ' + b.color + ' 40%, #FFFFFF)' : 'color-mix(in srgb, ' + b.color + ' 80%, #000000)';
+    return { isImg: false, isMono: true, initials: initialsOf(b.name), style: box + ' background:' + bg + '; color:' + fg + '; border-color:color-mix(in srgb, ' + b.color + ' ' + (dark ? 40 : 22) + '%, transparent); font-size:' + Math.round(size * 0.36) + 'px' };
+  }
+  let bg = b.bg, src = b.logo;
+  if (dark && b.logoDark) src = b.logoDark;
+  else if (dark && bg === 'transparent') bg = 'light';
+  const fill = bg === 'light' ? '#FFFFFF' : bg === 'dark' ? '#0F172A' : 'transparent';
+  return { isImg: true, isMono: false, src: src, style: box + ' padding:' + Math.max(2, Math.round(size * (LOGO_PAD[b.shape] || 0.12))) + 'px; background:' + fill + (bg === 'dark' ? '; border-color:#1E293B' : '') };
+}
+const LO = -25, HI = 40;
+const xp = v => ((v - LO) / (HI - LO) * 100).toFixed(2) + '%';
+const chg = (v, s) => (v / s - 1) * 100;
+const money = n => 'LKR ' + n.toFixed(2);
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { mode: null, co: 'All companies', oc: 'all' }; }
+  theme() {
+    const m = this.state.mode || this.props.theme || 'light';
+    let dark = m === 'dark';
+    if (m === 'system') { try { dark = window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {} }
+    return {
+      isDark: dark,
+      rootClass: dark ? 'av dark' : 'av',
+      segL: m === 'light' ? 'seg-btn on' : 'seg-btn', segD: m === 'dark' ? 'seg-btn on' : 'seg-btn', segS: m === 'system' ? 'seg-btn on' : 'seg-btn',
+      pL: m === 'light', pD: m === 'dark', pS: m === 'system',
+      setL: () => this.setState({ mode: 'light' }), setD: () => this.setState({ mode: 'dark' }), setS: () => this.setState({ mode: 'system' })
+    };
+  }
+  renderVals() {
+    const s = this.state;
+    const dark = this.theme().isDark;
+    const n = PRED.length, hits = PRED.filter(p => p.hit).length, dirs = PRED.filter(p => p.dirOk).length;
+    const abs = PRED.map(p => Math.abs(p.err)).sort((a, b) => a - b);
+    const med = (abs[Math.floor((n - 1) / 2)] + abs[Math.ceil((n - 1) / 2)]) / 2;
+    const rows = PRED.filter(p => (s.co === 'All companies' || p.co === s.co) && (s.oc === 'all' || (s.oc === 'hit') === p.hit)).map(p => {
+      const b0 = chg(p.low, p.start), b1 = chg(p.high, p.start), pr = chg(p.pred, p.start), ac = chg(p.act, p.start);
+      const l = Math.min(pr, ac), r = Math.max(pr, ac);
+      return {
+        co: p.co, name: NAMES[p.co], made: p.made, logo: logoTile(BRANDS[p.co], 32, dark),
+        startText: money(p.start), predText: money(p.pred), bandText: p.low.toFixed(2) + ' – ' + p.high.toFixed(2), actText: money(p.act),
+        errText: (p.err >= 0 ? '+' : '−') + Math.abs(p.err).toFixed(1) + '%',
+        outcome: p.hit ? 'Hit' : 'Miss', pill: p.hit ? 'pill pill-approved' : 'pill pill-failed',
+        bandStyle: 'position:absolute; top:50%; height:12px; transform:translateY(-50%); border-radius:6px; background:var(--band); left:' + xp(b0) + '; width:calc(' + xp(b1) + ' - ' + xp(b0) + ')',
+        linkStyle: 'position:absolute; top:50%; height:2px; transform:translateY(-50%); background:var(--border-strong); left:' + xp(l) + '; width:calc(' + xp(r) + ' - ' + xp(l) + ')',
+        predStyle: 'position:absolute; top:50%; width:11px; height:11px; border:2px solid var(--c1); background:var(--card); left:' + xp(pr) + '; transform:translate(-50%,-50%) rotate(45deg)',
+        actStyle: 'position:absolute; top:50%; width:11px; height:11px; border-radius:50%; box-shadow:0 0 0 2px var(--card); background:' + (p.hit ? 'var(--pos)' : 'var(--neg)') + '; left:' + xp(ac) + '; transform:translate(-50%,-50%)'
+      };
+    });
+    const ticks = [];
+    for (let v = -20; v <= 40; v += 10) ticks.push({ text: (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v) + '%', style: 'position:absolute; bottom:4px; font-size:11px; color:var(--muted); left:' + xp(v) + '; transform:translateX(-50%)' });
+    const mk = k => ({ on: s.oc === k, cls: s.oc === k ? 'seg-btn on' : 'seg-btn', go: () => this.setState({ oc: k }) });
+    return Object.assign(this.theme(), {
+      sum: { hitRate: Math.round(hits / n * 100) + '%', hits: hits, n: n, dirRate: Math.round(dirs / n * 100) + '%', mae: med.toFixed(1) + '%' },
+      rows: rows, ticks: ticks,
+      zeroStyle: 'position:absolute; top:0; bottom:0; width:1px; background:var(--border-strong); left:' + xp(0),
+      co: s.co, coOptions: ['All companies'].concat(Object.keys(NAMES)), setCo: e => this.setState({ co: e.target.value }),
+      oc: { all: mk('all'), hit: mk('hit'), miss: mk('miss') },
+      chartLabel: hits + ' of ' + n + ' predictions landed inside their band.'
+    });
+  }
+}
+</script>
+</body>
+</html>

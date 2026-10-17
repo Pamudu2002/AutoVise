@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AutoVise — Compare</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./autovise.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="{{rootClass}}" style="min-height:100vh; background:var(--bg); color:var(--text); font-family:var(--font)">
+
+<header style="position:sticky; top:0; z-index:30; background:var(--surface); border-bottom:1px solid var(--border)">
+  <div class="wrap" style="height:64px; display:flex; align-items:center; gap:28px">
+    <a href="Main.dc.html" aria-label="AutoVise home" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text)">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="8" style="fill:var(--primary)"></rect><circle cx="14" cy="14" r="8.5" fill="none" style="stroke:var(--on-primary)" stroke-opacity=".35" stroke-width="1.5"></circle><path d="M8.5 17.5 12.5 13.5 15 16 19.5 10.5" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 10.5h3.5V14" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      <span style="font-weight:600; font-size:18px; letter-spacing:-0.025em">AutoVise</span>
+    </a>
+    <nav aria-label="Primary" class="hide-sm" style="display:flex; gap:2px">
+      <a class="navlink" href="Main.dc.html">Companies</a>
+      <a class="navlink on" href="Compare.dc.html" aria-current="page">Compare</a>
+      <a class="navlink" href="TrackRecord.dc.html">Track Record</a>
+      <a class="navlink" href="Methodology.dc.html">Methodology</a>
+    </nav>
+    <div style="flex:1"></div>
+    <div class="seg" role="group" aria-label="Colour theme">
+      <button class="{{segL}}" aria-label="Light theme" aria-pressed="{{pL}}" onClick="{{setL}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg></button>
+      <button class="{{segD}}" aria-label="Dark theme" aria-pressed="{{pD}}" onClick="{{setD}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg></button>
+      <button class="{{segS}}" aria-label="Use system theme" aria-pressed="{{pS}}" onClick="{{setS}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg></button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" style="padding-top:40px; padding-bottom:72px; display:flex; flex-direction:column; gap:28px">
+  <div style="display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; align-items:flex-end">
+    <div style="display:flex; flex-direction:column; gap:8px">
+      <h1 style="font-size:32px; font-weight:600">Compare companies</h1>
+      <p style="color:var(--muted); font-size:15px">Up to three side by side. The strongest value in each row is marked.</p>
+    </div>
+    <span class="disclaimer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>Predictions are model estimates, not financial advice.</span>
+  </div>
+
+  <!-- Slots -->
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap:16px">
+    <sc-for list="{{slots}}" as="s" hint-placeholder-count="3">
+      <div class="card" style="padding:16px; display:flex; flex-direction:column; gap:14px">
+        <div style="display:flex; align-items:center; gap:10px">
+          <span style="{{s.swatch}}" aria-hidden="true"></span>
+          <span style="font-size:12px; color:var(--muted); flex:1">Company {{s.n}}</span>
+          <button class="btn btn-ghost btn-icon btn-sm" aria-label="{{s.removeLabel}}" onClick="{{s.remove}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+        </div>
+        <div style="display:flex; gap:12px; align-items:center">
+          <sc-if value="{{s.logo.isImg}}" hint-placeholder-val="{{ true }}"><span class="logo" style="{{s.logo.style}}"><img src="{{s.logo.src}}" alt=""></span></sc-if>
+          <sc-if value="{{s.logo.isMono}}" hint-placeholder-val="{{ false }}"><span class="logo logo-mono" style="{{s.logo.style}}" aria-hidden="true">{{s.logo.initials}}</span></sc-if>
+          <div class="field" style="flex:1">
+            <label class="label" for="{{s.selId}}" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)">Company {{s.n}}</label>
+            <div class="select-wrap">
+              <select id="{{s.selId}}" class="select" value="{{s.id}}" onChange="{{s.change}}">
+                <sc-for list="{{options}}" as="o" hint-placeholder-count="7"><option value="{{o.id}}">{{o.name}}</option></sc-for>
+              </select>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+    <sc-if value="{{canAdd}}" hint-placeholder-val="{{ false }}">
+      <button class="drop" style="min-height:130px; cursor:pointer; color:var(--muted); font:500 14px var(--font)" onClick="{{add}}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+        Add a company
+      </button>
+    </sc-if>
+  </div>
+
+  <!-- Table -->
+  <section class="tbl-box">
+    <table class="tbl" style="min-width:760px">
+      <thead>
+        <tr>
+          <th style="width:220px">Metric</th>
+          <sc-for list="{{slots}}" as="s" hint-placeholder-count="3"><th class="r"><span style="display:inline-flex; align-items:center; gap:10px; color:var(--text)"><span style="{{s.swatch}}"></span><sc-if value="{{s.logo.isImg}}" hint-placeholder-val="{{ true }}"><span class="logo" style="{{s.logo.style}}"><img src="{{s.logo.src}}" alt=""></span></sc-if><sc-if value="{{s.logo.isMono}}" hint-placeholder-val="{{ false }}"><span class="logo logo-mono" style="{{s.logo.style}}" aria-hidden="true">{{s.logo.initials}}</span></sc-if><span class="num" style="font-size:13px; font-weight:600">{{s.id}}</span></span></th></sc-for>
+        </tr>
+      </thead>
+      <tbody>
+        <sc-for list="{{rows}}" as="r" hint-placeholder-count="12">
+          <tr>
+            <td style="font-weight:500">{{r.label}}<sc-if value="{{r.hasNote}}" hint-placeholder-val="{{ false }}"><div style="font-size:12px; color:var(--muted); font-weight:400">{{r.note}}</div></sc-if></td>
+            <sc-for list="{{r.cells}}" as="c" hint-placeholder-count="3">
+              <td class="r">
+                <span style="display:inline-flex; align-items:center; gap:8px; justify-content:flex-end">
+                  <sc-if value="{{c.best}}" hint-placeholder-val="{{ false }}"><span class="pill pill-approved" style="height:20px; font-size:11px">Best</span></sc-if>
+                  <sc-if value="{{c.isDelta}}" hint-placeholder-val="{{ false }}"><span class="{{c.cls}}">{{c.text}}</span></sc-if>
+                  <sc-if value="{{c.isMeter}}" hint-placeholder-val="{{ false }}"><span class="{{c.meterCls}}" style="width:72px; display:inline-block"><span style="{{c.fill}}"></span></span></sc-if>
+                  <sc-if value="{{c.isPlain}}" hint-placeholder-val="{{ true }}"><span class="num" style="{{c.style}}">{{c.text}}</span></sc-if>
+                  <sc-if value="{{c.isMeter}}" hint-placeholder-val="{{ false }}"><span class="num" style="font-weight:600; width:24px">{{c.text}}</span></sc-if>
+                </span>
+              </td>
+            </sc-for>
+          </tr>
+        </sc-for>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Radar overlay -->
+  <section class="card" style="padding:24px; display:flex; gap:32px; flex-wrap:wrap; align-items:center">
+    <div style="flex:1 1 280px; display:flex; flex-direction:column; gap:12px">
+      <h2 style="font-size:16px; font-weight:600">Qualitative factors, overlaid</h2>
+      <p style="font-size:14px; color:var(--muted); line-height:1.6">Each company's six factor scores (0–100) from its latest reports. For risk, a higher score means lower risk.</p>
+      <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:10px">
+        <sc-for list="{{slots}}" as="s" hint-placeholder-count="3">
+          <li style="display:flex; align-items:center; gap:10px; font-size:14px"><span style="{{s.legend}}" aria-hidden="true"></span><span style="font-weight:500">{{s.name}}</span><span class="num muted" style="margin-left:auto">avg {{s.avg}}</span></li>
+        </sc-for>
+      </ul>
+    </div>
+    <div style="position:relative; flex:0 1 420px; aspect-ratio:320 / 300">
+      <svg viewBox="0 0 320 300" preserveAspectRatio="none" style="position:absolute; inset:0; width:100%; height:100%" role="img" aria-label="{{radarLabel}}">
+        <path d="{{rd.rings}}" fill="none" style="stroke:var(--grid)" stroke-width="1"></path>
+        <path d="{{rd.axes}}" style="stroke:var(--grid)" stroke-width="1"></path>
+        <sc-for list="{{rd.polys}}" as="p" hint-placeholder-count="3"><path d="{{p.d}}" style="{{p.style}}" stroke-width="2" stroke-dasharray="{{p.dash}}" stroke-linejoin="round"></path></sc-for>
+      </svg>
+      <sc-for list="{{rd.labels}}" as="l" hint-placeholder-count="6"><span style="{{l.style}}">{{l.text}}</span></sc-for>
+    </div>
+  </section>
+</main>
+
+<footer style="border-top:1px solid var(--border); background:var(--surface)">
+  <div class="wrap" style="padding-top:28px; padding-bottom:28px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap">
+    <p style="font-size:12px; color:var(--muted); max-width:760px; line-height:1.6">AutoVise publishes model-generated estimates for research and education. Predictions are model estimates, not financial advice. Share prices may be delayed.</p>
+    <nav aria-label="Footer" style="display:flex; gap:20px; font-size:13px"><a href="Methodology.dc.html">Methodology</a><a href="Disclaimer.dc.html">Disclaimer</a></nav>
+  </div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark","system"],"default":"light","section":"Theme"},"$preview":{"width":1440,"height":2000}}'>
+const COS = {
+  LHL: { name: 'Lanka Harbour Logistics', tone: 't1', price: 245.50, target: 318.10, bear: 212.40, bull: 371.80, conf: 78, score: 74, pe: 13.5, dy: 2.5, roe: 16.9, nm: 9.2, de: 0.44, report: 'Q2 2026 Interim', f: [78, 82, 74, 58, 71, 66] },
+  STEL: { name: 'Serendib Telecom', tone: 't2', price: 112.25, target: 128.40, bear: 101.20, bull: 149.70, conf: 82, score: 69, pe: 15.2, dy: 4.1, roe: 13.8, nm: 11.6, de: 0.92, report: 'Q2 2026 Interim', f: [72, 64, 80, 70, 76, 60] },
+  KHT: { name: 'Kandy Highland Tea', tone: 't3', price: 86.10, target: 79.20, bear: 64.50, bull: 96.30, conf: 61, score: 48, pe: 9.4, dy: 5.6, roe: 8.1, nm: 6.2, de: 0.38, report: 'Q2 2026 Interim', f: [61, 45, 58, 52, 66, 41] },
+  CCB: { name: 'Colombo Capital Bank', tone: 't4', price: 402.00, target: 476.30, bear: 352.00, bull: 541.00, conf: 74, score: 71, pe: 8.6, dy: 3.9, roe: 15.4, nm: 21.8, de: null, report: 'Q2 2026 Interim', f: [74, 70, 72, 63, 78, 68] },
+  RCEM: { name: 'Ruhuna Cement', tone: 't5', price: 58.70, target: 71.90, bear: 47.10, bull: 84.60, conf: 55, score: 63, pe: 10.8, dy: 3.2, roe: 11.2, nm: 8.4, de: 0.66, report: 'Q2 2026 Interim', f: [64, 71, 60, 55, 62, 58] },
+  GBH: { name: 'Galle Bay Hotels', tone: 't2', price: 33.40, target: 41.10, bear: 24.80, bull: 50.20, conf: 47, score: 58, pe: 18.4, dy: 1.2, roe: 7.9, nm: 12.5, de: 1.14, report: 'Q1 2026 Interim', f: [58, 76, 62, 44, 60, 63] },
+  IPL: { name: 'Island Pharma Labs', tone: 't6', price: 167.00, target: 181.50, bear: 150.00, bull: 205.00, conf: 52, score: 55, pe: 14.1, dy: 2.0, roe: 10.6, nm: 10.3, de: 0.29, report: 'Annual Report 2024', f: [66, 58, 64, 61, 70, 52] }
+};
+const BRANDS = {
+  LHL: { name: 'Lanka Harbour Logistics', color: '#1F4E8C', logo: './logos/lhl.svg', logoDark: './logos/lhl-dark.svg', bg: 'transparent', shape: 'square' },
+  STEL: { name: 'Serendib Telecom', color: '#0E9384', logo: './logos/serendib.svg', logoDark: './logos/serendib-dark.svg', bg: 'transparent', shape: 'wide' },
+  KHT: { name: 'Kandy Highland Tea', color: '#3F7D3A', logo: './logos/kht.svg', logoDark: './logos/kht-dark.svg', bg: 'transparent', shape: 'round' },
+  CCB: { name: 'Colombo Capital Bank', color: '#8B1E3F', logo: './logos/ccb.svg', logoDark: null, bg: 'light', shape: 'tall' },
+  RCEM: { name: 'Ruhuna Cement', color: '#9A6A2F', logo: null },
+  GBH: { name: 'Galle Bay Hotels', color: '#C2410C', logo: './logos/gbh.svg', logoDark: './logos/gbh-dark.svg', bg: 'transparent', shape: 'wide' },
+  MPWR: { name: 'Meridian Power', color: '#6D28D9', logo: null },
+  IPL: { name: 'Island Pharma Labs', color: '#0284C7', logo: './logos/ipl.svg', logoDark: null, bg: 'dark', shape: 'square' }
+};
+const LOGO_PAD = { square: 0.16, round: 0.14, tall: 0.10, wide: 0.07 };
+function initialsOf(name) { return name.split(/\s+/).filter(w => /^[A-Z]/.test(w)).slice(0, 2).map(w => w[0]).join(''); }
+function logoTile(b, size, dark) {
+  const r = Math.min(14, Math.round(size * 0.25));
+  const box = 'width:' + size + 'px; height:' + size + 'px; border-radius:' + r + 'px;';
+  if (!b.logo) {
+    const bg = dark ? 'color-mix(in srgb, ' + b.color + ' 28%, #121A2D)' : 'color-mix(in srgb, ' + b.color + ' 13%, #FFFFFF)';
+    const fg = dark ? 'color-mix(in srgb, ' + b.color + ' 40%, #FFFFFF)' : 'color-mix(in srgb, ' + b.color + ' 80%, #000000)';
+    return { isImg: false, isMono: true, initials: initialsOf(b.name), style: box + ' background:' + bg + '; color:' + fg + '; border-color:color-mix(in srgb, ' + b.color + ' ' + (dark ? 40 : 22) + '%, transparent); font-size:' + Math.round(size * 0.36) + 'px' };
+  }
+  let bg = b.bg, src = b.logo;
+  if (dark && b.logoDark) src = b.logoDark;
+  else if (dark && bg === 'transparent') bg = 'light';
+  const fill = bg === 'light' ? '#FFFFFF' : bg === 'dark' ? '#0F172A' : 'transparent';
+  return { isImg: true, isMono: false, src: src, style: box + ' padding:' + Math.max(2, Math.round(size * (LOGO_PAD[b.shape] || 0.12))) + 'px; background:' + fill + (bg === 'dark' ? '; border-color:#1E293B' : '') };
+}
+const FNAMES = ['Management', 'Growth outlook', 'Competitive position', 'Risk profile', 'Governance', 'Sentiment'];
+const SERIES = [
+  { color: 'var(--c1)', dash: '0' },
+  { color: 'var(--c2)', dash: '6 4' },
+  { color: 'var(--c4)', dash: '2 3' }
+];
+const money = n => 'LKR ' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const pc = (v, tot) => (v / tot * 100).toFixed(3) + '%';
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { mode: null, slots: ['LHL', 'STEL', 'CCB'] }; }
+  theme() {
+    const m = this.state.mode || this.props.theme || 'light';
+    let dark = m === 'dark';
+    if (m === 'system') { try { dark = window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {} }
+    return {
+      isDark: dark,
+      rootClass: dark ? 'av dark' : 'av',
+      segL: m === 'light' ? 'seg-btn on' : 'seg-btn', segD: m === 'dark' ? 'seg-btn on' : 'seg-btn', segS: m === 'system' ? 'seg-btn on' : 'seg-btn',
+      pL: m === 'light', pD: m === 'dark', pS: m === 'system',
+      setL: () => this.setState({ mode: 'light' }), setD: () => this.setState({ mode: 'dark' }), setS: () => this.setState({ mode: 'system' })
+    };
+  }
+  renderVals() {
+    const ids = this.state.slots;
+    const dark = this.theme().isDark;
+    const cs = ids.map(id => Object.assign({ id: id }, COS[id]));
+    const setSlots = v => this.setState({ slots: v });
+    const slots = cs.map((c, i) => ({
+      id: c.id, n: i + 1, name: c.name, tone: c.tone, logo: logoTile(BRANDS[c.id], 32, dark), initials: c.id.slice(0, 2), selId: 'cmp-' + i,
+      avg: Math.round(c.f.reduce((a, b) => a + b, 0) / 6),
+      swatch: 'width:10px; height:10px; border-radius:3px; background:' + SERIES[i].color + '; display:inline-block',
+      legend: 'width:22px; height:0; border-top:3px ' + (i === 0 ? 'solid' : i === 1 ? 'dashed' : 'dotted') + ' ' + SERIES[i].color,
+      removeLabel: 'Remove ' + c.name,
+      remove: () => { if (ids.length > 1) setSlots(ids.filter((x, k) => k !== i)); },
+      change: e => { const v = ids.slice(); v[i] = e.target.value; setSlots(v); }
+    }));
+    const row = (label, get, fmt, dir, opts) => {
+      opts = opts || {};
+      const vals = cs.map(get);
+      const valid = vals.filter(v => v !== null && v !== undefined);
+      const best = dir ? (dir > 0 ? Math.max.apply(null, valid) : Math.min.apply(null, valid)) : null;
+      return {
+        label: label, note: opts.note || '', hasNote: !!opts.note,
+        cells: vals.map((v, i) => {
+          const isNull = v === null || v === undefined;
+          const base = { best: !isNull && dir && cs.length > 1 && v === best, isDelta: false, isMeter: false, isPlain: true, style: opts.bold ? 'font-weight:600' : '', text: isNull ? 'n/a' : (fmt ? fmt(v, cs[i]) : String(v)) };
+          if (opts.delta && !isNull) return Object.assign(base, { isDelta: true, isPlain: false, cls: v >= 0 ? 'delta up' : 'delta down', text: (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(1) + '%' });
+          if (opts.meter && !isNull) return Object.assign(base, { isMeter: true, isPlain: false, meterCls: v >= 70 ? 'meter' : v >= 60 ? 'meter mid' : 'meter low', fill: 'display:block; height:100%; width:' + v + '%', text: String(v) });
+          return base;
+        })
+      };
+    };
+    const rows = [
+      row('Current price', c => c.price, v => money(v), 0, { bold: true }),
+      row('3-yr target · base', c => c.target, v => money(v), 0, { bold: true }),
+      row('Upside to base', c => (c.target / c.price - 1) * 100, null, 1, { delta: true }),
+      row('Bear / bull', c => c.bear, (v, c) => c.bear.toFixed(2) + ' / ' + c.bull.toFixed(2), 0, { note: 'LKR, Oct 2029' }),
+      row('Confidence', c => c.conf, null, 1, { meter: true }),
+      row('AutoVise Score', c => c.score, v => String(v), 1, { bold: true }),
+      row('P/E', c => c.pe, v => v.toFixed(1) + '×', -1),
+      row('Dividend yield', c => c.dy, v => v.toFixed(1) + '%', 1),
+      row('Return on equity', c => c.roe, v => v.toFixed(1) + '%', 1),
+      row('Net margin', c => c.nm, v => v.toFixed(1) + '%', 1),
+      row('Debt / equity', c => c.de, v => v.toFixed(2), -1, { note: 'Not meaningful for banks' }),
+      row('Latest report', c => c.report, v => v, 0)
+    ];
+    // radar
+    const cx = 160, cy = 150, R = 105, W = 320, H = 300;
+    const pt = (i, r) => { const a = (-90 + i * 60) * Math.PI / 180; return [cx + Math.cos(a) * r, cy + Math.sin(a) * r]; };
+    let rings = '';
+    [25, 50, 75, 100].forEach(v => { rings += [0, 1, 2, 3, 4, 5].map((i, k) => { const p = pt(i, R * v / 100); return (k ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ') + ' Z '; });
+    let axes = '';
+    for (let i = 0; i < 6; i++) { const p = pt(i, R); axes += 'M' + cx + ' ' + cy + 'L' + p[0].toFixed(1) + ' ' + p[1].toFixed(1) + ' '; }
+    const polys = cs.map((c, k) => ({
+      d: c.f.map((s, i) => { const p = pt(i, R * s / 100); return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ') + ' Z',
+      style: 'fill:' + SERIES[k].color + '; fill-opacity:.08; stroke:' + SERIES[k].color, dash: SERIES[k].dash
+    }));
+    const labels = FNAMES.map((t, i) => {
+      const p = pt(i, R + 18);
+      const tx = Math.abs(p[0] - cx) < 4 ? '-50%' : (p[0] > cx ? '0' : '-100%');
+      return { text: t, style: 'position:absolute; font-size:11.5px; font-weight:500; color:var(--muted); white-space:nowrap; left:' + pc(p[0], W) + '; top:' + pc(p[1], H) + '; transform:translate(' + tx + ',-50%)' };
+    });
+    const free = Object.keys(COS).filter(id => ids.indexOf(id) < 0);
+    return Object.assign(this.theme(), {
+      slots: slots, rows: rows,
+      options: Object.keys(COS).map(id => ({ id: id, name: COS[id].name + ' (' + id + ')' })),
+      canAdd: ids.length < 3,
+      add: () => { if (free.length) setSlots(ids.concat([free[0]])); },
+      rd: { rings: rings, axes: axes, polys: polys, labels: labels },
+      radarLabel: 'Factor scores for ' + cs.map(c => c.name).join(', ')
+    });
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AutoVise — Lanka Harbour Logistics pitch</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./autovise.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="{{rootClass}}" style="min-height:100vh; background:var(--bg); color:var(--text); font-family:var(--font)">
+
+<!-- Header -->
+<header style="position:sticky; top:0; z-index:30; background:var(--surface); border-bottom:1px solid var(--border)">
+  <div class="wrap" style="height:64px; display:flex; align-items:center; gap:28px">
+    <a href="Main.dc.html" aria-label="AutoVise home" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text)">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="8" style="fill:var(--primary)"></rect><circle cx="14" cy="14" r="8.5" fill="none" style="stroke:var(--on-primary)" stroke-opacity=".35" stroke-width="1.5"></circle><path d="M8.5 17.5 12.5 13.5 15 16 19.5 10.5" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 10.5h3.5V14" fill="none" style="stroke:var(--on-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      <span style="font-weight:600; font-size:18px; letter-spacing:-0.025em">AutoVise</span>
+    </a>
+    <nav aria-label="Primary" class="hide-sm" style="display:flex; gap:2px">
+      <a class="navlink on" href="Main.dc.html">Companies</a>
+      <a class="navlink" href="Compare.dc.html">Compare</a>
+      <a class="navlink" href="TrackRecord.dc.html">Track Record</a>
+      <a class="navlink" href="Methodology.dc.html">Methodology</a>
+    </nav>
+    <div style="flex:1"></div>
+    <div class="seg" role="group" aria-label="Colour theme">
+      <button class="{{segL}}" aria-label="Light theme" aria-pressed="{{pL}}" onClick="{{setL}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg></button>
+      <button class="{{segD}}" aria-label="Dark theme" aria-pressed="{{pD}}" onClick="{{setD}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg></button>
+      <button class="{{segS}}" aria-label="Use system theme" aria-pressed="{{pS}}" onClick="{{setS}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg></button>
+    </div>
+  </div>
+</header>
+
+<main class="page-pad-sheet">
+  <!-- Company header -->
+  <section style="background:var(--surface); border-bottom:1px solid var(--border)">
+    <div class="wrap" style="padding-top:20px; padding-bottom:28px; display:flex; flex-direction:column; gap:20px">
+      <nav aria-label="Breadcrumb" style="display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted)">
+        <a href="Main.dc.html" style="color:var(--muted)">Companies</a>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+        <span aria-current="page" style="color:var(--text)">Lanka Harbour Logistics</span>
+      </nav>
+      <div style="display:flex; gap:32px; flex-wrap:wrap; align-items:flex-end; justify-content:space-between">
+        <div class="hero-id" style="display:flex; gap:20px; align-items:center; flex:1 1 440px; min-width:0">
+          <span class="logo logo-hero" style="{{lg.hero.style}}"><img src="{{lg.hero.src}}" alt="Lanka Harbour Logistics logo"></span>
+          <div style="display:flex; flex-direction:column; gap:8px; min-width:0">
+            <h1 style="font-size:30px; line-height:1.15; font-weight:600">Lanka Harbour Logistics</h1>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center">
+              <span class="chip num" style="color:var(--text)">LHL</span>
+              <span class="chip">Logistics</span>
+              <a href="#" style="display:inline-flex; align-items:center; gap:4px; font-size:13px; font-weight:500">Company website<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></a>
+            </div>
+            <span style="font-size:13px; color:var(--muted)">Last updated from reports dated 30 Jun 2026</span>
+          </div>
+        </div>
+        <div style="display:flex; gap:28px; flex-wrap:wrap; align-items:flex-end">
+          <div style="display:flex; flex-direction:column; gap:2px">
+            <span style="font-size:12px; color:var(--muted)">Current price</span>
+            <span class="num" style="font-size:22px; font-weight:600">LKR 245.50</span>
+            <span style="font-size:12px; color:var(--muted)">16 Oct 2026, 14:30</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:2px">
+            <span style="font-size:12px; color:var(--muted)">3-yr target · base</span>
+            <span class="num" style="font-size:22px; font-weight:600">LKR 318.10</span>
+            <span style="font-size:12px; color:var(--muted)">By Oct 2029</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px">
+            <span style="font-size:12px; color:var(--muted)">Upside</span>
+            <span class="delta up delta-lg"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"></path></svg>+29.6%</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px; width:150px">
+            <span style="font-size:12px; color:var(--muted)">Confidence</span>
+            <div style="display:flex; gap:10px; align-items:center">
+              <div class="meter" style="flex:1" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="78" aria-label="Confidence 78 of 100"><span style="width:78%"></span></div>
+              <span class="num" style="font-weight:600">78</span>
+            </div>
+            <span style="font-size:12px; color:var(--muted)">High</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:0">
+            <div style="position:relative; width:112px; height:64px">
+              <svg width="112" height="64" viewBox="0 0 112 64" role="img" aria-label="AutoVise Score 74 out of 100">
+                <path d="M10 58 A46 46 0 0 1 102 58" fill="none" style="stroke:var(--subtle-2)" stroke-width="9" stroke-linecap="round"></path>
+                <path d="M10 58 A46 46 0 0 1 102 58" fill="none" style="stroke:var(--accent)" stroke-width="9" stroke-linecap="round" pathLength="100" stroke-dasharray="74 100"></path>
+              </svg>
+              <span class="num" style="position:absolute; left:0; right:0; bottom:2px; text-align:center; font-size:22px; font-weight:600">74</span>
+            </div>
+            <span style="font-size:12px; color:var(--muted)">AutoVise Score</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap" style="padding-top:28px; padding-bottom:64px; display:flex; gap:24px; flex-wrap:wrap; align-items:flex-start">
+    <!-- Main column -->
+    <div style="flex:999 1 640px; min-width:0; display:flex; flex-direction:column; gap:24px">
+
+      <!-- Main chart -->
+      <section class="card" style="padding:20px 20px 16px; display:flex; flex-direction:column; gap:16px" aria-labelledby="chart-h">
+        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center">
+          <h2 id="chart-h" style="font-size:16px; font-weight:600">Price history and 3-year projection</h2>
+          <div style="display:flex; gap:16px; flex-wrap:wrap; font-size:12px; color:var(--muted)">
+            <span style="display:inline-flex; align-items:center; gap:6px"><span style="width:16px; height:2px; background:var(--c1)"></span>History</span>
+            <span style="display:inline-flex; align-items:center; gap:6px"><span style="width:16px; height:0; border-top:2px dashed var(--c2)"></span>Base case</span>
+            <span style="display:inline-flex; align-items:center; gap:6px"><span style="width:14px; height:10px; border-radius:2px; background:var(--band)"></span>Bear–bull range</span>
+          </div>
+        </div>
+        <div style="position:relative; width:100%; aspect-ratio:960 / 340">
+          <svg viewBox="0 0 960 340" preserveAspectRatio="none" style="position:absolute; inset:0; width:100%; height:100%" role="img" aria-label="Share price from Oct 2021 to today, then a projected range to Oct 2029: bear LKR 212.40, base LKR 318.10, bull LKR 371.80.">
+            <path d="{{ch.grid}}" style="stroke:var(--grid)" stroke-width="1" vector-effect="non-scaling-stroke"></path>
+            <rect x="{{ch.todayX}}" y="24" width="{{ch.projW}}" height="272" style="fill:var(--band-2)"></rect>
+            <path d="{{ch.fan}}" style="fill:var(--band)"></path>
+            <path d="{{ch.markers}}" style="stroke:var(--border-strong)" stroke-width="1" stroke-dasharray="3 4" vector-effect="non-scaling-stroke"></path>
+            <path d="{{ch.bull}}" fill="none" style="stroke:var(--pos)" stroke-width="1.25" stroke-dasharray="2 3" vector-effect="non-scaling-stroke"></path>
+            <path d="{{ch.bear}}" fill="none" style="stroke:var(--neg)" stroke-width="1.25" stroke-dasharray="2 3" vector-effect="non-scaling-stroke"></path>
+            <path d="{{ch.hist}}" fill="none" style="stroke:var(--c1)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path>
+            <path d="{{ch.base}}" fill="none" style="stroke:var(--c2)" stroke-width="2.25" stroke-dasharray="6 5" vector-effect="non-scaling-stroke"></path>
+          </svg>
+          <sc-for list="{{ch.yLabels}}" as="t" hint-placeholder-count="7"><span class="num" style="{{t.style}}">{{t.text}}</span></sc-for>
+          <sc-for list="{{ch.xLabels}}" as="t" hint-placeholder-count="9"><span class="num" style="{{t.style}}">{{t.text}}</span></sc-for>
+          <sc-for list="{{ch.yearLabels}}" as="t" hint-placeholder-count="3"><span style="{{t.style}}">{{t.text}}</span></sc-for>
+          <sc-for list="{{ch.dots}}" as="d" hint-placeholder-count="3">
+            <span style="{{d.dotStyle}}"></span>
+            <span class="num" style="{{d.labelStyle}}">{{d.text}}</span>
+          </sc-for>
+          <sc-for list="{{ch.ends}}" as="e" hint-placeholder-count="3"><span class="num" style="{{e.style}}">{{e.text}}</span></sc-for>
+          <span style="{{ch.todayStyle}}">Today</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(180px, 100%), 1fr)); gap:12px">
+          <div style="padding:12px 14px; border-radius:10px; background:var(--subtle); display:flex; flex-direction:column; gap:4px">
+            <span style="font-size:12px; color:var(--muted)">Bear case · Oct 2029</span>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><span class="num" style="font-size:17px; font-weight:600">LKR 212.40</span><span class="delta down">−13.5%</span></div>
+          </div>
+          <div style="padding:12px 14px; border-radius:10px; background:var(--accent-soft); display:flex; flex-direction:column; gap:4px">
+            <span style="font-size:12px; color:var(--muted)">Base case · Oct 2029</span>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><span class="num" style="font-size:17px; font-weight:600">LKR 318.10</span><span class="delta up">+29.6%</span></div>
+          </div>
+          <div style="padding:12px 14px; border-radius:10px; background:var(--subtle); display:flex; flex-direction:column; gap:4px">
+            <span style="font-size:12px; color:var(--muted)">Bull case · Oct 2029</span>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><span class="num" style="font-size:17px; font-weight:600">LKR 371.80</span><span class="delta up">+51.4%</span></div>
+          </div>
+        </div>
+        <span class="disclaimer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>Predictions are model estimates, not financial advice.</span>
+      </section>
+
+      <!-- Tabs -->
+      <div style="display:flex; flex-direction:column; gap:20px">
+        <div class="tabs" role="tablist" aria-label="Pitch sections">
+          <button class="{{tb.pitch.cls}}" role="tab" aria-selected="{{tb.pitch.on}}" onClick="{{tb.pitch.go}}">The Pitch</button>
+          <button class="{{tb.how.cls}}" role="tab" aria-selected="{{tb.how.on}}" onClick="{{tb.how.go}}">How We Got Here</button>
+          <button class="{{tb.fin.cls}}" role="tab" aria-selected="{{tb.fin.on}}" onClick="{{tb.fin.go}}">Financials</button>
+          <button class="{{tb.sim.cls}}" role="tab" aria-selected="{{tb.sim.on}}" onClick="{{tb.sim.go}}">What-if Simulator</button>
+        </div>
+
+        <!-- a) The Pitch -->
+        <sc-if value="{{tb.pitch.on}}" hint-placeholder-val="{{ true }}">
+          <article class="card" role="tabpanel" aria-label="The Pitch" style="padding:32px; display:flex; flex-direction:column; gap:36px">
+            <section style="display:flex; flex-direction:column; gap:12px; max-width:720px">
+              <span class="eyebrow">01 · Investment thesis</span>
+              <h3 style="font-size:22px; line-height:1.3; font-weight:600">Earnings growth, not a re-rating, carries this stock to LKR 318.10.</h3>
+              <p style="font-size:15.5px; line-height:1.7">We see LKR 318.10 as fair value for Lanka Harbour Logistics in three years — 29.6% above today's LKR 245.50. The company is turning rising port volumes into profit faster than its peers, and its balance sheet can fund the next phase of warehouse expansion without new equity. <button class="cite" onClick="{{cite.ar12}}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>Annual Report 2025, p.12</button></p>
+              <p style="font-size:15.5px; line-height:1.7; color:var(--muted)">The market already pays 13.5× earnings, above the sector's 11.8×. We assume that premium narrows, not widens — so the upside comes from what LHL earns, not from what investors are willing to pay for it.</p>
+            </section>
+
+            <section style="display:flex; flex-direction:column; gap:16px">
+              <span class="eyebrow">02 · Key drivers</span>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap:16px">
+                <div style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border); border-radius:12px">
+                  <span class="num" style="font-size:24px; font-weight:600; color:var(--pos)">+14%</span>
+                  <span style="font-weight:600">Container volumes</span>
+                  <p style="font-size:14px; color:var(--muted); line-height:1.6">Throughput rose to 1.92 mn TEU in 2025, a record for the group.</p>
+                  <button class="cite" style="align-self:flex-start" onClick="{{cite.ar34}}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>Annual Report 2025, p.34</button>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border); border-radius:12px">
+                  <span class="num" style="font-size:24px; font-weight:600; color:var(--pos)">31%</span>
+                  <span style="font-weight:600">Higher-margin mix</span>
+                  <p style="font-size:14px; color:var(--muted); line-height:1.6">Contract logistics and warehousing now make up 31% of revenue, up from 24% in 2023.</p>
+                  <button class="cite" style="align-self:flex-start" onClick="{{cite.ar41}}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>Annual Report 2025, p.41</button>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border); border-radius:12px">
+                  <span class="num" style="font-size:24px; font-weight:600; color:var(--pos)">0.42×</span>
+                  <span style="font-weight:600">Deleveraging</span>
+                  <p style="font-size:14px; color:var(--muted); line-height:1.6">Debt/equity fell from 0.62 in 2021 to 0.42 at June 2026, cutting finance costs.</p>
+                  <button class="cite" style="align-self:flex-start" onClick="{{cite.q2p8}}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>Q2 2026 Interim, p.8</button>
+                </div>
+              </div>
+            </section>
+
+            <section style="display:flex; flex-direction:column; gap:12px; max-width:720px">
+              <span class="eyebrow">03 · Valuation walkthrough</span>
+              <p style="font-size:15.5px; line-height:1.7">We start from 2025 earnings per share of <span class="num">LKR 18.20</span> and grow them at <span class="num">11.0%</span> a year — above the sector median of 8.4%, below LHL's own 14.7% four-year record — to reach <span class="num">LKR 24.89</span> by 2028.</p>
+              <p style="font-size:15.5px; line-height:1.7">We then apply an exit P/E of <span class="num">12.0×</span>, a step down from today's 13.5× toward the sector benchmark. That gives <span class="num">LKR 298.69</span>. A <span class="num">+6.5%</span> qualitative adjustment for management quality and contracted revenue takes the base case to <span class="num">LKR 318.10</span>.</p>
+              <button class="btn btn-secondary btn-sm" style="align-self:flex-start" onClick="{{tb.how.go}}">See the full walkthrough
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
+            </section>
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap:24px">
+              <section style="display:flex; flex-direction:column; gap:12px">
+                <span class="eyebrow">04 · Risks</span>
+                <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:14px">
+                  <li style="display:flex; gap:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--neg); flex:none; margin-top:3px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4M12 17h.01"></path></svg><div style="line-height:1.6"><strong style="font-weight:600">Customer concentration.</strong> The top three shipping lines account for 46% of throughput. <button class="cite" onClick="{{cite.ar58}}">Annual Report 2025, p.58</button></div></li>
+                  <li style="display:flex; gap:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--neg); flex:none; margin-top:3px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4M12 17h.01"></path></svg><div style="line-height:1.6"><strong style="font-weight:600">Currency.</strong> 38% of operating costs are USD-linked; a weaker rupee squeezes margins. <button class="cite" onClick="{{cite.ar112}}">Annual Report 2025, p.112</button></div></li>
+                  <li style="display:flex; gap:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--neg); flex:none; margin-top:3px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4M12 17h.01"></path></svg><div style="line-height:1.6"><strong style="font-weight:600">Concession renewal.</strong> The terminal operating licence comes up for renewal in 2031, just beyond our horizon.</div></li>
+                </ul>
+              </section>
+              <section style="display:flex; flex-direction:column; gap:12px">
+                <span class="eyebrow">05 · Catalysts</span>
+                <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:14px">
+                  <li style="display:flex; gap:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent); flex:none; margin-top:3px"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg><div style="line-height:1.6"><strong style="font-weight:600">Q3 2026 results, Nov 2026.</strong> First full quarter from the new Kelaniya warehouse.</div></li>
+                  <li style="display:flex; gap:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent); flex:none; margin-top:3px"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg><div style="line-height:1.6"><strong style="font-weight:600">Dividend policy review.</strong> The board will revisit payouts before the 2027 AGM. <button class="cite" onClick="{{cite.q2p3}}">Q2 2026 Interim, p.3</button></div></li>
+                </ul>
+              </section>
+            </div>
+
+            <section style="display:flex; flex-direction:column; gap:12px">
+              <span class="eyebrow">06 · What would change our view</span>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap:16px">
+                <div style="padding:16px; border-radius:12px; background:var(--pos-soft); display:flex; flex-direction:column; gap:6px">
+                  <span style="display:flex; gap:6px; align-items:center; font-weight:600; color:var(--pos)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"></path></svg>Toward the bull case · LKR 371.80</span>
+                  <p style="font-size:14px; line-height:1.6">Throughput growth above 18% for two quarters in a row, or a new long-term contract with a top-five shipping line.</p>
+                </div>
+                <div style="padding:16px; border-radius:12px; background:var(--neg-soft); display:flex; flex-direction:column; gap:6px">
+                  <span style="display:flex; gap:6px; align-items:center; font-weight:600; color:var(--neg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10M17 8v9H8"></path></svg>Toward the bear case · LKR 212.40</span>
+                  <p style="font-size:14px; line-height:1.6">Losing one of the three largest shipping-line customers, or net margin falling below 8% for a full year.</p>
+                </div>
+              </div>
+            </section>
+            <span class="disclaimer">Predictions are model estimates, not financial advice.</span>
+          </article>
+        </sc-if>
+
+        <!-- b) How We Got Here -->
+        <sc-if value="{{tb.how.on}}" hint-placeholder-val="{{ false }}">
+          <div role="tabpanel" aria-label="How We Got Here" style="display:flex; flex-direction:column; gap:24px">
+            <section class="card" style="padding:24px; display:flex; flex-direction:column; gap:20px">
+              <div style="display:flex; flex-direction:column; gap:4px">
+                <h3 style="font-size:16px; font-weight:600">Valuation waterfall</h3>
+                <p style="font-size:13px; color:var(--muted)">From today's price to the base-case target, in LKR per share.</p>
+              </div>
+              <div style="display:flex; gap:8px; height:280px; align-items:stretch; border-bottom:1px solid var(--border-strong)" role="img" aria-label="Current price LKR 245.50, plus earnings growth LKR 90.25, minus multiple change LKR 37.06, plus qualitative adjustment LKR 19.41, equals target LKR 318.10.">
+                <sc-for list="{{wf}}" as="w" hint-placeholder-count="5">
+                  <div style="flex:1; position:relative">
+                    <span style="{{w.barStyle}}"></span>
+                    <span class="num" style="{{w.labelStyle}}">{{w.valueText}}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex; gap:8px; margin-top:-8px">
+                <sc-for list="{{wf}}" as="w" hint-placeholder-count="5"><span style="flex:1; text-align:center; font-size:12px; color:var(--muted); line-height:1.35">{{w.label}}</span></sc-for>
+              </div>
+            </section>
+
+            <section class="card" style="padding:24px; display:flex; flex-direction:column; gap:16px">
+              <h3 style="font-size:16px; font-weight:600">Assumptions</h3>
+              <div class="tbl-box" style="border-radius:10px">
+                <table class="tbl">
+                  <thead><tr><th>Assumption</th><th class="r">AutoVise</th><th class="r">Now / sector</th><th>Source</th></tr></thead>
+                  <tbody>
+                    <tr><td>Base EPS (2025)</td><td class="r num">LKR 18.20</td><td class="r num muted">—</td><td><button class="cite" onClick="{{cite.ar12}}">AR 2025, p.12</button></td></tr>
+                    <tr><td>EPS growth, per year</td><td class="r num">11.0%</td><td class="r num muted">8.4% sector median</td><td><button class="cite" onClick="{{cite.ar34}}">AR 2025, p.34</button></td></tr>
+                    <tr><td>P/E — today vs exit</td><td class="r num">12.0× exit</td><td class="r num muted">13.5× now</td><td style="font-size:13px; color:var(--muted)">Market data, 16 Oct 2026</td></tr>
+                    <tr><td>Sector P/E benchmark</td><td class="r num">11.8×</td><td class="r num muted">7 logistics peers</td><td style="font-size:13px; color:var(--muted)">Sector file, Sep 2026</td></tr>
+                    <tr><td>Qualitative tilt</td><td class="r num">+6.5%</td><td class="r num muted">cap ±10%</td><td style="font-size:13px; color:var(--muted)">Factor scores, below</td></tr>
+                    <tr><td>Horizon</td><td class="r num">3 years</td><td class="r num muted">Oct 2029</td><td style="font-size:13px; color:var(--muted)">—</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="card" style="padding:24px; display:flex; flex-direction:column; gap:20px">
+              <div style="display:flex; flex-direction:column; gap:4px">
+                <h3 style="font-size:16px; font-weight:600">Qualitative factors</h3>
+                <p style="font-size:13px; color:var(--muted)">Scored 0–100 from report text. Higher is better; for risk, higher means lower risk.</p>
+              </div>
+              <div style="display:flex; gap:32px; flex-wrap:wrap; align-items:center">
+                <div style="position:relative; flex:0 1 340px; aspect-ratio:320 / 300">
+                  <svg viewBox="0 0 320 300" preserveAspectRatio="none" style="position:absolute; inset:0; width:100%; height:100%" role="img" aria-label="Radar chart of six factor scores">
+                    <path d="{{rd.rings}}" fill="none" style="stroke:var(--grid)" stroke-width="1"></path>
+                    <path d="{{rd.axes}}" style="stroke:var(--grid)" stroke-width="1"></path>
+                    <path d="{{rd.poly}}" style="fill:var(--band); stroke:var(--c2)" stroke-width="2" stroke-linejoin="round"></path>
+                  </svg>
+                  <sc-for list="{{rd.labels}}" as="l" hint-placeholder-count="6"><span style="{{l.style}}">{{l.text}}</span></sc-for>
+                </div>
+                <ul style="flex:1 1 360px; margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:14px">
+                  <sc-for list="{{factors}}" as="f" hint-placeholder-count="6">
+                    <li style="display:grid; grid-template-columns:150px 40px minmax(0, 1fr); gap:12px; align-items:baseline">
+                      <span style="font-weight:500; font-size:14px">{{f.name}}</span>
+                      <span class="num" style="font-weight:600; text-align:right">{{f.score}}</span>
+                      <span style="font-size:13px; color:var(--muted); line-height:1.5">{{f.why}}</span>
+                    </li>
+                  </sc-for>
+                </ul>
+              </div>
+            </section>
+
+            <section class="card" style="padding:24px; display:flex; flex-direction:column; gap:16px">
+              <h3 style="font-size:16px; font-weight:600">Key ratios</h3>
+              <div class="tbl-box" style="border-radius:10px">
+                <table class="tbl">
+                  <thead><tr><th>Ratio</th><th class="r">LHL</th><th class="r">Sector median</th><th>Read</th></tr></thead>
+                  <tbody>
+                    <sc-for list="{{ratios}}" as="r" hint-placeholder-count="7">
+                      <tr><td>{{r.name}}</td><td class="r num">{{r.v}}</td><td class="r num muted">{{r.s}}</td><td><span class="{{r.cls}}">{{r.read}}</span></td></tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+            <span class="disclaimer">Predictions are model estimates, not financial advice.</span>
+          </div>
+        </sc-if>
+
+        <!-- c) Financials -->
+        <sc-if value="{{tb.fin.on}}" hint-placeholder-val="{{ false }}">
+          <div role="tabpanel" aria-label="Financials" style="display:flex; flex-direction:column; gap:24px">
+            <section class="card" style="padding:24px; display:flex; flex-direction:column; gap:16px">
+              <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:baseline">
+                <h3 style="font-size:16px; font-weight:600">Five-year financials</h3>
+                <span style="font-size:12px; color:var(--muted)">LKR million unless stated · year to 31 Dec</span>
+              </div>
+              <div class="tbl-box" style="border-radius:10px">
+                <table class="tbl" style="min-width:720px">
+                  <thead><tr><th>Metric</th><th class="r">FY2021</th><th class="r">FY2022</th><th class="r">FY2023</th><th class="r">FY2024</th><th class="r">FY2025</th><th class="r">vs FY24</th></tr></thead>
+                  <tbody>
+                    <sc-for list="{{fin}}" as="f" hint-placeholder-count="7">
+                      <tr>
+                        <td style="font-weight:500">{{f.name}}</td>
+                        <td class="r num">{{f.v0}}</td><td class="r num">{{f.v1}}</td><td class="r num">{{f.v2}}</td><td class="r num">{{f.v3}}</td><td class="r num" style="font-weight:600">{{f.v4}}</td>
+                        <td class="r"><span style="{{f.trendStyle}}" aria-label="{{f.trendLabel}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{f.arrow}}"></path></svg></span></td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+              <span style="font-size:12px; color:var(--muted)">Green and red show whether the change helps or hurts the case — falling debt/equity is shown green.</span>
+            </section>
+            <section class="card" style="padding:24px; display:flex; flex-direction:column; gap:12px">
+              <h3 style="font-size:16px; font-weight:600">Source reports</h3>
+              <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column">
+                <sc-for list="{{reports}}" as="r" hint-placeholder-count="5">
+                  <li style="display:flex; gap:14px; align-items:center; padding:12px 0; border-bottom:1px solid var(--border); flex-wrap:wrap">
+                    <span style="width:36px; height:36px; border-radius:9px; background:var(--subtle); display:inline-flex; align-items:center; justify-content:center; color:var(--muted); flex:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6M16 13H8M16 17H8"></path></svg></span>
+                    <div style="flex:1 1 220px; display:flex; flex-direction:column; gap:2px; min-width:0">
+                      <span style="font-weight:500">{{r.title}}</span>
+                      <span style="font-size:12px; color:var(--muted)">{{r.type}} · {{r.period}} · {{r.pages}}</span>
+                    </div>
+                    <span class="chip num">{{r.version}}</span>
+                    <span style="font-size:12px; color:var(--muted); width:150px">{{r.note}}</span>
+                  </li>
+                </sc-for>
+              </ul>
+            </section>
+          </div>
+        </sc-if>
+
+        <!-- d) What-if -->
+        <sc-if value="{{tb.sim.on}}" hint-placeholder-val="{{ false }}">
+          <div role="tabpanel" aria-label="What-if Simulator" class="card" style="padding:24px; display:flex; flex-direction:column; gap:24px">
+            <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:flex-start">
+              <div style="display:flex; flex-direction:column; gap:4px; max-width:560px">
+                <h3 style="font-size:16px; font-weight:600">What-if Simulator</h3>
+                <p style="font-size:13px; color:var(--muted)">Change the three levers behind the target and watch the projection move. Your scenario stays on this page; it is never saved or published.</p>
+              </div>
+              <button class="btn btn-secondary btn-sm" onClick="{{sim.reset}}" disabled="{{sim.isBase}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>Reset to AutoVise base case</button>
+            </div>
+            <div style="display:flex; gap:32px; flex-wrap:wrap">
+              <div style="flex:1 1 300px; display:flex; flex-direction:column; gap:24px">
+                <div class="field">
+                  <div style="display:flex; justify-content:space-between"><label class="label" for="s-g">EPS growth, per year</label><span class="num" style="font-weight:600">{{sim.gText}}</span></div>
+                  <input id="s-g" type="range" min="0" max="25" step="0.5" value="{{sim.g}}" onChange="{{sim.setG}}">
+                  <div style="display:flex; justify-content:space-between" class="hint num"><span>0%</span><span>Base 11.0%</span><span>25%</span></div>
+                </div>
+                <div class="field">
+                  <div style="display:flex; justify-content:space-between"><label class="label" for="s-pe">Exit P/E</label><span class="num" style="font-weight:600">{{sim.peText}}</span></div>
+                  <input id="s-pe" type="range" min="6" max="20" step="0.1" value="{{sim.pe}}" onChange="{{sim.setPe}}">
+                  <div style="display:flex; justify-content:space-between" class="hint num"><span>6.0×</span><span>Base 12.0×</span><span>20.0×</span></div>
+                </div>
+                <div class="field">
+                  <div style="display:flex; justify-content:space-between"><label class="label" for="s-t">Qualitative tilt</label><span class="num" style="font-weight:600">{{sim.tText}}</span></div>
+                  <input id="s-t" type="range" min="-10" max="10" step="0.5" value="{{sim.t}}" onChange="{{sim.setT}}">
+                  <div style="display:flex; justify-content:space-between" class="hint num"><span>−10%</span><span>Base +6.5%</span><span>+10%</span></div>
+                </div>
+              </div>
+              <div style="flex:1 1 340px; display:flex; flex-direction:column; gap:16px">
+                <div style="padding:16px; border-radius:12px; background:var(--subtle); display:flex; gap:24px; flex-wrap:wrap; align-items:flex-end">
+                  <div style="display:flex; flex-direction:column; gap:2px">
+                    <span style="font-size:12px; color:var(--muted)">Your 3-yr target</span>
+                    <span class="num" style="font-size:28px; font-weight:600" aria-live="polite">{{sim.targetText}}</span>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:6px">
+                    <span style="font-size:12px; color:var(--muted)">vs today</span>
+                    <span class="{{sim.deltaCls}}">{{sim.upText}}</span>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:6px">
+                    <span style="font-size:12px; color:var(--muted)">vs AutoVise base</span>
+                    <span class="num" style="font-size:14px; font-weight:600">{{sim.vsBase}}</span>
+                  </div>
+                </div>
+                <div style="position:relative; width:100%; aspect-ratio:480 / 220">
+                  <svg viewBox="0 0 480 220" preserveAspectRatio="none" style="position:absolute; inset:0; width:100%; height:100%" role="img" aria-label="{{sim.chartLabel}}">
+                    <path d="{{sim.grid}}" style="stroke:var(--grid)" stroke-width="1" vector-effect="non-scaling-stroke"></path>
+                    <path d="{{sim.basePath}}" fill="none" style="stroke:var(--c5)" stroke-width="2" stroke-dasharray="5 5" vector-effect="non-scaling-stroke"></path>
+                    <path d="{{sim.userPath}}" fill="none" style="stroke:var(--c1)" stroke-width="2.5" vector-effect="non-scaling-stroke"></path>
+                  </svg>
+                  <sc-for list="{{sim.yl}}" as="t" hint-placeholder-count="4"><span class="num" style="{{t.style}}">{{t.text}}</span></sc-for>
+                  <sc-for list="{{sim.xl}}" as="t" hint-placeholder-count="4"><span class="num" style="{{t.style}}">{{t.text}}</span></sc-for>
+                </div>
+                <div style="display:flex; gap:16px; font-size:12px; color:var(--muted)">
+                  <span style="display:inline-flex; align-items:center; gap:6px"><span style="width:16px; height:2px; background:var(--c1)"></span>Your scenario</span>
+                  <span style="display:inline-flex; align-items:center; gap:6px"><span style="width:16px; border-top:2px dashed var(--c5)"></span>AutoVise base</span>
+                </div>
+                <div class="tbl-box" style="border-radius:10px">
+                  <table class="tbl">
+                    <thead><tr><th>Year</th><th class="r">EPS</th><th class="r">P/E</th><th class="r">Price</th></tr></thead>
+                    <tbody>
+                      <sc-for list="{{sim.rows}}" as="r" hint-placeholder-count="3"><tr><td>{{r.y}}</td><td class="r num">{{r.eps}}</td><td class="r num">{{r.pe}}</td><td class="r num" style="font-weight:600">{{r.p}}</td></tr></sc-for>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <span class="disclaimer">Predictions are model estimates, not financial advice.</span>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+
+    <!-- Chat panel: right side on desktop, bottom sheet below 1024px -->
+    <aside class="card chat-aside {{chat.cls}}" style="flex:1 1 340px; min-width:0; overflow:hidden" aria-label="Ask the consultant">
+      <button class="chat-handle" onClick="{{chat.toggle}}" aria-expanded="{{chat.open}}" style="width:100%; align-items:center; gap:12px; padding:12px 16px; border:0; background:var(--card); color:var(--text); cursor:pointer; flex-direction:column; font:inherit">
+        <span style="width:40px; height:4px; border-radius:999px; background:var(--border-strong)"></span>
+        <span style="display:flex; width:100%; align-items:center; gap:10px">
+          <span class="logo" style="{{lg.chat.style}}"><img src="{{lg.chat.src}}" alt=""></span>
+          <span style="font-weight:600; font-size:15px; flex:1; text-align:left; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">Ask the consultant about LHL</span>
+          <span style="font-size:12px; color:var(--muted)">{{chat.handleHint}}</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="{{chat.chevStyle}}"><path d="m18 15-6-6-6 6"></path></svg>
+        </span>
+      </button>
+      <div class="chat-desk-head" style="display:flex; align-items:center; gap:12px; padding:16px; border-bottom:1px solid var(--border)">
+        <span class="logo" style="{{lg.chat.style}}"><img src="{{lg.chat.src}}" alt=""></span>
+        <div style="display:flex; flex-direction:column; min-width:0">
+          <span style="font-weight:600">Ask the consultant about Lanka Harbour Logistics</span>
+          <span style="font-size:12px; color:var(--muted)">Answers draw on LHL's reports and this pitch</span>
+        </div>
+      </div>
+      <div class="chat-body" style="flex:1; min-height:0; display:flex; flex-direction:column">
+        <div style="flex:1; min-height:0; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:16px" aria-live="polite">
+          <div class="bubble bot">I've walked you through the LHL pitch. Ask me anything about the target, the assumptions or the risks — like the Q&amp;A after a presentation.</div>
+          <sc-for list="{{chat.msgs}}" as="m" hint-placeholder-count="2">
+            <sc-if value="{{m.isUser}}" hint-placeholder-val="{{ true }}">
+              <div class="bubble user">{{m.text}}</div>
+            </sc-if>
+            <sc-if value="{{m.isBot}}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; flex-direction:column; gap:8px">
+                <div class="bubble bot">
+                  <sc-if value="{{m.typing}}" hint-placeholder-val="{{ false }}"><span class="typing" aria-label="Consultant is typing"><i></i><i></i><i></i></span></sc-if>
+                  <sc-if value="{{m.showText}}" hint-placeholder-val="{{ true }}"><span>{{m.text}}</span></sc-if>
+                  <sc-if value="{{m.streaming}}" hint-placeholder-val="{{ false }}"><span class="caret" aria-hidden="true"></span></sc-if>
+                </div>
+                <sc-if value="{{m.done}}" hint-placeholder-val="{{ true }}">
+                  <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center">
+                    <sc-for list="{{m.cites}}" as="c" hint-placeholder-count="2"><button class="cite" onClick="{{c.open}}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>{{c.label}}</button></sc-for>
+                    <span style="flex:1"></span>
+                    <button class="{{m.upCls}}" aria-label="Helpful answer" aria-pressed="{{m.upOn}}" onClick="{{m.voteUp}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10v12"></path><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"></path></svg></button>
+                    <button class="{{m.downCls}}" aria-label="Unhelpful answer" aria-pressed="{{m.downOn}}" onClick="{{m.voteDown}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 14V2"></path><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"></path></svg></button>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+          </sc-for>
+        </div>
+        <div style="padding:12px 16px 16px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:10px">
+          <sc-if value="{{chat.hasChips}}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex; gap:8px; flex-wrap:wrap">
+              <sc-for list="{{chat.chips}}" as="q" hint-placeholder-count="3"><button class="chip chip-btn" onClick="{{q.ask}}" disabled="{{chat.busy}}">{{q.text}}</button></sc-for>
+            </div>
+          </sc-if>
+          <form onSubmit="{{chat.submit}}" style="display:flex; gap:8px">
+            <label for="chat-in" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)">Ask a follow-up question</label>
+            <input id="chat-in" class="input" placeholder="Ask a follow-up question…" value="{{chat.draft}}" onChange="{{chat.setDraft}}">
+            <button class="btn btn-primary btn-icon" type="submit" aria-label="Send question" disabled="{{chat.cantSend}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg></button>
+          </form>
+          <span class="disclaimer" style="justify-content:center">Not financial advice. Answers can be wrong — check the cited source.</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer style="border-top:1px solid var(--border); background:var(--surface)">
+  <div class="wrap" style="padding-top:28px; padding-bottom:28px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap">
+    <p style="font-size:12px; color:var(--muted); max-width:760px; line-height:1.6">AutoVise publishes model-generated estimates for research and education. Predictions are model estimates, not financial advice. Share prices may be delayed.</p>
+    <nav aria-label="Footer" style="display:flex; gap:20px; font-size:13px"><a href="Methodology.dc.html">Methodology</a><a href="Disclaimer.dc.html">Disclaimer</a></nav>
+  </div>
+</footer>
+
+<!-- Source preview -->
+<sc-if value="{{pv.open}}" hint-placeholder-val="{{ false }}">
+  <div class="overlay">
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="pv-title" style="max-width:560px">
+      <div style="display:flex; gap:12px; align-items:flex-start; padding:20px 20px 0">
+        <span style="width:40px; height:40px; border-radius:10px; background:var(--primary-soft); color:var(--primary-text); display:inline-flex; align-items:center; justify-content:center; flex:none"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6M16 13H8M16 17H8"></path></svg></span>
+        <div style="flex:1; display:flex; flex-direction:column; gap:2px">
+          <h2 id="pv-title" style="font-size:16px; font-weight:600">{{pv.doc}}</h2>
+          <span style="font-size:13px; color:var(--muted)">Page {{pv.page}} · {{pv.section}}</span>
+        </div>
+        <button class="btn btn-ghost btn-icon btn-sm" aria-label="Close source preview" onClick="{{pv.close}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+      </div>
+      <div style="padding:16px 20px">
+        <div style="padding:20px; border-radius:10px; background:var(--subtle); border:1px solid var(--border); display:flex; flex-direction:column; gap:10px; font-family:Georgia, 'Times New Roman', serif">
+          <span style="height:8px; width:70%; border-radius:4px; background:var(--subtle-2)"></span>
+          <span style="height:8px; width:92%; border-radius:4px; background:var(--subtle-2)"></span>
+          <p style="font-size:15px; line-height:1.6; padding:6px 8px; margin:2px -8px; border-radius:6px; background:var(--warn-soft); color:var(--text)">“{{pv.quote}}”</p>
+          <span style="height:8px; width:85%; border-radius:4px; background:var(--subtle-2)"></span>
+          <span style="height:8px; width:60%; border-radius:4px; background:var(--subtle-2)"></span>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:space-between; gap:8px; padding:0 20px 20px; align-items:center; flex-wrap:wrap">
+        <span style="font-size:12px; color:var(--muted)">{{pv.version}}</span>
+        <div style="display:flex; gap:8px">
+          <button class="btn btn-secondary" onClick="{{pv.close}}">Close</button>
+          <a class="btn btn-primary" href="#">Open full report</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark","system"],"default":"light","section":"Theme"},"tab":{"editor":"enum","options":["pitch","how","financials","whatif"],"default":"pitch","section":"State"},"chatOpen":{"editor":"boolean","default":false,"section":"State"},"$preview":{"width":1440,"height":3200}}'>
+const CITES = {
+  ar12: { label: 'Annual Report 2025, p.12', doc: 'Annual Report 2025', page: 12, section: 'Chairman’s review', version: 'Version 2 · approved 02 Apr 2026', quote: 'Group revenue rose 13.3% to LKR 30.9 bn, while profit attributable to shareholders increased 12.3% to LKR 2.84 bn.' },
+  ar34: { label: 'Annual Report 2025, p.34', doc: 'Annual Report 2025', page: 34, section: 'Operating review — Ports', version: 'Version 2 · approved 02 Apr 2026', quote: 'Container throughput handled across our terminals rose 14% to 1.92 million TEU, the highest in the Group’s history.' },
+  ar41: { label: 'Annual Report 2025, p.41', doc: 'Annual Report 2025', page: 41, section: 'Segment review', version: 'Version 2 · approved 02 Apr 2026', quote: 'Contract logistics and warehousing contributed 31% of Group revenue (2023: 24%), reflecting the commissioning of 85,000 sq ft of new capacity.' },
+  ar58: { label: 'Annual Report 2025, p.58', doc: 'Annual Report 2025', page: 58, section: 'Risk management', version: 'Version 2 · approved 02 Apr 2026', quote: 'Our three largest shipping-line customers together accounted for 46% of throughput in 2025.' },
+  ar112: { label: 'Annual Report 2025, p.112', doc: 'Annual Report 2025', page: 112, section: 'Note 34 — Financial risk', version: 'Version 2 · approved 02 Apr 2026', quote: 'Approximately 38% of operating costs are denominated in or linked to the US dollar, principally fuel, equipment leases and spares.' },
+  q2p8: { label: 'Q2 2026 Interim, p.8', doc: 'Q2 2026 Interim Report', page: 8, section: 'Financial position', version: 'Version 1 · approved 18 Aug 2026', quote: 'Debt to equity improved to 0.42 times as at 30 June 2026 following scheduled repayments of term loans.' },
+  q2p3: { label: 'Q2 2026 Interim, p.3', doc: 'Q2 2026 Interim Report', page: 3, section: 'Chairman’s statement', version: 'Version 1 · approved 18 Aug 2026', quote: 'The Board intends to review the dividend policy ahead of the 2027 Annual General Meeting.' }
+};
+const QA = [
+  { q: 'Why is the target above today’s price?', a: 'Mostly earnings growth. We expect EPS to rise from LKR 18.20 to about LKR 24.89 by 2028 — 11% a year. At today’s 13.5× multiple that alone would be worth LKR 335.75. We then assume the P/E eases to 12.0×, which takes off LKR 37.06, and add LKR 19.41 for qualitative strengths. Net result: LKR 318.10.', cites: ['ar34', 'ar41'] },
+  { q: 'What’s the biggest risk to this view?', a: 'Customer concentration. The top three shipping lines make up 46% of throughput; losing one would cut volumes enough to push us toward the bear case of LKR 212.40. Currency is the second risk — 38% of costs are USD-linked.', cites: ['ar58', 'ar112'] },
+  { q: 'How sensitive is the target to the P/E?', a: 'Each 1.0× change in the exit P/E moves the target by about LKR 26.50. At 10× the base case falls to roughly LKR 265; at 14× it rises to about LKR 371. You can try this yourself in the What-if Simulator.', cites: [] },
+  { q: 'How does LHL compare with its sector?', a: 'LHL trades at 13.5× earnings against a sector benchmark of 11.8×, but earns a higher return on equity (16.9% vs 12.3%) with less debt (0.44 vs 0.71 debt/equity). The premium is earned, which is why we only assume it narrows rather than disappears.', cites: ['ar12'] }
+];
+const FALLBACK = { a: 'Good question. Based on the 2025 annual report and the Q2 2026 interim, nothing in the filings changes the base case of LKR 318.10. The assumptions most likely to move it are EPS growth and the exit P/E — both are in How We Got Here.', cites: ['ar12', 'q2p8'] };
+const EPS0 = 18.20, P0 = 245.50, PE0 = P0 / EPS0;
+const BASE = { g: 11, pe: 12, t: 6.5 };
+function project(g, pe, t) {
+  const out = [P0];
+  for (let n = 1; n <= 3; n++) {
+    const eps = EPS0 * Math.pow(1 + g / 100, n);
+    const m = PE0 + (pe - PE0) * n / 3;
+    out.push(eps * m * (1 + (t / 100) * n / 3));
+  }
+  return out;
+}
+function money(n) { return 'LKR ' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function signed(p) { return (p >= 0 ? '+' : '−') + Math.abs(p).toFixed(1) + '%'; }
+function hist(seed, end, n, drift) {
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const t = i / (n - 1);
+    const w = 1 + 0.045 * Math.sin(i * 0.9 + seed) + 0.03 * Math.sin(i * 2.3 + seed * 1.7) + 0.018 * Math.sin(i * 5.1 + seed * 0.3);
+    out.push(Math.pow(1 / drift, 1 - t) * w);
+  }
+  const k = end / out[n - 1];
+  return out.map(v => v * k);
+}
+const pc = (v, tot) => (v / tot * 100).toFixed(3) + '%';
+function mainChart() {
+  const W = 960, H = 340, x0 = 56, x1 = 850, y0 = 24, y1 = 296, lo = 100, hi = 400;
+  const X = m => x0 + m / 96 * (x1 - x0);
+  const Y = v => y1 - (v - lo) / (hi - lo) * (y1 - y0);
+  const h = hist(1.2, P0, 61, 1.62);
+  const base = project(BASE.g, BASE.pe, BASE.t);
+  const at = m => { const f = (m - 60) / 12; const k = Math.min(2, Math.floor(f)); const r = f - k; return base[k] + (base[k + 1] - base[k]) * r; };
+  const bull = [], bear = [], b = [];
+  for (let m = 60; m <= 96; m += 2) { const f = (m - 60) / 36, v = at(m); b.push([X(m), Y(v)]); bull.push([X(m), Y(v * (1 + 0.1688 * f))]); bear.push([X(m), Y(v * (1 - 0.3323 * f))]); }
+  const line = pts => pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+  let grid = '';
+  const yLabels = [];
+  for (let v = lo; v <= hi; v += 50) { grid += 'M' + x0 + ' ' + Y(v).toFixed(1) + 'H' + x1 + ' '; yLabels.push({ text: v, style: 'position:absolute; font-size:11px; color:var(--muted); left:' + pc(x0 - 10, W) + '; top:' + pc(Y(v), H) + '; transform:translate(-100%,-50%)' }); }
+  const xLabels = [];
+  for (let m = 0; m <= 96; m += 12) xLabels.push({ text: "Oct '" + (21 + m / 12), style: 'position:absolute; font-size:11px; color:var(--muted); white-space:nowrap; left:' + pc(X(m), W) + '; top:' + pc(y1 + 8, H) + '; transform:translateX(-50%)' });
+  let markers = '';
+  const yearLabels = [], dots = [];
+  [1, 2, 3].forEach(n => {
+    const m = 60 + n * 12;
+    markers += 'M' + X(m).toFixed(1) + ' ' + y0 + 'V' + y1 + ' ';
+    yearLabels.push({ text: 'Y' + n + ' · Oct ' + (2026 + n), style: 'position:absolute; font-size:11px; font-weight:600; color:var(--text); white-space:nowrap; left:' + pc(X(m), W) + '; top:' + pc(y0 - 4, H) + '; transform:translate(-50%,-100%)' });
+    dots.push({ text: base[n].toFixed(2), dotStyle: 'position:absolute; width:9px; height:9px; border-radius:50%; background:var(--card); border:2px solid var(--c2); left:' + pc(X(m), W) + '; top:' + pc(Y(base[n]), H) + '; transform:translate(-50%,-50%)', labelStyle: 'position:absolute; font-size:11px; font-weight:600; color:var(--text); background:var(--card); padding:1px 4px; border-radius:4px; left:' + pc(X(m), W) + '; top:' + pc(Y(base[n]) - 10, H) + '; transform:translate(-50%,-100%)' });
+  });
+  dots.pop();
+  const endStyle = (v, c) => 'position:absolute; font-size:11px; font-weight:600; white-space:nowrap; color:' + c + '; left:' + pc(x1 + 8, W) + '; top:' + pc(Y(v), H) + '; transform:translateY(-50%)';
+  const ends = [
+    { text: 'Bull 371.80', style: endStyle(371.8, 'var(--pos)') },
+    { text: 'Base 318.10', style: endStyle(base[3], 'var(--text)') },
+    { text: 'Bear 212.40', style: endStyle(212.4, 'var(--neg)') }
+  ];
+  return {
+    grid: grid, hist: line(h.map((v, i) => [X(i), Y(v)])), base: line(b), bull: line(bull), bear: line(bear),
+    fan: line(bull) + ' ' + bear.slice().reverse().map(p => 'L' + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ') + ' Z',
+    markers: markers, yLabels: yLabels, xLabels: xLabels, yearLabels: yearLabels, dots: dots, ends: ends,
+    todayX: X(60).toFixed(1), projW: (x1 - X(60)).toFixed(1),
+    todayStyle: 'position:absolute; font-size:11px; font-weight:600; color:var(--muted); left:' + pc(X(60), W) + '; top:' + pc(y0 - 4, H) + '; transform:translate(-50%,-100%)'
+  };
+}
+function waterfall() {
+  const steps = [
+    { label: 'Current price', start: 0, end: 245.50, kind: 'total' },
+    { label: 'Earnings growth', start: 245.50, end: 335.75, kind: 'up' },
+    { label: 'Multiple change', start: 335.75, end: 298.69, kind: 'down' },
+    { label: 'Qualitative adjustment', start: 298.69, end: 318.10, kind: 'up' },
+    { label: '3-yr target', start: 0, end: 318.10, kind: 'target' }
+  ];
+  const top = 380;
+  return steps.map(s => {
+    const lo = Math.min(s.start, s.end), hi = Math.max(s.start, s.end);
+    const color = s.kind === 'up' ? 'var(--pos)' : s.kind === 'down' ? 'var(--neg)' : s.kind === 'target' ? 'var(--c2)' : 'var(--c1)';
+    const d = s.end - s.start;
+    return {
+      label: s.label,
+      valueText: s.kind === 'total' || s.kind === 'target' ? s.end.toFixed(2) : (d >= 0 ? '+' : '−') + Math.abs(d).toFixed(2),
+      barStyle: 'position:absolute; left:18%; right:18%; border-radius:4px 4px 0 0; background:' + color + '; bottom:' + (lo / top * 100).toFixed(2) + '%; height:' + ((hi - lo) / top * 100).toFixed(2) + '%',
+      labelStyle: 'position:absolute; left:0; right:0; text-align:center; font-size:13px; font-weight:600; bottom:calc(' + (hi / top * 100).toFixed(2) + '% + 6px); color:' + (s.kind === 'down' ? 'var(--neg)' : s.kind === 'up' ? 'var(--pos)' : 'var(--text)')
+    };
+  });
+}
+const FACTORS = [
+  { name: 'Management', score: 78, why: 'Consistent capital allocation; guidance met in 7 of the last 8 quarters.' },
+  { name: 'Growth outlook', score: 82, why: 'Throughput up 14% in 2025; new warehouse capacity online in 2026.' },
+  { name: 'Competitive position', score: 74, why: 'Long berth concession; contract-logistics share rising, some price pressure.' },
+  { name: 'Risk profile', score: 58, why: '46% of volume from three customers; 38% of costs USD-linked.' },
+  { name: 'Governance', score: 71, why: 'Majority-independent board; one related-party lease disclosed.' },
+  { name: 'Sentiment', score: 66, why: 'Report tone confident but measured; price up 21% over 12 months.' }
+];
+function radar() {
+  const cx = 160, cy = 150, R = 105, W = 320, H = 300;
+  const pt = (i, r) => { const a = (-90 + i * 60) * Math.PI / 180; return [cx + Math.cos(a) * r, cy + Math.sin(a) * r]; };
+  let rings = '';
+  [25, 50, 75, 100].forEach(v => { rings += [0, 1, 2, 3, 4, 5].map((i, k) => { const p = pt(i, R * v / 100); return (k ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ') + ' Z '; });
+  let axes = '';
+  for (let i = 0; i < 6; i++) { const p = pt(i, R); axes += 'M' + cx + ' ' + cy + 'L' + p[0].toFixed(1) + ' ' + p[1].toFixed(1) + ' '; }
+  const poly = FACTORS.map((f, i) => { const p = pt(i, R * f.score / 100); return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ') + ' Z';
+  const labels = FACTORS.map((f, i) => {
+    const p = pt(i, R + 18);
+    const tx = Math.abs(p[0] - cx) < 4 ? '-50%' : (p[0] > cx ? '0' : '-100%');
+    return { text: f.name, style: 'position:absolute; font-size:11.5px; font-weight:500; color:var(--muted); white-space:nowrap; left:' + pc(p[0], W) + '; top:' + pc(p[1], H) + '; transform:translate(' + tx + ',-50%)' };
+  });
+  return { rings: rings, axes: axes, poly: poly, labels: labels };
+}
+const RATIOS = [
+  ['P/E', '13.5×', '11.8×', 'Premium', 'warn'], ['P/B', '2.3×', '1.6×', 'Premium', 'warn'], ['EV/EBITDA', '7.9×', '7.1×', 'In line', 'flat'],
+  ['Dividend yield', '2.5%', '3.1%', 'Below', 'down'], ['Return on equity', '16.9%', '12.3%', 'Stronger', 'up'], ['Net margin', '9.2%', '7.4%', 'Stronger', 'up'], ['Debt / equity', '0.44', '0.71', 'Stronger', 'up']
+].map(r => ({ name: r[0], v: r[1], s: r[2], read: r[3], cls: r[4] === 'warn' ? 'warn-chip' : 'delta ' + r[4] }));
+const FIN = [
+  { name: 'Revenue', v: [18420, 21060, 24880, 27310, 30940], d: 0, good: 1 },
+  { name: 'Net income', v: [1640, 1910, 2280, 2530, 2840], d: 0, good: 1 },
+  { name: 'EPS (LKR)', v: [10.51, 12.24, 14.62, 16.22, 18.20], d: 2, good: 1 },
+  { name: 'Net margin', v: [8.9, 9.1, 9.2, 9.3, 9.2], d: 1, good: 1, pct: true },
+  { name: 'Return on equity', v: [14.2, 15.1, 15.8, 16.4, 16.9], d: 1, good: 1, pct: true },
+  { name: 'Debt / equity', v: [0.62, 0.58, 0.55, 0.49, 0.44], d: 2, good: -1 },
+  { name: 'Dividend / share (LKR)', v: [3.50, 4.00, 4.80, 5.40, 6.20], d: 2, good: 1 }
+].map(r => {
+  const f = n => n.toLocaleString('en-US', { minimumFractionDigits: r.d, maximumFractionDigits: r.d }) + (r.pct ? '%' : '');
+  const ch = (r.v[4] - r.v[3]) / Math.abs(r.v[3]);
+  const flat = Math.abs(ch) < 0.015;
+  const better = ch * r.good > 0;
+  return {
+    name: r.name, v0: f(r.v[0]), v1: f(r.v[1]), v2: f(r.v[2]), v3: f(r.v[3]), v4: f(r.v[4]),
+    arrow: flat ? 'M5 12h14M15 8l4 4-4 4' : (ch > 0 ? 'M7 17 17 7M8 7h9v9' : 'M7 7l10 10M17 8v9H8'),
+    trendStyle: 'display:inline-flex; color:' + (flat ? 'var(--muted)' : better ? 'var(--pos)' : 'var(--neg)'),
+    trendLabel: (flat ? 'Flat' : ch > 0 ? 'Up' : 'Down') + ' ' + Math.abs(ch * 100).toFixed(1) + '% vs FY2024'
+  };
+});
+const LHL_BRAND = { name: 'Lanka Harbour Logistics', color: '#1F4E8C', logo: './logos/lhl.svg', logoDark: './logos/lhl-dark.svg', bg: 'transparent', shape: 'square' };
+const LOGO_PAD = { square: 0.16, round: 0.14, tall: 0.10, wide: 0.07 };
+function logoTile(b, size, dark) {
+  const r = Math.min(14, Math.round(size * 0.25));
+  let bg = b.bg, src = b.logo;
+  if (dark && b.logoDark) src = b.logoDark;
+  else if (dark && bg === 'transparent') bg = 'light';
+  const fill = bg === 'light' ? '#FFFFFF' : bg === 'dark' ? '#0F172A' : 'transparent';
+  return { src: src, style: 'width:' + size + 'px; height:' + size + 'px; border-radius:' + r + 'px; padding:' + Math.max(2, Math.round(size * (LOGO_PAD[b.shape] || 0.12))) + 'px; background:' + fill };
+}
+const REPORTS = [
+  { title: 'Q2 2026 Interim Report', type: 'Quarterly', period: 'Apr–Jun 2026', pages: '24 pages', version: 'v1', note: 'Approved 18 Aug 2026' },
+  { title: 'Q1 2026 Interim Report', type: 'Quarterly', period: 'Jan–Mar 2026', pages: '22 pages', version: 'v1', note: 'Approved 21 May 2026' },
+  { title: 'Annual Report 2025', type: 'Annual', period: 'FY2025', pages: '148 pages', version: 'v2', note: 'v1 superseded 02 Apr 2026' },
+  { title: 'Annual Report 2024', type: 'Annual', period: 'FY2024', pages: '140 pages', version: 'v1', note: 'Approved 08 Apr 2025' },
+  { title: 'Annual Report 2023', type: 'Annual', period: 'FY2023', pages: '136 pages', version: 'v1', note: 'Approved 11 Apr 2024' }
+];
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      mode: null, tab: null, chatOpen: null, cite: null, draft: '',
+      g: BASE.g, pe: BASE.pe, t: BASE.t,
+      msgs: [{ role: 'user', text: QA[0].q }, { role: 'bot', full: QA[0].a, shown: QA[0].a.length, typing: false, cites: QA[0].cites, vote: 0 }],
+      asked: [0]
+    };
+    this.timers = [];
+  }
+  componentWillUnmount() { this.timers.forEach(t => { clearTimeout(t); clearInterval(t); }); }
+  theme() {
+    const m = this.state.mode || this.props.theme || 'light';
+    let dark = m === 'dark';
+    if (m === 'system') { try { dark = window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {} }
+    return {
+      isDark: dark,
+      rootClass: dark ? 'av dark' : 'av',
+      segL: m === 'light' ? 'seg-btn on' : 'seg-btn', segD: m === 'dark' ? 'seg-btn on' : 'seg-btn', segS: m === 'system' ? 'seg-btn on' : 'seg-btn',
+      pL: m === 'light', pD: m === 'dark', pS: m === 'system',
+      setL: () => this.setState({ mode: 'light' }), setD: () => this.setState({ mode: 'dark' }), setS: () => this.setState({ mode: 'system' })
+    };
+  }
+  ask(text, entry) {
+    if (this.busy()) return;
+    const ans = entry || FALLBACK;
+    const msgs = this.state.msgs.concat([{ role: 'user', text: text }, { role: 'bot', full: ans.a, shown: 0, typing: true, cites: ans.cites, vote: 0 }]);
+    const idx = msgs.length - 1;
+    this.setState({ msgs: msgs, draft: '' });
+    const t1 = setTimeout(() => {
+      this.patch(idx, { typing: false });
+      const iv = setInterval(() => {
+        const m = this.state.msgs[idx];
+        if (!m) { clearInterval(iv); return; }
+        let next = m.full.indexOf(' ', m.shown + 6);
+        if (next < 0) next = m.full.length;
+        this.patch(idx, { shown: next });
+        if (next >= m.full.length) clearInterval(iv);
+      }, 45);
+      this.timers.push(iv);
+    }, 700);
+    this.timers.push(t1);
+  }
+  patch(i, obj) { const msgs = this.state.msgs.slice(); msgs[i] = Object.assign({}, msgs[i], obj); this.setState({ msgs: msgs }); }
+  busy() { return this.state.msgs.some(m => m.role === 'bot' && (m.typing || m.shown < m.full.length)); }
+  renderVals() {
+    const s = this.state, p = this.props;
+    const tab = s.tab || p.tab || 'pitch';
+    const mk = k => ({ on: tab === k, cls: tab === k ? 'tab on' : 'tab', go: () => this.setState({ tab: k }) });
+    const openCite = k => () => this.setState({ cite: k });
+    const cite = {}; Object.keys(CITES).forEach(k => { cite[k] = openCite(k); });
+    const c = s.cite ? CITES[s.cite] : null;
+    const busy = this.busy();
+    const chatOpen = s.chatOpen === null ? !!p.chatOpen : s.chatOpen;
+
+    const msgs = s.msgs.map((m, i) => {
+      const done = m.role === 'bot' && !m.typing && m.shown >= m.full.length;
+      return {
+        isUser: m.role === 'user', isBot: m.role === 'bot',
+        text: m.role === 'user' ? m.text : m.full.slice(0, m.shown),
+        typing: !!m.typing, showText: m.role === 'bot' && !m.typing, streaming: m.role === 'bot' && !m.typing && !done, done: done,
+        cites: (m.cites || []).map(k => ({ label: CITES[k].label, open: openCite(k) })),
+        upOn: m.vote === 1, downOn: m.vote === -1,
+        upCls: 'btn btn-ghost btn-icon btn-sm' + (m.vote === 1 ? ' on-up' : ''),
+        downCls: 'btn btn-ghost btn-icon btn-sm' + (m.vote === -1 ? ' on-down' : ''),
+        voteUp: () => this.patch(i, { vote: m.vote === 1 ? 0 : 1 }),
+        voteDown: () => this.patch(i, { vote: m.vote === -1 ? 0 : -1 })
+      };
+    });
+    const chips = QA.map((x, i) => ({ text: x.q, i: i })).filter(x => s.asked.indexOf(x.i) < 0).map(x => ({
+      text: x.text, ask: () => { this.setState({ asked: s.asked.concat([x.i]) }); this.ask(x.text, QA[x.i]); }
+    }));
+
+    // simulator
+    const user = project(s.g, s.pe, s.t), base = project(BASE.g, BASE.pe, BASE.t);
+    const all = user.concat(base);
+    const lo = Math.floor(Math.min.apply(null, all) / 50) * 50, hi = Math.ceil(Math.max.apply(null, all) / 50) * 50;
+    const W = 480, H = 220, x0 = 44, x1 = 466, y0 = 12, y1 = 190;
+    const X = n => x0 + n / 3 * (x1 - x0), Y = v => y1 - (v - lo) / ((hi - lo) || 1) * (y1 - y0);
+    const path = arr => arr.map((v, n) => (n ? 'L' : 'M') + X(n).toFixed(1) + ' ' + Y(v).toFixed(1)).join(' ');
+    const step = (hi - lo) / 50 > 6 ? 100 : 50;
+    let grid = ''; const yl = [];
+    for (let v = lo; v <= hi; v += step) { grid += 'M' + x0 + ' ' + Y(v).toFixed(1) + 'H' + x1 + ' '; yl.push({ text: v, style: 'position:absolute; font-size:11px; color:var(--muted); left:' + pc(x0 - 8, W) + '; top:' + pc(Y(v), H) + '; transform:translate(-100%,-50%)' }); }
+    const xl = ['Today', 'Y1', 'Y2', 'Y3'].map((t, n) => ({ text: t, style: 'position:absolute; font-size:11px; color:var(--muted); left:' + pc(X(n), W) + '; top:' + pc(y1 + 8, H) + '; transform:translateX(-50%)' }));
+    const up = (user[3] / P0 - 1) * 100;
+    const isBase = s.g === BASE.g && s.pe === BASE.pe && s.t === BASE.t;
+    const rows = [1, 2, 3].map(n => ({ y: 'Y' + n + ' · Oct ' + (2026 + n), eps: (EPS0 * Math.pow(1 + s.g / 100, n)).toFixed(2), pe: (PE0 + (s.pe - PE0) * n / 3).toFixed(1) + '×', p: money(user[n]) }));
+    const diff = user[3] - base[3];
+
+    return Object.assign(this.theme(), {
+      tb: { pitch: mk('pitch'), how: mk('how'), fin: mk('financials'), sim: mk('whatif') },
+      lg: { hero: logoTile(LHL_BRAND, 96, this.theme().isDark), chat: logoTile(LHL_BRAND, 32, this.theme().isDark) },
+      ch: mainChart(), wf: waterfall(), rd: radar(), factors: FACTORS, ratios: RATIOS, fin: FIN, reports: REPORTS,
+      cite: cite,
+      pv: c ? { open: true, doc: c.doc, page: c.page, section: c.section, quote: c.quote, version: c.version, close: () => this.setState({ cite: null }) } : { open: false, close: () => {} },
+      chat: {
+        msgs: msgs, chips: chips, hasChips: chips.length > 0, busy: busy,
+        draft: s.draft, setDraft: e => this.setState({ draft: e.target.value }),
+        cantSend: busy || !s.draft.trim(),
+        submit: e => { e.preventDefault(); const t = s.draft.trim(); if (t) this.ask(t, null); },
+        open: chatOpen, cls: chatOpen ? 'open' : 'collapsed',
+        toggle: () => this.setState({ chatOpen: !chatOpen }),
+        handleHint: chatOpen ? 'Hide' : '4 suggested questions',
+        chevStyle: chatOpen ? 'transform:rotate(180deg); color:var(--muted)' : 'color:var(--muted)'
+      },
+      sim: {
+        g: s.g, pe: s.pe, t: s.t,
+        gText: s.g.toFixed(1) + '%', peText: Number(s.pe).toFixed(1) + '×', tText: (s.t >= 0 ? '+' : '−') + Math.abs(s.t).toFixed(1) + '%',
+        setG: e => this.setState({ g: parseFloat(e.target.value) }), setPe: e => this.setState({ pe: parseFloat(e.target.value) }), setT: e => this.setState({ t: parseFloat(e.target.value) }),
+        reset: () => this.setState({ g: BASE.g, pe: BASE.pe, t: BASE.t }), isBase: isBase,
+        targetText: money(user[3]), upText: signed(up), deltaCls: up >= 0 ? 'delta up delta-lg' : 'delta down delta-lg',
+        vsBase: isBase ? 'Matches base' : (diff >= 0 ? '+' : '−') + 'LKR ' + Math.abs(diff).toFixed(2),
+        grid: grid, basePath: path(base), userPath: path(user), yl: yl, xl: xl, rows: rows,
+        chartLabel: 'Your scenario reaches ' + money(user[3]) + ' in year 3, against the AutoVise base of ' + money(base[3]) + '.'
+      }
+    });
+  }
+}
+</script>
+</body>
+</html>
