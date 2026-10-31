@@ -82,6 +82,13 @@ export function templatePitch(f: PitchFacts, insights: SourcedInsight[]): PitchC
   ];
 
   const used = new Set(drivers.flatMap((d) => d.cites));
+  const mt = f.methods;
+  if (mt && mt.dcfValue !== null && mt.cashConversionPct !== null && mt.costOfEquityPct !== null) {
+    valuation.push({
+      text: `As a cross-check, a discounted cash flow model values the shares at ${m(mt.dcfValue)} in year three, converting ${pctU(mt.cashConversionPct)} of profit into free cash flow and discounting at ${pctU(mt.costOfEquityPct)}. The target blends the P/E value (${mt.weightsPct.pe}%), the DCF value (${mt.weightsPct.dcf}%)${mt.dividendValue !== null ? ` and a dividend-discount value (${mt.weightsPct.dividend}%)` : ""}.`,
+    });
+  }
+
   const risks: PitchContent["risks"] = uniqueTitles(negatives.slice(0, 3).map((n) => ({ title: titleOf(n.category), body: strip(n.summary).slice(0, 290) + ".", cites: [n.sourceId] })));
   if (premium && risks.length < 3) {
     risks.push({ title: "Valuation premium", body: `The shares trade at ${num(f.pe.now, 1)}× earnings against ${num(f.pe.sector, 1)}× for the sector; if the premium closes faster, the target falls.`, cites: [] });

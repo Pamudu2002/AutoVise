@@ -128,7 +128,20 @@ export const pitchContentSchema = z.object({
 });
 export type PitchContent = z.infer<typeof pitchContentSchema>;
 
-export type Pitch = PitchContent & { generatedBy: "gemini" | "template"; model?: string | null };
+/**
+ * An approved customer-evidence finding attached to the pitch verbatim (docs/PLAN2.md §7.6). Never
+ * rewritten by the pitch model, and never used by the valuation.
+ */
+export interface CustomerEvidenceItem {
+  section: "competitive_positioning" | "industry_overview" | "risks";
+  text: string;
+  support: "supports" | "contradicts" | "explains" | "qualifies";
+  attribution: string;
+  studyId: string;
+  appendixPath: string | null;
+}
+
+export type Pitch = PitchContent & { generatedBy: "gemini" | "template"; model?: string | null; customerEvidence?: CustomerEvidenceItem[] };
 
 /** Every string in the pitch, with a path for error messages. */
 export function pitchStrings(p: PitchContent): [string, string][] {
@@ -188,3 +201,48 @@ export const feedbackSchema = z.object({
   reason: z.enum(["Didn’t answer", "Wrong number", "Out of date", "No date given", "Other"]).optional(),
   note: z.string().max(500).optional(),
 });
+
+// ─── Customer evidence (docs/PLAN2.md) ────────────────────────────────────
+const evidenceSentiment = z.enum(["positive", "mixed", "negative", "unclear"]);
+const evidenceProduct = z.enum(["mobile", "app", "home_broadband", "air_fibre", "fibre", "satellite", "unclear"]);
+
+/** Coding of one customer record. Theme keys are limited to the study's own keys. */
+export function makeEvidenceCodingSchema(themeKeys: string[]) {
+  const keys = themeKeys.length ? (themeKeys as [string, ...string[]]) : (["none"] as [string, ...string[]]);
+  return z.object({
+    themes: z.array(z.enum(keys)).max(6).describe("Every study theme the record speaks to; may be empty"),
+    sentiment: evidenceSentiment,
+    switching: z.object({
+      value: z.boolean().describe("True only for an explicit change of provider or a kept second connection"),
+      explanation: z.string().max(300).nullable(),
+    }),
+    product_guess: evidenceProduct,
+    product_evidence_quote: z.string().max(300).nullable().describe("Verbatim words that name the product; required for air_fibre"),
+    language: z.enum(["en", "si", "ta", "mixed"]),
+    translation_en: z.string().max(2000).nullable(),
+    flags: z.object({
+      advert: z.boolean(),
+      hearsay: z.boolean(),
+      not_first_hand: z.boolean(),
+      overseas: z.boolean(),
+      irrelevant: z.boolean(),
+    }),
+    confidence: z.number().min(0).max(1),
+  });
+}
+export const EvidenceCodingSchema = makeEvidenceCodingSchema(["price_value", "network", "billing_app", "support", "switching", "install_availability"]);
+export type EvidenceCoding = z.infer<typeof EvidenceCodingSchema>;
+
+export const EvidenceFindingsSchema = z.object({
+  sentences: z
+    .array(
+      z.object({
+        text: z.string().min(20).max(400),
+        support: z.enum(["supports", "contradicts", "explains", "qualifies"]),
+        cited_record_codes: z.array(z.string().regex(/^R\d{3,}$/)).min(1).max(8),
+      }),
+    )
+    .max(3),
+  caveats: z.array(z.string().max(300)).max(4),
+});
+export type EvidenceFindings = z.infer<typeof EvidenceFindingsSchema>;

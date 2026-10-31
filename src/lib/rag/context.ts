@@ -33,8 +33,14 @@ function pitchText(p: Pitch): string {
   ].join("\n");
 }
 
+export interface ChatEvidenceExample {
+  entity: string;
+  platform: string;
+  text: string;
+}
+
 /** The grounding context for the consultant: profile, price, published prediction, pitch, figures and sources. */
-export function buildChatContext(data: CompanyPageData, retrieved: RetrievedChunk[], startIndex = 1) {
+export function buildChatContext(data: CompanyPageData, retrieved: RetrievedChunk[], startIndex = 1, examples: ChatEvidenceExample[] = []) {
   const { company: co, prediction: p } = data;
   const cur = co.currency;
   const lines: string[] = [];
@@ -56,6 +62,16 @@ export function buildChatContext(data: CompanyPageData, retrieved: RetrievedChun
       `P/E: ${multiple(a.pe0)} today, exit ${multiple(a.exitPe.final)} (before qualitative ${multiple(a.exitPe.quant)}); sector benchmark ${multiple(a.sector.pe)}.`,
       `Qualitative composite ${toHundred(a.qualitative.composite)}/100, price effect ${signedPct(a.qualitative.tiltPct)} (capped at ±${pct(a.model.tiltCap, 0)}).`,
       `Dividend cross-check: ${a.ddm ? `weight ${pct(a.ddm.weight, 0)}, cost of equity ${pct(a.ddm.costOfEquity)}` : "not used (no dividend)"}.`,
+      `Discounted cash flow: ${
+        a.dcf
+          ? `weight ${pct(a.dcf.weight, 0)}; free cash flow = EPS × ${pct(a.dcf.fcfConversion)} cash conversion; cost of equity ${pct(a.dcf.costOfEquity)}; growth fades to ${pct(a.dcf.terminalGrowth)} over ${a.dcf.fadeYears} years`
+          : "not used for this company"
+      }.`,
+      ...(a.methods
+        ? [
+            `Year-3 values before the qualitative adjustment: P/E ${money(a.methods.pe, cur)} (weight ${pct(a.methods.weights.pe, 0)})${a.methods.dcf !== null && a.methods.weights.dcf > 0 ? `, DCF ${money(a.methods.dcf, cur)} (weight ${pct(a.methods.weights.dcf, 0)})` : ""}${a.methods.ddm !== null && a.methods.weights.ddm > 0 ? `, dividend discount ${money(a.methods.ddm, cur)} (weight ${pct(a.methods.weights.ddm, 0)})` : ""}.`,
+          ]
+        : []),
       `Waterfall: ${p.valuationBreakdown.map((w) => `${w.label} ${w.key === "current" || w.key === "target" ? money(w.value, cur) : (w.value >= 0 ? "+" : "−") + money(Math.abs(w.value), cur)}`).join(" → ")}.`,
       `Factor scores (0–100): ${p.factorScores.map((f) => `${FACTOR_LABELS[f.key]} ${toHundred(f.score)} — ${f.justification}`).join("; ")}`,
       `Key ratios: ROE ${pct(a.ratios.roe)}, net margin ${pct(a.ratios.netMargin)}, debt/equity ${a.ratios.debtToEquity?.toFixed(2) ?? "n/a"}, dividend yield ${pct(a.ratios.dividendYield)}, P/B ${multiple(a.ratios.pb)}.`,
@@ -83,6 +99,24 @@ export function buildChatContext(data: CompanyPageData, retrieved: RetrievedChun
     for (const c of citations) lines.push(`${c.id}: [${c.label}] ${c.quote ? cut(c.quote, 300) : ""}`);
   }
 
+  // Approved customer-evidence findings (PLAN2): context for the case, never an input to the numbers.
+  const evidence = p?.pitch?.customerEvidence ?? [];
+  if (evidence.length || examples.length) {
+    const appendix = evidence.find((e) => e.appendixPath)?.appendixPath ?? null;
+    lines.push("\nCUSTOMER EVIDENCE (exploratory sample of public customer accounts; not representative; does not affect the prediction):");
+    let n = 1;
+    for (const e of evidence) {
+      const id = `E${n++}`;
+      citations.push({ id, label: e.attribution, page: null, quote: e.text, url: appendix });
+      lines.push(`${id}: [${e.attribution}] ${e.text}`);
+    }
+    for (const x of examples) {
+      const id = `E${n++}`;
+      citations.push({ id, label: `Example customer account, ${x.entity}`, page: null, quote: cut(x.text, 300), url: appendix });
+      lines.push(`${id}: [Example account, ${x.entity}, ${x.platform}, paraphrased] ${cut(x.text, 400)}`);
+    }
+  }
+
   const passages = retrieved.map((r, i) => {
     const id = `R${startIndex + i}`;
     const label = `${r.title.replace(/ Report$/, "")}${r.page ? `, p.${r.page}` : ""}`;
@@ -99,7 +133,7 @@ export function urlFor(data: CompanyPageData, versionId: string | null): string 
   return data.reports.find((r) => r.versionId === versionId)?.url ?? null;
 }
 
-/** Ids like [S3] or [R2] mentioned in an answer. */
+/** Ids like [S3], [R2] or [E1] mentioned in an answer. */
 export function citedIds(text: string): string[] {
-  return [...new Set([...text.matchAll(/\[([SR]\d{1,3})\]/g)].map((m) => m[1]))];
+  return [...new Set([...text.matchAll(/\[([SRE]\d{1,3})\]/g)].map((m) => m[1]))];
 }

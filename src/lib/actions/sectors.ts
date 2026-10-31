@@ -17,13 +17,14 @@ const sectorSchema = z.object({
   benchmarkGrowthPct: z.coerce.number().min(-20).max(50),
   benchmarkRoePct: z.coerce.number().min(-50).max(100),
   notes: z.string().trim().max(300).optional(),
+  dcfApplicable: z.boolean().default(true),
 });
 
 export async function saveSector(input: z.input<typeof sectorSchema>): Promise<ActionResult> {
   return run(async () => {
     const admin = await requireAdmin("sectors.write");
     const d = sectorSchema.parse(input);
-    const values = { name: d.name, benchmarkPe: d.benchmarkPe, benchmarkGrowth: d.benchmarkGrowthPct / 100, benchmarkRoe: d.benchmarkRoePct / 100, notes: d.notes || null, updatedAt: new Date() };
+    const values = { name: d.name, benchmarkPe: d.benchmarkPe, benchmarkGrowth: d.benchmarkGrowthPct / 100, benchmarkRoe: d.benchmarkRoePct / 100, notes: d.notes || null, dcfApplicable: d.dcfApplicable, updatedAt: new Date() };
     const dupe = await db.query.sectors.findFirst({ where: eq(sectors.name, d.name) });
     if (dupe && dupe.id !== d.id) throw new UserError(`A sector called ${d.name} already exists.`);
     if (d.id) {

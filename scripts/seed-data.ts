@@ -9,13 +9,14 @@ export interface SeedSector {
   growth: number;
   roe: number;
   notes: string;
+  dcf?: boolean;
 }
 
 export const SECTORS: SeedSector[] = [
   { name: "Logistics", pe: 11.8, growth: 0.084, roe: 0.123, notes: "Median of 7 listed logistics peers." },
   { name: "Telecommunications", pe: 14.0, growth: 0.06, roe: 0.12, notes: "Mobile and fixed operators." },
   { name: "Plantations", pe: 9.5, growth: 0.03, roe: 0.09, notes: "Tea and rubber estates." },
-  { name: "Banking", pe: 8.5, growth: 0.09, roe: 0.14, notes: "Licensed commercial banks. Debt/equity is not meaningful." },
+  { name: "Banking", pe: 8.5, growth: 0.09, roe: 0.14, notes: "Licensed commercial banks. Debt/equity and DCF are not meaningful.", dcf: false },
   { name: "Manufacturing", pe: 11.0, growth: 0.07, roe: 0.11, notes: "Building materials and industrials." },
   { name: "Leisure", pe: 16.0, growth: 0.1, roe: 0.08, notes: "Hotels and travel." },
   { name: "Energy", pe: 9.0, growth: 0.05, roe: 0.1, notes: "Power generation and distribution." },

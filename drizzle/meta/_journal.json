@@ -8,6 +8,20 @@
       "when": 1792189571220,
       "tag": "0000_init",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792213556017,
+      "tag": "0001_sector_dcf",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793124879821,
+      "tag": "0002_customer_evidence",
+      "breakpoints": true
     }
   ]
 }

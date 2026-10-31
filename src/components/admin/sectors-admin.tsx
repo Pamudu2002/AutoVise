@@ -16,11 +16,12 @@ interface Row {
   growth: number;
   roe: number;
   notes: string | null;
+  dcf: boolean;
   companies: number;
   updatedAt: string;
 }
 
-const empty = { name: "", pe: "10", growth: "6", roe: "12", notes: "" };
+const empty = { name: "", pe: "10", growth: "6", roe: "12", notes: "", dcf: true };
 
 /** Sector benchmarks: P/E, long-run growth and ROE that every company's valuation leans toward. */
 export function SectorsAdmin({ rows, canEdit }: { rows: Row[]; canEdit: boolean }) {
@@ -31,10 +32,10 @@ export function SectorsAdmin({ rows, canEdit }: { rows: Row[]; canEdit: boolean 
   const open = (r: Row | "new") => {
     setError(null);
     setEdit(r);
-    setF(r === "new" ? empty : { name: r.name, pe: String(r.pe), growth: String(+(r.growth * 100).toFixed(2)), roe: String(+(r.roe * 100).toFixed(2)), notes: r.notes ?? "" });
+    setF(r === "new" ? empty : { name: r.name, pe: String(r.pe), growth: String(+(r.growth * 100).toFixed(2)), roe: String(+(r.roe * 100).toFixed(2)), notes: r.notes ?? "", dcf: r.dcf });
   };
   const save = async () => {
-    const res = await exec(() => saveSector({ id: edit === "new" ? undefined : edit!.id, name: f.name, benchmarkPe: f.pe, benchmarkGrowthPct: f.growth, benchmarkRoePct: f.roe, notes: f.notes }));
+    const res = await exec(() => saveSector({ id: edit === "new" ? undefined : edit!.id, name: f.name, benchmarkPe: f.pe, benchmarkGrowthPct: f.growth, benchmarkRoePct: f.roe, notes: f.notes, dcfApplicable: f.dcf }));
     if (res.ok) setEdit(null);
   };
 
@@ -60,6 +61,7 @@ export function SectorsAdmin({ rows, canEdit }: { rows: Row[]; canEdit: boolean 
               <th className="r">P/E benchmark</th>
               <th className="r">Long-run growth</th>
               <th className="r">ROE benchmark</th>
+              <th>DCF</th>
               <th className="r">Companies</th>
               <th>Updated</th>
               <th className="r">Actions</th>
@@ -77,6 +79,7 @@ export function SectorsAdmin({ rows, canEdit }: { rows: Row[]; canEdit: boolean 
                 <td className="r num">{multiple(r.pe)}</td>
                 <td className="r num">{pct(r.growth)}</td>
                 <td className="r num">{pct(r.roe)}</td>
+                <td>{r.dcf ? <span className="pill pill-approved">Used</span> : <span className="pill pill-draft">Not used</span>}</td>
                 <td className="r num">{r.companies}</td>
                 <td className="tnum">{fmtDate(r.updatedAt)}</td>
                 <td className="r">
@@ -146,6 +149,13 @@ export function SectorsAdmin({ rows, canEdit }: { rows: Row[]; canEdit: boolean 
               </div>
             ))}
           </div>
+          <label style={{ display: "flex", gap: 10, alignItems: "flex-start", fontSize: 14, cursor: "pointer" }}>
+            <input type="checkbox" className="check" checked={f.dcf} onChange={(e) => setF({ ...f, dcf: e.target.checked })} style={{ marginTop: 2 }} />
+            <span>
+              Use discounted cash flow for this sector
+              <span className="hint" style={{ display: "block" }}>Turn off where free cash flow is not meaningful, such as banks and insurers.</span>
+            </span>
+          </label>
           <div className="field">
             <label className="label" htmlFor="s-notes">
               Notes

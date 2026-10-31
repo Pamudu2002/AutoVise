@@ -8,6 +8,7 @@ const COLOR: Record<WaterfallStep["key"], string> = {
   current: "var(--c1)",
   earnings: "var(--pos)",
   multiple: "var(--pos)",
+  dcf: "var(--pos)",
   dividend: "var(--pos)",
   qualitative: "var(--pos)",
   target: "var(--c2)",

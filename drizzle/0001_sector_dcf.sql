@@ -1,0 +1,1 @@
+ALTER TABLE "sectors" ADD COLUMN "dcf_applicable" boolean DEFAULT true NOT NULL;

@@ -24,7 +24,7 @@ const textOf = (m: Msg) =>
     .filter((p) => p.type === "text")
     .map((p) => (p as { text: string }).text)
     .join("");
-const strip = (t: string) => t.replace(/\s?\[(?:[SR]\d{1,3})(?:,\s*[SR]\d{1,3})*\]/g, "");
+const strip = (t: string) => t.replace(/\s?\[(?:[SRE]\d{1,3})(?:,\s*[SRE]\d{1,3})*\]/g, "");
 
 function errorText(err: Error | undefined): string | null {
   if (!err) return null;
@@ -191,7 +191,7 @@ function BotMessage({ m, streaming, known, onCite }: { m: Msg; streaming: boolea
   const text = textOf(m);
   const dbId = m.metadata?.dbId;
   const fromMeta = m.metadata?.citations ?? [];
-  const ids = [...new Set([...text.matchAll(/\[([SR]\d{1,3})\]/g)].map((x) => x[1]))];
+  const ids = [...new Set([...text.matchAll(/\[([SRE]\d{1,3})\]/g)].map((x) => x[1]))];
   const cites: CiteSource[] = fromMeta.length
     ? fromMeta.map((c) => ({ ...c, url: c.url }))
     : (ids.map((id) => known.get(id)).filter(Boolean) as CiteSource[]);

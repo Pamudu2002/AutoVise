@@ -57,6 +57,9 @@ export default async function CompanyReportsPage({ params }: { params: Promise<{
         <Link className="tab" href={`/admin/predictions?company=${c.slug}`} role="tab" aria-selected="false">
           Prediction
         </Link>
+        <Link className="tab" href={`/admin/companies/${c.slug}/evidence`} role="tab" aria-selected="false">
+          Customer evidence
+        </Link>
       </div>
       {canWrite && <ReportUploader companyId={c.id} blobEnabled={env.hasBlob} />}
       <ReportsTable rows={rows} ticker={c.ticker} publishedTarget={published?.scenarios.base.y3 ?? null} currency={c.currency} blobEnabled={env.hasBlob} canWrite={canWrite} />

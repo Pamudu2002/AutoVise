@@ -57,10 +57,10 @@ export default async function MethodologyPage() {
         <p>The numbers come from deterministic code, never from an AI model. The base-case target is built in four steps:</p>
         <div className="card" style={{ padding: "20px 22px", display: "flex", flexDirection: "column", gap: 10, boxShadow: "none" }}>
           <code className="num" style={{ fontSize: 15, lineHeight: 1.6, color: "var(--text)" }}>
-            Target = EPS<sub>year 3</sub> × Exit P/E, adjusted for qualitative factors
+            Target = {pct(1 - v.dcf.weight - v.ddm.weight, 0)} × P/E value + {pct(v.dcf.weight, 0)} × DCF value + {pct(v.ddm.weight, 0)} × dividend value, adjusted for qualitative factors
           </code>
           <span style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.6 }}>
-            EPS<sub>year n</sub> = EPS<sub>year n−1</sub> × (1 + g<sub>n</sub>), where g<sub>n</sub> starts at the blended growth rate and eases toward the sector rate each year
+            EPS<sub>year n</sub> = EPS<sub>year n−1</sub> × (1 + g<sub>n</sub>), where g<sub>n</sub> starts at the blended growth rate and eases toward the sector rate each year. P/E value = EPS<sub>year 3</sub> × exit P/E.
           </span>
         </div>
         <ul>
@@ -73,7 +73,13 @@ export default async function MethodologyPage() {
             benchmark, within {v.minExitPe}× to {v.maxExitPe}×.
           </li>
           <li>
-            <strong>Dividend cross-check.</strong> For dividend payers, a dividend-discount value (cost of equity {pct(v.ddm.costOfEquity, 0)}) is blended in at {pct(v.ddm.weight, 0)}.
+            <strong>Discounted cash flow (DCF).</strong> Free cash flow to shareholders is estimated as EPS × the company&apos;s cash conversion (the median of operating cash flow less capital
+            spending, divided by profit, over its reported years). It grows with earnings to year three, then fades to a long-run rate of at most {pct(v.terminalGrowthCap, 0)} over{" "}
+            {v.dcf.fadeYears} years, and is discounted at a {pct(v.costOfEquity, 0)} cost of equity with a terminal value. It carries {pct(v.dcf.weight, 0)} of the target. DCF is skipped for
+            sectors where free cash flow is not meaningful (such as banks) and for companies with negative free cash flow; its weight then moves to the P/E value.
+          </li>
+          <li>
+            <strong>Dividend cross-check.</strong> For dividend payers, a dividend-discount value at the same cost of equity is blended in at {pct(v.ddm.weight, 0)}.
           </li>
           <li>
             <strong>Qualitative tilt.</strong> A small adjustment for strengths and weaknesses that do not show up in the numbers yet. It can shift growth by up to ±{pct(v.qualGrowthCap, 0)} points

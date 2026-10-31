@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { CitationChip, type CiteSource } from "@/components/citation";
 import { FactorRadar } from "@/components/factor-radar";
 import { ValuationWaterfall } from "@/components/valuation-waterfall";
@@ -17,6 +18,8 @@ interface Props {
   epsSource: CiteSource | null;
   onCite: (s: CiteSource) => void;
   disclaimer: string;
+  /** Public methodology appendix of the customer-evidence study, when one is published. */
+  evidencePath?: string | null;
 }
 
 type Read = { text: string; cls: string };
@@ -28,7 +31,7 @@ const better = (v: number | null, ref: number | null, higherIsBetter = true): Re
   return good ? { text: "Stronger", cls: "delta up" } : { text: "Weaker", cls: "delta down" };
 };
 
-export function HowWeGotHere({ a, waterfall, factors, currency, ticker, epsSource, onCite, disclaimer }: Props) {
+export function HowWeGotHere({ a, waterfall, factors, currency, ticker, epsSource, onCite, disclaimer, evidencePath }: Props) {
   const r = a.ratios;
   const premium = a.pe0 > a.sector.pe * 1.05;
   const discount = a.pe0 < a.sector.pe * 0.95;
@@ -50,6 +53,12 @@ export function HowWeGotHere({ a, waterfall, factors, currency, ticker, epsSourc
     { name: "P/E — today vs exit", ours: `${multiple(a.exitPe.final)} exit`, ref: `${multiple(a.pe0)} now`, source: <span style={muted}>Price {a.priceDate ? `of ${a.priceDate}` : "today"}</span> },
     { name: "Sector P/E benchmark", ours: multiple(a.sector.pe), ref: a.sector.name, source: <span style={muted}>Sector file</span> },
     { name: "Qualitative tilt", ours: signedPct(a.qualitative.tiltPct), ref: `cap ±${pct(a.model.tiltCap, 0)}`, source: <span style={muted}>Factor scores, below</span> },
+    {
+      name: "Discounted cash flow",
+      ours: a.dcf ? `${pct(a.dcf.weight, 0)} weight` : "Not used",
+      ref: a.dcf ? `${pct(a.dcf.fcfConversion, 0)} cash conversion` : "—",
+      source: <span style={muted}>{a.dcf ? `${pct(a.dcf.costOfEquity)} cost of equity, ${pct(a.dcf.terminalGrowth)} terminal growth after ${a.dcf.fadeYears} years` : "See notes below"}</span>,
+    },
     { name: "Dividend cross-check", ours: a.ddm ? `${pct(a.ddm.weight, 0)} weight` : "Not used", ref: a.ddm ? `${pct(a.ddm.costOfEquity)} cost of equity` : "No dividend", source: <span style={muted}>Dividend discount model</span> },
     { name: "Horizon", ours: `${a.horizonYears} years`, ref: fmtMonthYear(a.horizonDate), source: <span style={muted}>—</span> },
   ];
@@ -74,6 +83,37 @@ export function HowWeGotHere({ a, waterfall, factors, currency, ticker, epsSourc
           <p style={muted}>From today&apos;s price to the base-case target, in {currency} per share.</p>
         </div>
         <ValuationWaterfall steps={waterfall} currency={currency} />
+        {a.methods && (
+          <div className="tbl-box" style={{ borderRadius: 10 }}>
+            <table className="tbl">
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th className="r">Value in year 3</th>
+                  <th className="r">Weight</th>
+                  <th>What it measures</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(
+                  [
+                    ["P/E multiple", a.methods.pe, a.methods.weights.pe, "Projected earnings × the exit P/E"],
+                    ["Discounted cash flow", a.methods.dcf, a.methods.weights.dcf, "Future free cash flow, discounted to that date"],
+                    ["Dividend discount", a.methods.ddm, a.methods.weights.ddm, "Future dividends, discounted to that date"],
+                  ] as const
+                ).map(([name, value, weight, what]) => (
+                  <tr key={name}>
+                    <td style={{ fontWeight: 500 }}>{name}</td>
+                    <td className="r num">{value === null || weight === 0 ? "Not used" : money(value, currency)}</td>
+                    <td className="r num">{pct(weight, 0)}</td>
+                    <td style={muted}>{what}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {a.methods && <p style={muted}>Values are before the qualitative adjustment. The waterfall&apos;s cross-check steps are each method&apos;s weight × its difference from the P/E value.</p>}
       </section>
 
       <section className="card" style={{ padding: 24, display: "flex", flexDirection: "column", gap: 16 }}>
@@ -168,6 +208,17 @@ export function HowWeGotHere({ a, waterfall, factors, currency, ticker, epsSourc
           </table>
         </div>
       </section>
+      {evidencePath && (
+        <section className="card" style={{ padding: 24, display: "flex", flexDirection: "column", gap: 8 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 600 }}>Customer evidence</h3>
+          <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.6 }}>
+            The pitch quotes a few findings from an exploratory study of public customer accounts. They add context only: the study is not an input to the valuation above, and none of these numbers depend on it.
+          </p>
+          <Link href={evidencePath} prefetch={false} style={{ fontSize: 14, alignSelf: "flex-start" }}>
+            Read how the customer evidence was collected and checked
+          </Link>
+        </section>
+      )}
       <Disclaimer text={disclaimer} icon={false} />
     </div>
   );

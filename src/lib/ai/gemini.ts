@@ -24,4 +24,4 @@ export function requireGemini() {
 }
 
 export const modelVersion = () =>
-  env.hasGemini ? `engine-1 · ${env.flashModel} · ${env.proModel}` : "engine-1 · deterministic";
+  env.hasGemini ? `engine-2 · ${env.flashModel} · ${env.proModel}` : "engine-2 · deterministic";

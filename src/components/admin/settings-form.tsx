@@ -40,8 +40,11 @@ const MODEL: Num[] = [
   { path: "valuation.peConvergence", label: "P/E convergence", unit: "%", hint: "How far the exit P/E moves toward the sector.", pct: true },
   { path: "valuation.scenario.growthShift", label: "Scenario growth shift", unit: "± pp", hint: "Bear and bull growth difference.", pct: true },
   { path: "valuation.scenario.peShift", label: "Scenario P/E shift", unit: "± %", hint: "Bear and bull multiple difference.", pct: true },
+  { path: "valuation.dcf.weight", label: "DCF weight", unit: "%", hint: "Share of the target from discounted cash flow. 0 turns it off.", pct: true },
+  { path: "valuation.dcf.fadeYears", label: "DCF fade period", unit: "years", hint: "Years for growth to fade to the terminal rate." },
   { path: "valuation.ddm.weight", label: "Dividend cross-check weight", unit: "%", hint: "0 turns the dividend model off.", pct: true },
-  { path: "valuation.ddm.costOfEquity", label: "Cost of equity", unit: "%", hint: "Discount rate for the dividend model.", pct: true },
+  { path: "valuation.costOfEquity", label: "Cost of equity", unit: "%", hint: "Discount rate for DCF and dividends.", pct: true },
+  { path: "valuation.terminalGrowthCap", label: "Terminal growth cap", unit: "%", hint: "Long-run growth limit after the fade.", pct: true },
 ];
 
 function NumField({ s, value, onChange, disabled }: { s: Num; value: number; onChange: (v: number) => void; disabled: boolean }) {
@@ -84,7 +87,8 @@ export function SettingsForm({ initial, canEdit }: { initial: AppSettings; canEd
   const total = w.upside + w.quality + w.confidence;
   const gw = s.valuation.growthWeights;
   const gTotal = Math.round((gw.historical + gw.sustainable + gw.sector) * 100);
-  const bad = total !== 100;
+  const peShare = Math.round((1 - s.valuation.dcf.weight - s.valuation.ddm.weight) * 100);
+  const bad = total !== 100 || peShare < 10;
   const upd = (path: string, v: unknown) => setS((x) => set(x, path, v));
 
   useEffect(() => {
@@ -119,7 +123,7 @@ export function SettingsForm({ initial, canEdit }: { initial: AppSettings; canEd
               </h2>
               <p style={{ fontSize: 13, color: "var(--muted)" }}>How the 0–100 score blends upside, quality and confidence. Must add up to 100.</p>
             </div>
-            <span className={bad ? "pill pill-failed" : "pill pill-approved"}>Total {total}</span>
+            <span className={total !== 100 ? "pill pill-failed" : "pill pill-approved"}>Total {total}</span>
           </div>
           {(
             [
@@ -143,7 +147,7 @@ export function SettingsForm({ initial, canEdit }: { initial: AppSettings; canEd
               </div>
             </div>
           ))}
-          {bad && (
+          {total !== 100 && (
             <span className="err" role="alert">
               Weights add up to {total}. Adjust them to 100 to save.
             </span>
@@ -172,7 +176,10 @@ export function SettingsForm({ initial, canEdit }: { initial: AppSettings; canEd
               </h2>
               <p style={{ fontSize: 13, color: "var(--muted)" }}>Growth blend, mean reversion, scenarios and the dividend cross-check. The growth weights are normalised automatically.</p>
             </div>
-            <span className="pill pill-draft">Growth weights {gTotal}%</span>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <span className="pill pill-draft">Growth weights {gTotal}%</span>
+              <span className={peShare < 10 ? "pill pill-failed" : "pill pill-draft"}>P/E method {peShare}%</span>
+            </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))", gap: 20 }}>
             {MODEL.map((c) => (

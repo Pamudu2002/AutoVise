@@ -13,7 +13,10 @@ export const DEFAULT_VALUATION_SETTINGS: ValuationSettings = {
   qualMultipleCap: 0.15,
   tiltCap: 0.1,
   scenario: { growthShift: 0.04, peShift: 0.15 },
-  ddm: { weight: 0.1, costOfEquity: 0.14, terminalGrowthCap: 0.06 },
+  costOfEquity: 0.14,
+  terminalGrowthCap: 0.06,
+  dcf: { weight: 0.3, fadeYears: 5 },
+  ddm: { weight: 0.1 },
   factorWeights: {
     management: 1,
     growth_outlook: 1,

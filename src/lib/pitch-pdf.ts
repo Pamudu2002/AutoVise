@@ -151,6 +151,11 @@ export async function buildPitchPdf(data: CompanyPageData, disclaimer: string): 
     p.pitch.valuation.paragraphs.forEach((x) => para(x.text));
     heading("Risks");
     p.pitch.risks.forEach((r) => para(`• ${r.title ? r.title + ": " : ""}${r.body}`));
+    const evidence = p.pitch.customerEvidence ?? [];
+    if (evidence.length) {
+      heading("Customer evidence (exploratory)");
+      evidence.forEach((e) => para(`• ${e.text} (${e.attribution}; not a representative survey; not an input to the valuation)`));
+    }
     heading("Catalysts");
     p.pitch.catalysts.forEach((r) => para(`• ${r.title ? r.title + ": " : ""}${r.body}`));
     heading("What would change our view");
@@ -163,6 +168,14 @@ export async function buildPitchPdf(data: CompanyPageData, disclaimer: string): 
   para(
     `Base EPS ${money(a.eps0, cur)} (FY${a.epsYear}); EPS growth ${pct(a.growth.blended)} in year 1 easing toward the sector's ${pct(a.growth.sector)}; P/E ${multiple(a.pe0)} today, ${multiple(a.exitPe.final)} at exit (sector ${multiple(a.sector.pe)}); qualitative adjustment ${signedPct(a.qualitative.tiltPct)}.`,
   );
+  if (a.methods) {
+    const w = a.methods.weights;
+    para(
+      `Year-3 value by method: P/E ${money(a.methods.pe, cur)} (${pct(w.pe, 0)})${a.methods.dcf !== null && w.dcf > 0 ? `; discounted cash flow ${money(a.methods.dcf, cur)} (${pct(w.dcf, 0)})` : ""}${a.methods.ddm !== null && w.ddm > 0 ? `; dividend discount ${money(a.methods.ddm, cur)} (${pct(w.ddm, 0)})` : ""}.`,
+      9.5,
+      muted,
+    );
+  }
   para(`Factor scores (0-100): ${p.factorScores.map((f) => `${FACTOR_LABELS[f.key]} ${toHundred(f.score)}`).join(", ")}.`, 9.5, muted);
   if (p.citations?.length) {
     heading("Sources");

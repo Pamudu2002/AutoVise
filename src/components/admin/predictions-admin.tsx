@@ -51,6 +51,12 @@ function compareRows(d: PredictionSummary, p: PredictionSummary | null): Row[] {
     row(`Base EPS (FY${a.epsYear ?? "—"})`, money(a.eps0, d.currency), b ? money(b.eps0, d.currency) : null, b && b.epsYear !== a.epsYear ? `New full-year figures (FY${a.epsYear})` : ""),
     row("EPS growth, first year", pct(a.growth.blended), b ? pct(b.growth.blended) : null, `Record ${pct(a.growth.historical)}, sustainable ${pct(a.growth.sustainable)}, sector ${pct(a.growth.sector)}`),
     row("Exit P/E", multiple(a.exitPe.final), b ? multiple(b.exitPe.final) : null, `Today ${multiple(a.pe0)}, sector ${multiple(a.sector.pe)}`),
+    row(
+      "DCF value, year 3",
+      a.methods?.dcf != null && a.methods.weights.dcf > 0 ? `${money(a.methods.dcf, d.currency)} · ${pct(a.methods.weights.dcf, 0)}` : "Not used",
+      b ? (b.methods?.dcf != null && b.methods.weights.dcf > 0 ? `${money(b.methods.dcf, d.currency)} · ${pct(b.methods.weights.dcf, 0)}` : "Not used") : null,
+      a.dcf ? `Cash conversion ${pct(a.dcf.fcfConversion)}, cost of equity ${pct(a.dcf.costOfEquity)}` : "",
+    ),
     row("Qualitative tilt", signedPct(a.qualitative.tiltPct), b ? signedPct(b.qualitative.tiltPct) : null, `Composite ${toHundred(a.qualitative.composite)}/100`),
     row("Debt / equity input", a.ratios.debtToEquity === null ? "n/a" : num(a.ratios.debtToEquity), b ? (b.ratios.debtToEquity === null ? "n/a" : num(b.ratios.debtToEquity)) : null),
     ...FACTOR_KEYS.map((k) => {

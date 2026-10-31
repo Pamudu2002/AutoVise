@@ -1,9 +1,10 @@
 "use client";
 
-import { AlertTriangle, ArrowDownRight, ArrowUpRight, CalendarDays, ChevronRight } from "lucide-react";
+import { AlertTriangle, ArrowDownRight, ArrowUpRight, CalendarDays, ChevronRight, MessagesSquare } from "lucide-react";
+import Link from "next/link";
 import { CitationChip, type CiteSource } from "@/components/citation";
 import { Disclaimer } from "@/components/ui/figures";
-import type { Pitch } from "@/lib/ai/schemas";
+import type { CustomerEvidenceItem, Pitch } from "@/lib/ai/schemas";
 import { money } from "@/lib/format";
 
 interface Props {
@@ -29,6 +30,9 @@ export function PitchSections({ pitch, sources, bear, bull, currency, onCite, on
         </span>
       ));
   const figureColor = (f: string) => (/^[−-]/.test(f.trim()) ? "var(--neg)" : "var(--pos)");
+  const evidence = pitch.customerEvidence ?? [];
+  const context = evidence.filter((e) => e.section !== "risks");
+  const evidenceRisks = evidence.filter((e) => e.section === "risks");
 
   return (
     <article className="card" role="tabpanel" aria-label="The Pitch" style={{ padding: "clamp(20px, 4vw, 32px)", display: "flex", flexDirection: "column", gap: 36 }}>
@@ -61,6 +65,8 @@ export function PitchSections({ pitch, sources, bear, bull, currency, onCite, on
         </div>
       </section>
 
+      {context.length > 0 && <CustomerEvidence items={context} />}
+
       <section style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 720 }}>
         <span className="eyebrow">03 · Valuation walkthrough</span>
         {pitch.valuation.paragraphs.map((p, i) => (
@@ -85,6 +91,14 @@ export function PitchSections({ pitch, sources, bear, bull, currency, onCite, on
                   {r.title && <strong style={{ fontWeight: 600 }}>{r.title}. </strong>}
                   {r.body}
                   {chips(r.cites)}
+                </div>
+              </li>
+            ))}
+            {evidenceRisks.map((e) => (
+              <li key={e.text} style={{ display: "flex", gap: 10 }}>
+                <MessagesSquare size={16} style={{ color: "var(--warn)", flex: "none", marginTop: 3 }} aria-hidden />
+                <div style={{ lineHeight: 1.6 }}>
+                  {e.text} <EvidenceAttribution item={e} />
                 </div>
               </li>
             ))}
@@ -133,5 +147,45 @@ export function PitchSections({ pitch, sources, bear, bull, currency, onCite, on
         </span>
       </div>
     </article>
+  );
+}
+
+function EvidenceAttribution({ item }: { item: CustomerEvidenceItem }) {
+  return (
+    <span style={{ display: "block", fontSize: 12.5, color: "var(--muted)" }}>
+      {item.attribution}.{" "}
+      {item.appendixPath ? (
+        <Link href={item.appendixPath} prefetch={false}>
+          How this was collected
+        </Link>
+      ) : (
+        "Not a representative survey."
+      )}
+    </span>
+  );
+}
+
+/** Approved customer-evidence findings, quoted as approved, with the exploratory-sample caveat. */
+function CustomerEvidence({ items }: { items: CustomerEvidenceItem[] }) {
+  const label = { competitive_positioning: "Competitive positioning", industry_overview: "Industry overview", risks: "Risks" } as const;
+  return (
+    <section style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 760 }} aria-labelledby="ce-title">
+      <span className="eyebrow" id="ce-title">
+        Customer evidence · exploratory
+      </span>
+      <div style={{ padding: 16, borderRadius: 12, border: "1px dashed var(--border-strong)", display: "flex", flexDirection: "column", gap: 14 }}>
+        {items.map((e) => (
+          <div key={e.text} style={{ display: "flex", gap: 10 }}>
+            <MessagesSquare size={16} style={{ color: "var(--muted)", flex: "none", marginTop: 4 }} aria-hidden />
+            <div style={{ lineHeight: 1.6, fontSize: 15 }}>
+              <span style={{ fontSize: 12, fontWeight: 600, color: "var(--muted)", display: "block" }}>{label[e.section]}</span>
+              {e.text}
+              <EvidenceAttribution item={e} />
+            </div>
+          </div>
+        ))}
+        <p style={{ fontSize: 12.5, color: "var(--muted)" }}>Public customer accounts add context to the case. They describe the records collected, not all customers, and they do not change the price prediction.</p>
+      </div>
+    </section>
   );
 }

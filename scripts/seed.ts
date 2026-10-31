@@ -1,7 +1,8 @@
 /**
  * Seeds the super-admin, sectors, sample companies (with generated sample report PDFs, extracted
  * figures, insights, price history and events), past predictions for the track record, current
- * predictions computed by the real valuation engine, and sample chat feedback.
+ * predictions computed by the real valuation engine, sample chat feedback and a demo customer-evidence
+ * study (fictional operators) whose approved findings are attached to the STEL pitch.
  *
  *   npm run db:seed              # first run
  *   npm run db:seed -- --reset   # wipe all data and seed again
@@ -78,7 +79,7 @@ async function main() {
   // ── Sectors ──────────────────────────────────────────────────────────
   const sectorRows = await db
     .insert(s.sectors)
-    .values(SECTORS.map((x) => ({ name: x.name, benchmarkPe: x.pe, benchmarkGrowth: x.growth, benchmarkRoe: x.roe, notes: x.notes })))
+    .values(SECTORS.map((x) => ({ name: x.name, benchmarkPe: x.pe, benchmarkGrowth: x.growth, benchmarkRoe: x.roe, notes: x.notes, dcfApplicable: x.dcf ?? true })))
     .returning();
   const sectorId = new Map(sectorRows.map((r) => [r.name, r.id]));
 
@@ -390,7 +391,7 @@ async function main() {
         latestBalance: built.latestBalance,
         latestPeriodEnd: built.latestPeriodEnd,
         sharesOutstanding: c.sharesMn * 1e6,
-        sector: { name: sec.name, pe: sec.pe, growth: sec.growth, roe: sec.roe },
+        sector: { name: sec.name, pe: sec.pe, growth: sec.growth, roe: sec.roe, dcf: sec.dcf ?? true },
         factorScores: factors,
         asOf: made,
         settings: DEFAULT_SETTINGS.valuation,
@@ -468,6 +469,11 @@ async function main() {
       createdAt: new Date(at.getTime() + 4000),
     });
   }
+
+  // ── Customer evidence (docs/PLAN2.md): a demo study with fictional operators ──
+  const { seedEvidence } = await import("./seed-evidence");
+  const ev = await seedEvidence({ companyId: companyIds.get("STEL")!, coderId: analyst.id, checkerId: reviewer.id, collectionDate: isoDate(daysAgo(10)) });
+  console.log(`  STEL  customer-evidence study: ${ev.records} records, ${ev.findings} approved findings, ${ev.pitchesUpdated} pitch(es) updated`);
 
   await db.insert(s.auditLogs).values({ actorId: superAdmin.id, actorEmail: superAdmin.email, action: "seed.completed", entity: "system", entityId: null, after: { companies: COMPANIES.length, reports: reportCount } });
 

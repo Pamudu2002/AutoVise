@@ -9,6 +9,7 @@ import {
   jsonb,
   pgEnum,
   pgTable,
+  primaryKey,
   smallint,
   text,
   timestamp,
@@ -24,7 +25,7 @@ import type {
   ScenarioSet,
   WaterfallStep,
 } from "@/lib/valuation/types";
-import type { Citation, Pitch } from "@/lib/ai/schemas";
+import type { Citation, EvidenceCoding, Pitch } from "@/lib/ai/schemas";
 
 const tsvector = customType<{ data: string }>({
   dataType() {
@@ -89,6 +90,8 @@ export const sectors = pgTable("sectors", {
   benchmarkGrowth: doublePrecision("benchmark_growth").notNull(),
   /** Return on equity benchmark as a fraction */
   benchmarkRoe: doublePrecision("benchmark_roe").notNull(),
+  /** Whether a discounted cash flow valuation is meaningful (false for banks). */
+  dcfApplicable: boolean("dcf_applicable").notNull().default(true),
   notes: text("notes"),
   ...timestamps,
 });
@@ -415,6 +418,259 @@ export const rateLimits = pgTable("rate_limits", {
   count: integer("count").notNull().default(0),
   windowStart: timestamp("window_start", { withTimezone: true }).notNull().defaultNow(),
 });
+
+
+// ─── Customer evidence module (docs/PLAN2.md) ────────────────────────────
+// Rule: nothing in src/lib/valuation or the recompute job may read these tables.
+export const evidenceStudyStatus = pgEnum("evidence_study_status", ["draft", "screening", "collecting", "coding", "checking", "complete"]);
+export const evidencePlatform = pgEnum("evidence_platform", ["google_play", "reddit", "trustpilot", "facebook", "google_maps", "other"]);
+export const evidenceScreenDecision = pgEnum("evidence_screen_decision", ["pending", "selected", "excluded"]);
+export const evidenceProduct = pgEnum("evidence_product", ["mobile", "app", "home_broadband", "air_fibre", "fibre", "satellite", "unclear"]);
+export const evidenceSentiment = pgEnum("evidence_sentiment", ["positive", "mixed", "negative", "unclear"]);
+export const evidenceLanguage = pgEnum("evidence_language", ["en", "si", "ta", "mixed"]);
+export const evidenceExclusion = pgEnum("evidence_exclusion", ["advert", "hearsay", "irrelevant", "duplicate", "out_of_window", "overseas", "not_first_hand", "other"]);
+export const evidenceCodingStatus = pgEnum("evidence_coding_status", ["uncoded", "ai_suggested", "coded", "checked", "disputed"]);
+export const evidenceReportSection = pgEnum("evidence_report_section", ["value_perception", "multi_sim_moat", "fixed_broadband", "investment_risks", "other"]);
+export const evidenceFindingStatus = pgEnum("evidence_finding_status", ["draft", "approved", "rejected"]);
+export const evidenceSupport = pgEnum("evidence_support", ["supports", "contradicts", "explains", "qualifies"]);
+export const evidenceSource = pgEnum("evidence_source", ["ai", "human"]);
+export const evidenceCheckResult = pgEnum("evidence_check_result", ["agree", "disagree"]);
+
+export const evidenceStudies = pgTable(
+  "evidence_studies",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    companyId: uuid("company_id")
+      .notNull()
+      .references(() => companies.id, { onDelete: "cascade" }),
+    title: text("title").notNull(),
+    status: evidenceStudyStatus("status").notNull().default("draft"),
+    collectionDate: date("collection_date", { mode: "string" }).notNull(),
+    windowMonths: integer("window_months").notNull().default(6),
+    /** collection_date − window_months; stored so queries and imports can use it directly. */
+    windowStart: date("window_start", { mode: "string" }).notNull(),
+    /** Languages the team can interpret; records in other languages stay uncoded. */
+    languages: evidenceLanguage("languages").array().notNull().default(sql`ARRAY['en']::evidence_language[]`),
+    languageLimitations: text("language_limitations"),
+    minNForPercent: integer("min_n_for_percent").notNull().default(20),
+    qaRate: doublePrecision("qa_rate").notNull().default(0.2),
+    notes: text("notes"),
+    /** Admin-written limitations shown on the public appendix next to the automatic ones. */
+    limitations: text("limitations"),
+    appendixPublished: boolean("appendix_published").notNull().default(false),
+    templateKey: text("template_key"),
+    createdBy: uuid("created_by").references(() => admins.id, { onDelete: "set null" }),
+    ...timestamps,
+  },
+  (t) => [index("evidence_studies_company_idx").on(t.companyId)],
+);
+
+export const evidenceResearchQuestions = pgTable("evidence_research_questions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  studyId: uuid("study_id")
+    .notNull()
+    .references(() => evidenceStudies.id, { onDelete: "cascade" }),
+  question: text("question").notNull(),
+  reportSection: evidenceReportSection("report_section").notNull(),
+  sort: integer("sort").notNull().default(0),
+});
+
+export const evidenceComparisonGroups = pgTable("evidence_comparison_groups", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  studyId: uuid("study_id")
+    .notNull()
+    .references(() => evidenceStudies.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  sort: integer("sort").notNull().default(0),
+});
+
+export const evidenceEntities = pgTable("evidence_entities", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  studyId: uuid("study_id")
+    .notNull()
+    .references(() => evidenceStudies.id, { onDelete: "cascade" }),
+  groupId: uuid("group_id")
+    .notNull()
+    .references(() => evidenceComparisonGroups.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  companyId: uuid("company_id").references(() => companies.id, { onDelete: "set null" }),
+  isSubject: boolean("is_subject").notNull().default(false),
+  requiresGeoCheck: boolean("requires_geo_check").notNull().default(false),
+  sort: integer("sort").notNull().default(0),
+});
+
+export const evidenceThemes = pgTable(
+  "evidence_themes",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    studyId: uuid("study_id")
+      .notNull()
+      .references(() => evidenceStudies.id, { onDelete: "cascade" }),
+    key: text("key").notNull(),
+    label: text("label").notNull(),
+    description: text("description"),
+    investmentRelevance: text("investment_relevance"),
+    sort: integer("sort").notNull().default(0),
+  },
+  (t) => [uniqueIndex("evidence_themes_study_key_uq").on(t.studyId, t.key)],
+);
+
+export const evidencePlatformScreenings = pgTable(
+  "evidence_platform_screenings",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    studyId: uuid("study_id")
+      .notNull()
+      .references(() => evidenceStudies.id, { onDelete: "cascade" }),
+    platform: evidencePlatform("platform").notNull(),
+    decision: evidenceScreenDecision("decision").notNull().default("pending"),
+    reason: text("reason"),
+    searchTerms: text("search_terms").array().notNull().default(sql`ARRAY[]::text[]`),
+    sortMethod: text("sort_method"),
+    coverageNote: text("coverage_note"),
+    screenedBy: uuid("screened_by").references(() => admins.id, { onDelete: "set null" }),
+    screenedAt: timestamp("screened_at", { withTimezone: true }),
+  },
+  (t) => [uniqueIndex("evidence_screenings_study_platform_uq").on(t.studyId, t.platform)],
+);
+
+export const evidenceTargets = pgTable("evidence_targets", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  studyId: uuid("study_id")
+    .notNull()
+    .references(() => evidenceStudies.id, { onDelete: "cascade" }),
+  label: text("label").notNull(),
+  /** Null = the whole study (the overall guide). */
+  groupId: uuid("group_id").references(() => evidenceComparisonGroups.id, { onDelete: "cascade" }),
+  product: evidenceProduct("product"),
+  platform: evidencePlatform("platform"),
+  perEntity: boolean("per_entity").notNull().default(false),
+  targetMin: integer("target_min").notNull(),
+  targetMax: integer("target_max").notNull(),
+  sort: integer("sort").notNull().default(0),
+});
+
+export const evidenceRecords = pgTable(
+  "evidence_records",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    studyId: uuid("study_id")
+      .notNull()
+      .references(() => evidenceStudies.id, { onDelete: "cascade" }),
+    recordCode: text("record_code").notNull(),
+    // source
+    platform: evidencePlatform("platform").notNull(),
+    /** Stored for traceability only; the app never fetches it and never shows it publicly. */
+    sourceUrl: text("source_url"),
+    postedAt: date("posted_at", { mode: "string" }),
+    collectionDate: date("collection_date", { mode: "string" }),
+    threadId: text("thread_id"),
+    /** Team-assigned pseudonymous reference (e.g. T03-C2). Never a username. */
+    contributorRef: text("contributor_ref"),
+    /** Stored as found; never averaged or pooled. */
+    starRating: smallint("star_rating"),
+    // subject
+    entityId: uuid("entity_id")
+      .notNull()
+      .references(() => evidenceEntities.id, { onDelete: "cascade" }),
+    product: evidenceProduct("product").notNull().default("unclear"),
+    /** Quote that names the product; required when product = air_fibre. */
+    productEvidence: text("product_evidence"),
+    geoConfirmed: boolean("geo_confirmed").notNull().default(false),
+    // content
+    text: text("text").notNull(),
+    language: evidenceLanguage("language").notNull().default("en"),
+    translationEn: text("translation_en"),
+    // coding
+    sentiment: evidenceSentiment("sentiment"),
+    switching: boolean("switching").notNull().default(false),
+    switchingNote: text("switching_note"),
+    codingStatus: evidenceCodingStatus("coding_status").notNull().default("uncoded"),
+    codedBy: uuid("coded_by").references(() => admins.id, { onDelete: "set null" }),
+    codedAt: timestamp("coded_at", { withTimezone: true }),
+    // inclusion
+    included: boolean("included").notNull().default(true),
+    exclusionReason: evidenceExclusion("exclusion_reason"),
+    inclusionNote: text("inclusion_note"),
+    duplicateOfId: uuid("duplicate_of_id"),
+    // QA
+    inQaSample: boolean("in_qa_sample").notNull().default(false),
+    checkedBy: uuid("checked_by").references(() => admins.id, { onDelete: "set null" }),
+    checkResult: evidenceCheckResult("check_result"),
+    /** Per-field agree/disagree: themes, sentiment, switching, inclusion. */
+    checkFields: jsonb("check_fields").$type<Partial<Record<"themes" | "sentiment" | "switching" | "inclusion", "agree" | "disagree">>>(),
+    checkNote: text("check_note"),
+    checkedAt: timestamp("checked_at", { withTimezone: true }),
+    // AI
+    aiSuggestion: jsonb("ai_suggestion").$type<EvidenceCoding & { model?: string; at?: string }>(),
+    embedding: vector("embedding", { dimensions: 768 }),
+    publicExample: boolean("public_example").notNull().default(false),
+    ...timestamps,
+  },
+  (t) => [
+    uniqueIndex("evidence_records_study_code_uq").on(t.studyId, t.recordCode),
+    index("evidence_records_study_entity_idx").on(t.studyId, t.entityId),
+    index("evidence_records_study_platform_idx").on(t.studyId, t.platform),
+    index("evidence_records_study_status_idx").on(t.studyId, t.codingStatus),
+    index("evidence_records_embedding_idx").using("hnsw", t.embedding.op("vector_cosine_ops")),
+  ],
+);
+
+export const evidenceRecordThemes = pgTable(
+  "evidence_record_themes",
+  {
+    recordId: uuid("record_id")
+      .notNull()
+      .references(() => evidenceRecords.id, { onDelete: "cascade" }),
+    themeId: uuid("theme_id")
+      .notNull()
+      .references(() => evidenceThemes.id, { onDelete: "cascade" }),
+    source: evidenceSource("source").notNull().default("human"),
+  },
+  (t) => [primaryKey({ columns: [t.recordId, t.themeId] })],
+);
+
+export const evidenceFindings = pgTable(
+  "evidence_findings",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    studyId: uuid("study_id")
+      .notNull()
+      .references(() => evidenceStudies.id, { onDelete: "cascade" }),
+    researchQuestionId: uuid("research_question_id").references(() => evidenceResearchQuestions.id, { onDelete: "set null" }),
+    reportSection: evidenceReportSection("report_section").notNull(),
+    text: text("text").notNull(),
+    support: evidenceSupport("support").notNull().default("explains"),
+    citedRecordIds: uuid("cited_record_ids").array().notNull().default(sql`ARRAY[]::uuid[]`),
+    guardWarnings: jsonb("guard_warnings").$type<{ code: string; message: string; phrase: string; acknowledged?: boolean }[]>().notNull().default([]),
+    status: evidenceFindingStatus("status").notNull().default("draft"),
+    generatedBy: evidenceSource("generated_by").notNull().default("human"),
+    approvedBy: uuid("approved_by").references(() => admins.id, { onDelete: "set null" }),
+    approvedAt: timestamp("approved_at", { withTimezone: true }),
+    sort: integer("sort").notNull().default(0),
+    ...timestamps,
+  },
+  (t) => [index("evidence_findings_study_idx").on(t.studyId)],
+);
+
+/** Duplicate candidates an admin has looked at and decided are not duplicates. */
+export const evidenceDuplicateDismissals = pgTable(
+  "evidence_duplicate_dismissals",
+  {
+    studyId: uuid("study_id")
+      .notNull()
+      .references(() => evidenceStudies.id, { onDelete: "cascade" }),
+    recordA: uuid("record_a").notNull(),
+    recordB: uuid("record_b").notNull(),
+    dismissedBy: uuid("dismissed_by").references(() => admins.id, { onDelete: "set null" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [primaryKey({ columns: [t.recordA, t.recordB] })],
+);
+
+export type EvidenceStudy = typeof evidenceStudies.$inferSelect;
+export type EvidenceRecord = typeof evidenceRecords.$inferSelect;
+export type EvidenceFinding = typeof evidenceFindings.$inferSelect;
 
 export type Admin = typeof admins.$inferSelect;
 export type Sector = typeof sectors.$inferSelect;

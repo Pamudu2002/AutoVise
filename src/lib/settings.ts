@@ -20,12 +20,15 @@ export const valuationSettingsSchema = z.object({
   qualMultipleCap: frac(0, 0.5),
   tiltCap: frac(0, 0.3),
   scenario: z.object({ growthShift: frac(0, 0.2), peShift: frac(0, 0.5) }),
-  ddm: z.object({ weight: frac(0, 1), costOfEquity: frac(0.02, 0.4), terminalGrowthCap: frac(0, 0.15) }),
+  costOfEquity: frac(0.02, 0.4),
+  terminalGrowthCap: frac(0, 0.15),
+  dcf: z.object({ weight: frac(0, 1), fadeYears: z.number().int().min(1).max(15) }),
+  ddm: z.object({ weight: frac(0, 1) }),
   factorWeights: z.object(Object.fromEntries(FACTOR_KEYS.map((k) => [k, z.number().min(0).max(5)])) as Record<(typeof FACTOR_KEYS)[number], z.ZodNumber>),
   scoreWeights: z
     .object({ upside: z.number().int().min(0).max(100), quality: z.number().int().min(0).max(100), confidence: z.number().int().min(0).max(100) })
     .refine((w) => w.upside + w.quality + w.confidence === 100, { message: "Score weights must add up to 100." }),
-});
+}).refine((v) => v.dcf.weight + v.ddm.weight <= 0.9, { message: "The DCF and dividend weights together must leave at least 10% for the P/E method." });
 
 export const appSettingsSchema = z.object({
   valuation: valuationSettingsSchema,

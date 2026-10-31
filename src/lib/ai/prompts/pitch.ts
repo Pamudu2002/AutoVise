@@ -11,7 +11,7 @@ Hard rules:
 Sections:
 - thesis: a one-sentence headline stating the base-case target and the main reason, then 1–2 short paragraphs.
 - drivers: 2–4 key drivers, each with a short "figure" (e.g. "+14%", "31%", "0.42×") taken from the inputs, a title and one or two sentences.
-- valuation: 1–2 paragraphs walking from base EPS and growth to the exit P/E, the qualitative adjustment and the target, using the computed figures.
+- valuation: 1–3 paragraphs walking from base EPS and growth to the exit P/E, the qualitative adjustment and the target, using the computed figures. If "methods" shows a DCF value, explain briefly how the discounted cash flow cross-check compares with the P/E value and how the methods are weighted.
 - risks: 2–4 risks. catalysts: 1–3 upcoming events or developments.
 - changeView: what would move the view toward the bull case and toward the bear case (mention those targets).`;
 

@@ -23,6 +23,7 @@ export default async function SectorsPage() {
         growth: s.benchmarkGrowth,
         roe: s.benchmarkRoe,
         notes: s.notes,
+        dcf: s.dcfApplicable,
         companies: counts.find((c) => c.sectorId === s.id)?.n ?? 0,
         updatedAt: s.updatedAt.toISOString(),
       }))}

@@ -104,6 +104,14 @@ words, but it never invents the price. Lives in `src/lib/valuation/` as pure, un
    - Exit multiple = current P/E moving toward the sector P/E.
    - Price_y = EPS_y × P/E_y. A dividend-discount cross-check runs when the company pays dividends;
      the final figure is a weighted blend.
+   - **Discounted cash flow (added Oct 2026):** free cash flow to equity = EPS × the company's cash
+     conversion (median of (operating cash flow − capex) ÷ net income over reported years). It follows
+     the EPS growth path to year 3, fades to the terminal growth rate over `fadeYears`, and is
+     discounted at the cost of equity with a Gordon terminal value, giving a value at each year end.
+     Blend (defaults): P/E 60 %, DCF 30 %, dividend discount 10 %. DCF is skipped for sectors flagged
+     as not suitable (`sectors.dcf_applicable`, off for banks) and for negative or missing free cash
+     flow; a skipped method's weight goes back to P/E. Each cross-check appears as its own waterfall
+     step (weight × difference from the P/E value), so the waterfall still adds up exactly.
 3. **Qualitative overlay** (`qualitative.ts`): Gemini rates 6 factors (management quality, growth
    outlook, competitive position, risk profile, governance, sentiment from events) from −1 to +1,
    each with a justification and cited evidence. The ratings shift the growth rate and the multiple
@@ -141,6 +149,17 @@ words, but it never invents the price. Lives in `src/lib/valuation/` as pure, un
 - `/compare?c=a,b,c` — up to 3 companies side by side
 - `/track-record` — past published predictions against actual prices (builds trust)
 - `/methodology`, `/disclaimer`
+- `/companies/[slug]/evidence` — public methodology appendix of a published customer-evidence study
+  (questions, platforms and search terms, sample, theme matrix, approved findings, limitations,
+  paraphrased examples). See **Customer evidence** below and `docs/PLAN2.md`.
+
+**Customer evidence (docs/PLAN2.md).** An optional, exploratory study of public customer accounts per
+company: admin pages under `/admin/companies/[slug]/evidence` and `/admin/evidence/[studyId]/…`
+(overview, setup, screening, records + import, coding, QA, analysis, findings, appendix). Approved
+findings are attached to the pitch word for word with an "exploratory customer evidence" caveat
+(`pitch.customerEvidence`), shown in The Pitch, linked from How we got here, and given to the chatbot
+as `[E#]` sources. Evidence never changes numbers: the valuation engine and the recompute job read no
+`evidence_*` table (enforced by `src/lib/evidence/isolation.test.ts`).
 - Logos also appear on the compare page, track record rows, the chat panel header, the downloadable
   pitch PDF and each company's OG/social share image.
 
@@ -238,6 +257,11 @@ Implementation starts with Phase 0 and 1. Code is committed and pushed to GitHub
 
 **Status (Oct 2026):** phases 0–6 are implemented. See §11 for decisions made during the build.
 
+**Customer evidence (PLAN2 E1–E10):** implemented after phase 6 — schema (migration `0002`), pure
+analysis modules with tests, service layer and server actions, Inngest jobs
+(`evidence/code.requested`, `evidence/embed.requested`, `company/pitch.refresh`), admin study pages,
+public appendix, pitch/chat/PDF integration, a demo study in the seed and a Playwright flow.
+
 ---
 
 ## 10. Verification
@@ -275,8 +299,9 @@ confidence in `extra`; `qualitative_insights.included` (reviewers can exclude an
 **Valuation engine defaults** (all editable in Settings): growth blend 40 % record / 30 % sustainable
 / 30 % sector; 25 % of the gap to sector growth closes each year; the exit P/E moves 50 % of the way
 to the sector P/E; growth −10 %…30 %, exit P/E 4×…25×; qualitative shifts ±3 pp growth and ±15 %
-multiple with a ±10 % total cap; scenarios ±4 pp growth and ±15 % P/E; dividend cross-check weight
-10 % at a 14 % cost of equity. The browser simulator calls the same `runScenario()`.
+multiple with a ±10 % total cap; scenarios ±4 pp growth and ±15 % P/E; method blend P/E 60 % /
+DCF 30 % (5-year fade) / dividend discount 10 %, at a 14 % cost of equity and a terminal growth cap
+of 6 % (engine-2; settings keys `costOfEquity`, `terminalGrowthCap`, `dcf`, `ddm`). The browser simulator calls the same `runScenario()`.
 Confidence = completeness 25 %, history 20 %, earnings stability 20 %, factor agreement 10 %,
 recency 10 %, bear–bull spread 15 %. AutoVise Score = 40 % upside, 40 % qualitative quality,
 20 % confidence (from the design). A recompute is skipped when the `inputs_hash` is unchanged.
@@ -301,3 +326,25 @@ UI components are hand-built from the design tokens in `src/app/globals.css` (po
 
 **Not built yet** (from §8 "Later"): visitor accounts, translations, audio pitch, sector dashboard,
 market price feed; Google sign-in for admins is also not enabled.
+
+**Customer evidence decisions (PLAN2).**
+- Findings are attached to the pitch verbatim; the pitch model never rewrites them.
+  `company/pitch.refresh` only replaces `pitch.customerEvidence` on draft and published predictions —
+  prices, assumptions and `inputs_hash` are untouched. After a recompute creates a prediction, the job
+  sends `company/pitch.refresh` by event name only, so the recompute path imports nothing from
+  `src/lib/evidence`.
+- AI-assisted coding uses Gemini Flash; with no key, or `EVIDENCE_AI_MOCK=1`, deterministic keyword
+  rules (`src/lib/evidence/offline.ts`) stand in so tests and demos work offline. Suggestions count only
+  after a person accepts them.
+- Citation problems (uncited, missing or excluded records) are stored as `citation` warnings and must
+  be fixed; other guard warnings can be fixed or acknowledged by an admin. Approval also needs every
+  cited record included and checked in QA, and at most three approved findings per question.
+- QA: a seeded, stratified ~20% sample per entity (minimum two) plus every cited record; the checker
+  cannot be the coder. Public examples must be checked records (max five).
+- The CSV export leaves out source URLs and contributor refs. Source URLs are stored as references only
+  and never fetched.
+- Studies keep extra fields `limitations` and `appendix_published`; duplicate dismissals live in
+  `evidence_duplicate_dismissals`; `cited_record_ids` is `uuid[]`.
+- The seed and the e2e test use the `telecom-sl-demo` template (fictional operators under the fictional
+  Serendib Telecom) so synthetic customer accounts are never attached to real operators. The real
+  `telecom-sl` template (Dialog, Mobitel, Hutch, SLT, Starlink) is for genuine studies.

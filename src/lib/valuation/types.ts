@@ -65,6 +65,8 @@ export interface SectorBenchmarks {
   pe: number;
   growth: number;
   roe: number;
+  /** False for sectors where free cash flow is not meaningful (e.g. banks). Defaults to true. */
+  dcf?: boolean;
 }
 
 export interface ValuationSettings {
@@ -86,7 +88,14 @@ export interface ValuationSettings {
   /** Largest combined price effect of the qualitative overlay (0.10 = ±10 %). */
   tiltCap: number;
   scenario: { growthShift: number; peShift: number };
-  ddm: { weight: number; costOfEquity: number; terminalGrowthCap: number };
+  /** Required return on equity, used to discount dividends and free cash flow. */
+  costOfEquity: number;
+  /** Upper limit for the long-run growth used in terminal values. */
+  terminalGrowthCap: number;
+  /** Discounted cash flow method: blend weight, and years over which growth fades to the terminal rate. */
+  dcf: { weight: number; fadeYears: number };
+  /** Dividend-discount cross-check blend weight. */
+  ddm: { weight: number };
   factorWeights: Record<FactorKey, number>;
   /** AutoVise Score weights in percent; must add up to 100. */
   scoreWeights: { upside: number; quality: number; confidence: number };
@@ -133,6 +142,14 @@ export interface ProjectionModel {
   qualMultipleCap: number;
   tiltCap: number;
   ddm: null | { weight: number; costOfEquity: number; terminalGrowth: number; payoutRatio: number };
+  /** Absent on predictions made before the DCF method existed. */
+  dcf?: null | { weight: number; costOfEquity: number; terminalGrowth: number; fcfConversion: number; fadeYears: number };
+}
+
+export interface MethodWeights {
+  pe: number;
+  dcf: number;
+  ddm: number;
 }
 
 /** The three levers of a scenario: starting EPS growth, exit P/E (before the overlay) and the qualitative composite (−1..+1). */
@@ -163,7 +180,7 @@ export interface ScenarioSet {
 }
 
 export interface WaterfallStep {
-  key: "current" | "earnings" | "multiple" | "dividend" | "qualitative" | "target";
+  key: "current" | "earnings" | "multiple" | "dcf" | "dividend" | "qualitative" | "target";
   label: string;
   /** For totals the absolute value; for steps the signed change. */
   value: number;
@@ -198,6 +215,9 @@ export interface Assumptions {
   exitPe: { quant: number; final: number };
   qualitative: { composite: number; growthShift: number; multipleShift: number; tiltPct: number };
   ddm: ProjectionModel["ddm"];
+  dcf?: ProjectionModel["dcf"];
+  /** Year-3 value from each method (before the qualitative overlay) and the blend weights used. */
+  methods?: { pe: number; dcf: number | null; ddm: number | null; weights: MethodWeights };
   horizonYears: number;
   horizonDate: string;
   rows: ProjectionRow[];

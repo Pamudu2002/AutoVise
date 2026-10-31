@@ -1,6 +1,6 @@
 import { autoviseScore, confidenceScore } from "./confidence";
 import { clamp, isNum } from "./math";
-import { blendGrowth, quantExitPe, sustainableGrowth } from "./projection";
+import { blendGrowth, fcfConversion, quantExitPe, sustainableGrowth } from "./projection";
 import { compositeScore } from "./qualitative";
 import { computeRatios } from "./ratios";
 import { buildScenarios, type ScenarioRun } from "./scenarios";
@@ -86,12 +86,33 @@ export function valueCompany(input: ValuationInput): ValuationOutcome {
     s.ddm.weight > 0 && payoutRatio !== null && payoutRatio > 0
       ? {
           weight: s.ddm.weight,
-          costOfEquity: s.ddm.costOfEquity,
-          terminalGrowth: Math.min(input.sector.growth, s.ddm.terminalGrowthCap),
+          costOfEquity: s.costOfEquity,
+          terminalGrowth: Math.min(input.sector.growth, s.terminalGrowthCap),
           payoutRatio,
         }
       : null;
   if (!ddm) notes.push("No dividend, so the dividend-discount cross-check was skipped.");
+
+  // DCF: free cash flow to equity = EPS × cash conversion, discounted at the cost of equity.
+  const conversion = fcfConversion(input.history);
+  let dcf: ProjectionModel["dcf"] = null;
+  if (s.dcf.weight <= 0) {
+    // switched off in settings
+  } else if (input.sector.dcf === false) {
+    notes.push(`Discounted cash flow is not meaningful for the ${input.sector.name} sector, so it was not used.`);
+  } else if (conversion === null) {
+    notes.push("Operating cash flow or capex is missing, so the discounted cash flow check was skipped.");
+  } else if (conversion < 0.05) {
+    notes.push("Free cash flow is negative or very small relative to profit, so the discounted cash flow check was skipped.");
+  } else {
+    dcf = {
+      weight: s.dcf.weight,
+      costOfEquity: s.costOfEquity,
+      terminalGrowth: Math.min(input.sector.growth, s.terminalGrowthCap),
+      fcfConversion: Math.min(conversion, 1.5),
+      fadeYears: s.dcf.fadeYears,
+    };
+  }
 
   const model: ProjectionModel = {
     price: input.price,
@@ -108,6 +129,7 @@ export function valueCompany(input: ValuationInput): ValuationOutcome {
     qualMultipleCap: s.qualMultipleCap,
     tiltCap: s.tiltCap,
     ddm,
+    dcf,
   };
   const baseLevers = { growth: blend.growth, exitPe: exitQuant, tilt: composite };
   const { set: scenarios, runs, levers } = buildScenarios(model, baseLevers, s.scenario);
@@ -146,6 +168,13 @@ export function valueCompany(input: ValuationInput): ValuationOutcome {
     exitPe: { quant: exitQuant, final: base.exitPe },
     qualitative: { composite, ...shifts, tiltPct: base.tiltPct },
     ddm,
+    dcf,
+    methods: {
+      pe: base.quantMethods.pe[last],
+      dcf: base.quantMethods.dcf[last],
+      ddm: base.quantMethods.ddm[last],
+      weights: base.quantMethods.weights[last],
+    },
     horizonYears: s.horizonYears,
     horizonDate: horizon.toISOString().slice(0, 10),
     rows: base.rows,
@@ -173,7 +202,10 @@ export function valueCompany(input: ValuationInput): ValuationOutcome {
   };
 }
 
-/** Current price → earnings growth → multiple change → (dividend check) → qualitative → target. */
+/**
+ * Current price → earnings growth → multiple change → (DCF and dividend cross-checks) → qualitative → target.
+ * Each cross-check step is its weight × (its value − the P/E value), so the steps add up exactly.
+ */
 export function buildWaterfall(price: number, pe0: number, run: ScenarioRun, last = run.rows.length - 1): WaterfallStep[] {
   const eps3 = run.quantRows[last].eps;
   const atTodaysPe = eps3 * pe0;
@@ -185,8 +217,18 @@ export function buildWaterfall(price: number, pe0: number, run: ScenarioRun, las
     { key: "earnings", label: "Earnings growth", value: atTodaysPe - price, start: price, end: atTodaysPe },
     { key: "multiple", label: "Multiple change", value: atExitPe - atTodaysPe, start: atTodaysPe, end: atExitPe },
   ];
-  if (Math.abs(quant - atExitPe) > 0.005) {
-    steps.push({ key: "dividend", label: "Dividend cross-check", value: quant - atExitPe, start: atExitPe, end: quant });
+  const m = run.quantMethods;
+  let at = atExitPe;
+  for (const [key, label, value] of [
+    ["dcf", "DCF cross-check", m.dcf[last]],
+    ["dividend", "Dividend cross-check", m.ddm[last]],
+  ] as const) {
+    const w = key === "dcf" ? m.weights[last].dcf : m.weights[last].ddm;
+    if (value === null || w <= 0) continue;
+    const step = w * (value - atExitPe);
+    if (Math.abs(step) <= 0.005) continue;
+    steps.push({ key, label, value: step, start: at, end: at + step });
+    at += step;
   }
   steps.push(
     { key: "qualitative", label: "Qualitative adjustment", value: target - quant, start: quant, end: target },

@@ -101,3 +101,47 @@ export function ddmValueAt(
   if (nextDividend <= 0) return null;
   return nextDividend / spread;
 }
+
+/**
+ * Extends a growth path beyond the forecast years: growth moves in a straight line from the last
+ * forecast year's rate to the terminal rate over `fadeYears`, then stays there.
+ */
+export function fadeGrowth(path: number[], terminal: number, fadeYears: number, total: number): number[] {
+  const out = [...path];
+  const last = path[path.length - 1] ?? terminal;
+  for (let t = path.length + 1; t <= total; t++) {
+    const k = Math.min(1, (t - path.length) / Math.max(1, fadeYears));
+    out.push(last + (terminal - last) * k);
+  }
+  return out;
+}
+
+/** Median of (operating cash flow − capex) ÷ net income over the years that report all three. */
+export function fcfConversion(history: { netIncome: number | null; operatingCashFlow: number | null; capex: number | null }[]): number | null {
+  const ratios = history
+    .filter((h) => isNum(h.netIncome) && h.netIncome > 0 && isNum(h.operatingCashFlow) && isNum(h.capex))
+    .map((h) => (h.operatingCashFlow! - Math.abs(h.capex!)) / h.netIncome!)
+    .sort((a, b) => a - b);
+  if (!ratios.length) return null;
+  const mid = Math.floor(ratios.length / 2);
+  return ratios.length % 2 ? ratios[mid] : (ratios[mid - 1] + ratios[mid]) / 2;
+}
+
+/**
+ * Discounted cash flow value per share at the end of year n. Free cash flow to equity is EPS ×
+ * cash conversion; it is discounted at the cost of equity for `fadeYears` explicit years after n,
+ * plus a Gordon terminal value. `growth` must cover at least n + fadeYears years.
+ */
+export function dcfValueAt(eps0: number, growth: number[], n: number, dcf: NonNullable<ProjectionModel["dcf"]>): number | null {
+  const r = dcf.costOfEquity;
+  const g = dcf.terminalGrowth;
+  const F = Math.max(1, Math.round(dcf.fadeYears));
+  if (r - g <= 0.005 || growth.length < n + F) return null;
+  const eps = [eps0];
+  for (const gr of growth) eps.push(eps[eps.length - 1] * (1 + gr));
+  let value = 0;
+  for (let t = n + 1; t <= n + F; t++) value += (eps[t] * dcf.fcfConversion) / (1 + r) ** (t - n);
+  const terminal = (eps[n + F] * dcf.fcfConversion * (1 + g)) / (r - g);
+  value += terminal / (1 + r) ** F;
+  return value > 0 && Number.isFinite(value) ? value : null;
+}

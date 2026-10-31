@@ -11,6 +11,7 @@ import { db } from "@/lib/db";
 import { chatMessages, chatSessions } from "@/lib/db/schema";
 import { env } from "@/lib/env";
 import { ANON_COOKIE, type ChatMeta } from "@/lib/chat";
+import { publicExamplesForCompany } from "@/lib/evidence/data";
 import { buildChatContext, citedIds, type ChatCitation } from "@/lib/rag/context";
 import { retrieveChunks } from "@/lib/rag/retrieve";
 import { checkLimits, clientIp } from "@/lib/ratelimit";
@@ -70,8 +71,8 @@ export async function POST(req: Request) {
     .returning({ id: chatSessions.id });
   await db.insert(chatMessages).values({ sessionId: session.id, companyId, role: "user", content: question });
 
-  const retrieved = await retrieveChunks(companyId, question, 8);
-  const { context, citations } = buildChatContext(data, retrieved);
+  const [retrieved, examples] = await Promise.all([retrieveChunks(companyId, question, 8), publicExamplesForCompany(companyId).catch(() => [])]);
+  const { context, citations } = buildChatContext(data, retrieved, 1, examples);
   const registry = new Map(citations.map((c) => [c.id, c]));
   let extraIndex = retrieved.length + 1;
   const assistantId = randomUUID();

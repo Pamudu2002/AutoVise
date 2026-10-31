@@ -1,9 +1,10 @@
 import { ZodError } from "zod";
 import { ForbiddenError } from "@/lib/admin";
+import { UserError } from "@/lib/errors";
 
 export type ActionResult<T = void> = { ok: true; data?: T; message?: string } | { ok: false; error: string };
 
-export class UserError extends Error {}
+export { UserError };
 
 /** Runs an action body and turns expected failures into a message the UI can show. */
 export async function run<T>(fn: () => Promise<T>, success?: string): Promise<ActionResult<T>> {

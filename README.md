@@ -43,13 +43,15 @@ npm run build        # production build
 npm run lint         # ESLint
 npm run typecheck    # tsc --noEmit
 npm test             # Vitest unit tests (valuation engine, grounding, parsing)
-npm run test:e2e     # Playwright: admin flow → publish → public pitch (needs a seeded DB)
+npm run test:e2e     # Playwright: admin flow → publish → public pitch, and the customer-evidence flow (needs a seeded DB)
 npm run db:generate  # drizzle-kit generate after editing src/lib/db/schema.ts
 npm run db:migrate   # apply migrations (Neon/Postgres or pglite)
 npm run db:seed      # seed data (add -- --reset to wipe and reseed)
 npm run inngest:dev  # local Inngest dev server (set INNGEST_DEV=1)
+npm run recompute    # rebuild predictions after an engine change (-- --force for all)
 npm run ai:check     # verify the Gemini key, models and 768-dim embeddings
 npm run ai:embed     # embed report chunks stored before Gemini was configured
+npx tsx scripts/make-evidence-fixture.ts   # regenerate tests/fixtures/evidence-sample.xlsx (synthetic)
 ```
 
 ## How a prediction is made
@@ -67,6 +69,21 @@ npm run ai:embed     # embed report chunks stored before Gemini was configured
    draft prediction with its `inputs_hash`.
 4. **Publish** — an admin compares the draft with the published version and publishes it (or
    auto-publish handles small changes). Earlier predictions are archived for the track record.
+
+## Customer evidence (exploratory)
+
+Admins can run a small study of public customer accounts for a company (`docs/PLAN2.md`):
+**Customer Evidence** in the admin sidebar, or a company's **Customer evidence** tab. Create a study
+from a template, screen platforms, import the team's spreadsheet (blank template on the import page),
+let AI-assisted coding suggest themes (a person accepts each), have a second admin check the QA
+sample, review the theme matrix, then draft, check and approve up to three findings per question.
+Approved findings appear in the pitch with an "exploratory" caveat and a link to the public
+methodology appendix (`/companies/<slug>/evidence`). They never change prices or predictions.
+
+- `EVIDENCE_AI_MOCK=1` uses offline keyword rules instead of Gemini for coding and draft findings.
+- The seed adds a demo study for Serendib Telecom with fictional operators.
+- `npm run test:e2e` includes `tests/e2e/evidence-flow.spec.ts`; run the dev server with
+  `EVIDENCE_AI_MOCK=1` for deterministic results.
 
 ## Deploying (Vercel + Neon + Inngest)
 

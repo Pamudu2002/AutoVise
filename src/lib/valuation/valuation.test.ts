@@ -3,7 +3,7 @@ import { buildHistory, type MetricRow } from "./aggregate";
 import { autoviseScore, confidenceScore, upsideToScore } from "./confidence";
 import { DEFAULT_VALUATION_SETTINGS } from "./defaults";
 import { buildWaterfall, valueCompany, type ValuationInput } from "./index";
-import { blendGrowth, growthPath, pePath, projectPath, quantExitPe, sustainableGrowth } from "./projection";
+import { blendGrowth, dcfValueAt, fadeGrowth, fcfConversion, growthPath, pePath, projectPath, quantExitPe, sustainableGrowth } from "./projection";
 import { compositeScore, heuristicFactorScores, overlayShifts, toHundred } from "./qualitative";
 import { cagr, computeRatios, epsOf, seriesCagr } from "./ratios";
 import { buildScenarios, runScenario } from "./scenarios";
@@ -349,5 +349,79 @@ describe("buildHistory", () => {
     ]);
     expect(latestBalance?.totalDebt).toBe(10_000_000);
     expect(latestPeriodEnd).toBe("2026-06-30");
+  });
+});
+
+describe("discounted cash flow", () => {
+  const dcf = { weight: 0.3, costOfEquity: 0.14, terminalGrowth: 0.05, fcfConversion: 0.8, fadeYears: 5 };
+
+  it("equals the Gordon growth value when growth is constant", () => {
+    const g = 0.05;
+    const growth = Array(8).fill(g);
+    for (const n of [1, 2, 3]) {
+      const epsN = 10 * (1 + g) ** n;
+      const gordon = (epsN * 0.8 * (1 + g)) / (0.14 - g);
+      expect(dcfValueAt(10, growth, n, dcf)).toBeCloseTo(gordon, 8);
+    }
+  });
+
+  it("fades growth to the terminal rate", () => {
+    const path = fadeGrowth([0.2, 0.15, 0.1], 0.05, 5, 8);
+    expect(path).toHaveLength(8);
+    expect(path[3]).toBeCloseTo(0.09, 10);
+    expect(path[7]).toBeCloseTo(0.05, 10);
+  });
+
+  it("refuses a terminal growth at or above the cost of equity", () => {
+    expect(dcfValueAt(10, Array(8).fill(0.05), 3, { ...dcf, terminalGrowth: 0.14 })).toBeNull();
+  });
+
+  it("takes the median cash conversion over years with complete data", () => {
+    expect(
+      fcfConversion([
+        { netIncome: 100, operatingCashFlow: 150, capex: 50 },
+        { netIncome: 100, operatingCashFlow: 120, capex: -40 },
+        { netIncome: 100, operatingCashFlow: 200, capex: 50 },
+        { netIncome: -5, operatingCashFlow: 10, capex: 1 },
+        { netIncome: 100, operatingCashFlow: null, capex: 10 },
+      ]),
+    ).toBeCloseTo(1, 10);
+    expect(fcfConversion([])).toBeNull();
+  });
+
+  it("blends P/E, DCF and dividend values by weight", () => {
+    const model = flatModel({
+      dcf,
+      ddm: { weight: 0.1, costOfEquity: 0.14, terminalGrowth: 0.05, payoutRatio: 0.4 },
+    });
+    const run = runScenario(model, { growth: 0.1, exitPe: 12, tilt: 0 });
+    const m = run.quantMethods;
+    expect(m.weights[2]).toEqual({ pe: expect.closeTo(0.6, 10), dcf: 0.3, ddm: 0.1 });
+    expect(run.quantPrices[2]).toBeCloseTo(0.6 * m.pe[2] + 0.3 * m.dcf[2]! + 0.1 * m.ddm[2]!, 8);
+    expect(m.pe[2]).toBeCloseTo(159.72, 8);
+  });
+
+  it("is skipped for sectors where it is not meaningful, and the waterfall still adds up", () => {
+    const base = {
+      price: 120,
+      priceDate: "2026-10-16",
+      history: [2023, 2024, 2025].map((y, i) => year(y, { eps: 8 * 1.1 ** i, netIncome: 80 * 1.1 ** i })),
+      latestPeriodEnd: "2025-12-31",
+      factorScores: scores(0.2),
+      asOf: new Date("2026-10-17T00:00:00Z"),
+      settings: DEFAULT_VALUATION_SETTINGS,
+    };
+    const withDcf = valueCompany({ ...base, sector: { name: "Logistics", pe: 11, growth: 0.08, roe: 0.12 } });
+    const bank = valueCompany({ ...base, sector: { name: "Banking", pe: 11, growth: 0.08, roe: 0.12, dcf: false } });
+    if (!withDcf.ok || !bank.ok) throw new Error("valuation failed");
+    expect(withDcf.result.assumptions.dcf).not.toBeNull();
+    expect(withDcf.result.waterfall.some((w) => w.key === "dcf")).toBe(true);
+    expect(bank.result.assumptions.dcf).toBeNull();
+    expect(bank.result.assumptions.methods?.weights.dcf).toBe(0);
+    expect(bank.result.assumptions.notes.join(" ")).toContain("Banking");
+    for (const r of [withDcf.result, bank.result]) {
+      const sum = r.waterfall.filter((w) => w.key !== "target").reduce((a, w) => a + w.value, 0);
+      expect(sum).toBeCloseTo(r.scenarios.base.y3, 8);
+    }
   });
 });

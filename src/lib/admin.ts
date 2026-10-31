@@ -17,6 +17,8 @@ export const PERMISSIONS = {
   "predictions.rerun": ALL,
   "predictions.note": ALL,
   "chat.review": ALL,
+  "evidence.write": ALL,
+  "evidence.approve": ADMINS,
   "predictions.publish": ADMINS,
   "companies.write": ADMINS,
   "sectors.write": ADMINS,

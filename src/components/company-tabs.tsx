@@ -109,6 +109,7 @@ export function CompanyTabs({ data, disclaimer }: { data: CompanyPageData; discl
           epsSource={epsSource}
           onCite={setSource}
           disclaimer={disclaimer}
+          evidencePath={p.pitch?.customerEvidence?.find((e) => e.appendixPath)?.appendixPath ?? null}
         />
       )}
       {tab === "financials" && <FinancialsTab history={data.history} reports={data.reports} currency={data.company.currency} />}

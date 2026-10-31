@@ -18,6 +18,9 @@ export const recomputeCompanyFn = inngest.createFunction(
   async ({ event, step }) => {
     const data = event.data as RecomputeData;
     const run: Step = (name, fn) => step.run(name, fn) as never;
-    return recomputeCompany(data.companyId, { trigger: data.trigger, force: data.force, step: run });
+    const result = await recomputeCompany(data.companyId, { trigger: data.trigger, force: data.force, step: run });
+    // A new prediction gets the approved customer-evidence findings attached (text only, by event name).
+    if (result.status === "created") await step.sendEvent("pitch-refresh", { name: EVENTS.pitchRefresh, data: { companyId: data.companyId } });
+    return result;
   },
 );

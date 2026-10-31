@@ -62,6 +62,17 @@ export function pitchFacts(input: {
       bearExit: d1(a.bearLevers.exitPe)!,
     },
     qualitative: { compositeScore: toHundred(a.qualitative.composite), priceEffectPct: p1(a.qualitative.tiltPct)! },
+    methods: a.methods
+      ? {
+          peValue: d2(a.methods.pe)!,
+          dcfValue: a.methods.weights.dcf > 0 ? d2(a.methods.dcf) : null,
+          dividendValue: a.methods.weights.ddm > 0 ? d2(a.methods.ddm) : null,
+          weightsPct: { pe: Math.round(a.methods.weights.pe * 100), dcf: Math.round(a.methods.weights.dcf * 100), dividend: Math.round(a.methods.weights.ddm * 100) },
+          cashConversionPct: a.dcf ? p1(a.dcf.fcfConversion) : null,
+          costOfEquityPct: p1(a.dcf?.costOfEquity ?? a.ddm?.costOfEquity ?? null),
+          terminalGrowthPct: a.dcf ? p1(a.dcf.terminalGrowth) : null,
+        }
+      : null,
     waterfall: r.waterfall.map((w) => ({ step: w.label, value: d2(w.value)! })),
     ratios: {
       roePct: p1(r.ratios.roe),

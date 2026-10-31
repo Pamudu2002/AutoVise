@@ -16,7 +16,7 @@ import type { MetricRow } from "@/lib/valuation/aggregate";
 import type { BasedOnReport, SectorBenchmarks } from "@/lib/valuation/types";
 
 /** Bump when the valuation engine changes, so every company recomputes on the next run. */
-export const ENGINE_VERSION = "engine-1";
+export const ENGINE_VERSION = "engine-2"; // engine-2: DCF added to the method blend
 
 export interface ReportRef {
   reportId: string;
@@ -103,7 +103,7 @@ export async function loadCompanyInputs(companyId: string, asOf = new Date()): P
   return {
     company,
     sector: sectorRow
-      ? { name: sectorRow.name, pe: sectorRow.benchmarkPe, growth: sectorRow.benchmarkGrowth, roe: sectorRow.benchmarkRoe }
+      ? { name: sectorRow.name, pe: sectorRow.benchmarkPe, growth: sectorRow.benchmarkGrowth, roe: sectorRow.benchmarkRoe, dcf: sectorRow.dcfApplicable }
       : DEFAULT_SECTOR,
     settings,
     reports,

@@ -15,7 +15,8 @@
     "db:seed": "tsx --conditions=react-server scripts/seed.ts",
     "inngest:dev": "inngest-cli dev -u http://localhost:3000/api/inngest",
     "ai:check": "tsx scripts/check-gemini.ts",
-    "ai:embed": "tsx --conditions=react-server scripts/embed-chunks.ts"
+    "ai:embed": "tsx --conditions=react-server scripts/embed-chunks.ts",
+    "recompute": "tsx --conditions=react-server scripts/recompute-all.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.103",
